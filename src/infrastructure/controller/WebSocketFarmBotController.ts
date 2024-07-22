@@ -1,0 +1,40 @@
+import { IClientManagerService } from '../../core/service/ClientManagerService';
+import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
+import { IFoodService } from '../../core/service/FoodService';
+import { IncomingToggleFarmMessage, IncomingToggleFoodMessage, OutgoingReplayMessage } from '../../../env/types';
+import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
+import { checkNotOnlineBot } from '../express/helper/checkOnline';
+import { IFarmService } from '../../core/service/FarmService';
+import { farmService } from '../services/FarmService';
+import { clientManagerService } from '../services/ClientManagerService';
+
+export class WebSocketFarmBotController {
+	constructor(
+		private farmService: IFarmService,
+		private clientManager: IClientManagerService,
+		private wsClients: WebSocketClientsController,
+	) {
+	}
+
+	async toggleAutoFarm(message: IncomingToggleFarmMessage) {
+		try {
+			const botID = message.botID;
+			const action = message.data.action;
+
+			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager);
+			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline);
+
+			if (action === 'START') {
+				this.farmService.startFarm(botID);
+			}
+			if (action === 'STOP') {
+				this.farmService.stopFarm(botID);
+			}
+
+			returnWSOk(message, this.wsClients);
+		} catch (e) {
+			returnWSError(message, e.errorMessage, this.wsClients);
+		}
+	}
+}
+export const websocketFarmController = new WebSocketFarmBotController(farmService, clientManagerService, webSocketClients)
