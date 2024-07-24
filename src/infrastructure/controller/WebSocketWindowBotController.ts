@@ -1,11 +1,11 @@
 import { IWindowService } from '../../core/service/WindowService';
 import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { IncomingClickWindowMessage, OutgoingReplayMessage, STATUS } from '../../../env/types';
 import { checkNotOnlineBot } from '../express/helper/checkOnline';
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
 import { windowsService } from '../services/WindowService';
 import { clientManagerService } from '../services/ClientManagerService';
+import { IncomingClickWindowMessage, OutgoingReplayMessage, STATUS } from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketWindowBotController {
 	constructor(
@@ -36,7 +36,7 @@ export class WebSocketWindowBotController {
 			await this.windowService.click(botID, slotIndex);
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients);
+			returnWSError(message, e.message, this.wsClients);
 		}
 	}
 }

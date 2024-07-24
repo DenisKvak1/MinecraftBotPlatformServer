@@ -1,12 +1,5 @@
 import { IWindowService } from '../../core/service/WindowService';
 import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import {
-	IncomingClickWindowMessage, IncomingGotoMessage, IncomingJumpBotMessage,
-	IncomingMovementBotMessage,
-	OutgoingReplayMessage,
-	STATUS,
-	UNIVERSAL_COMMAND_LIST,
-} from '../../../env/types';
 import { IWalkService } from '../../core/service/WalkService';
 import { walkService } from '../services/WalkService';
 import { checkNotOnlineBot } from '../express/helper/checkOnline';
@@ -14,6 +7,11 @@ import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { clientManagerService } from '../services/ClientManagerService';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
 import { websocketWindowController } from './WebSocketWindowBotController';
+import {
+	IncomingClickWindowMessage, IncomingGotoMessage,
+	IncomingJumpBotMessage, IncomingMovementBotMessage, OutgoingReplayMessage, STATUS,
+	UNIVERSAL_COMMAND_LIST,
+} from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketWindowBotController {
 	constructor(
@@ -64,7 +62,7 @@ export class WebSocketWindowBotController {
 
 			returnWSOk(message, this.wsClients)
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 
@@ -79,7 +77,7 @@ export class WebSocketWindowBotController {
 
 			returnWSOk(message, this.wsClients)
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 
@@ -91,7 +89,7 @@ export class WebSocketWindowBotController {
 			this.walkService.goto(botID, x,  y,  z)
 			returnWSOk(message, this.wsClients)
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 }

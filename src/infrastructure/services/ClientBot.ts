@@ -6,6 +6,7 @@ import { Movements, pathfinder } from 'mineflayer-pathfinder';
 import { Item } from 'prismarine-item';
 import { FuntimeCaptcha, getProfile } from '../../core/config';
 import { mapDownloader } from 'mineflayer-item-map-downloader';
+import { AccountRepository } from '../../core/repository/AccountRepository/AccountRepository';
 
 export class ClientBot implements IClientBot {
 	_bot: Bot;
@@ -26,13 +27,6 @@ export class ClientBot implements IClientBot {
 
 	connect() {
 		if (this._bot) return;
-
-		if (this.accountModel.profile) {
-			const profile = getProfile(this.accountModel.profile);
-			this.accountModel.port = profile.port;
-			this.accountModel.version = profile.version;
-			this.accountModel.server = profile.host;
-		}
 
 		this._bot = createBot({
 			username: this.accountModel.nickname,
@@ -82,7 +76,6 @@ export class ClientBot implements IClientBot {
 	private onDisconnectHandler(reason: string) {
 		this._bot = null;
 		this.$disconnect.next(reason);
-		this._bot = null;
 	}
 
 	private onSpawnHandler() {

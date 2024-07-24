@@ -1,20 +1,18 @@
 import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
 import { IInventoryService } from '../../core/service/InventoryService';
-import {
-	IncomingActivateSlotMessage,
-	IncomingDropAllSlotMessage,
-	IncomingDropSlotMessage, IncomingGetSlotsMessage,
-	IncomingSetHotBarSlotMessage, OutgoingGetSlotsReplayMessage,
-	OutgoingReplayMessage,
-	STATUS,
-	UNIVERSAL_COMMAND_LIST,
-} from '../../../env/types';
 import { checkNotOnlineBot } from '../express/helper/checkOnline';
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import exp from 'node:constants';
 import { inventoryService } from '../services/InventoryService';
 import { clientManagerService } from '../services/ClientManagerService';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
+import {
+	IncomingActivateSlotMessage,
+	IncomingDropAllSlotMessage, IncomingDropSlotMessage,
+	IncomingGetSlotsMessage, IncomingSetHotBarSlotMessage,
+	OutgoingGetSlotsReplayMessage, OutgoingReplayMessage, STATUS,
+	UNIVERSAL_COMMAND_LIST,
+} from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketInventoryBotController {
 	constructor(
@@ -30,7 +28,7 @@ export class WebSocketInventoryBotController {
 			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager)
 			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline)
 
-			if (slotIndex < 0 || slotIndex > 8){
+			if (slotIndex > 0 || slotIndex > 8){
 				return this.wsClients.broadcast<OutgoingReplayMessage>({
 					command: message.command,
 					botID: message.botID,
@@ -42,7 +40,7 @@ export class WebSocketInventoryBotController {
 			this.inventoryService.setHotBarSlot(botID, slotIndex)
 			returnWSOk(message, this.wsClients)
 		} catch (e){
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 
@@ -66,7 +64,7 @@ export class WebSocketInventoryBotController {
 			this.inventoryService.dropSlot(botID, slotIndex)
 			returnWSOk(message, this.wsClients)
 		} catch (e){
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 
@@ -83,7 +81,7 @@ export class WebSocketInventoryBotController {
 				command: message.command,
 				botID: message.botID,
 				status: STATUS.ERROR,
-				errorMessage: e.errorMessage
+				errorMessage: e.message
 			})
 		}
 	}
@@ -94,17 +92,18 @@ export class WebSocketInventoryBotController {
 			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager)
 			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline)
 
-			const slots = this.inventoryService.getSlots(botID)
+			const slotsData = this.inventoryService.getSlots(botID)
 			return this.wsClients.broadcast<OutgoingGetSlotsReplayMessage>({
 				command: message.command,
 				status: STATUS.SUCCESS,
 				botID,
 				data: {
-					slots: slots
+					slots: slotsData.slots,
+					selectedSlot: slotsData.selectedSlot
 				}
 			})
 		} catch (e){
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 
@@ -115,7 +114,7 @@ export class WebSocketInventoryBotController {
 			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager)
 			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline)
 
-			if (slotIndex < 0 || slotIndex > 8){
+			if (slotIndex > 0 || slotIndex > 8){
 				return this.wsClients.broadcast<OutgoingReplayMessage>({
 					command: message.command,
 					botID: message.botID,
@@ -127,7 +126,7 @@ export class WebSocketInventoryBotController {
 			this.inventoryService.useSlot(botID, slotIndex)
 			returnWSOk(message, this.wsClients)
 		} catch (e){
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 }

@@ -2,6 +2,7 @@ import {AccountUpdateDTO, CreateAccountDTO} from "../repository/AccountRepositor
 import {AccountRepository} from "../repository/AccountRepository/AccountRepository";
 import {inMemoryAccountRepository} from "../../infrastructure/database/repository/inMemoryAccountRepository";
 import {AccountModel} from "../model/AccountModel";
+import { getProfile } from '../config';
 
 export class AccountService {
     constructor(
@@ -9,6 +10,12 @@ export class AccountService {
     ) {}
 
     async create(account: CreateAccountDTO): Promise<AccountModel> {
+        if (account.profile){
+            const profile = getProfile(account.profile)
+            account.version = profile.version;
+            account.port = profile.port
+            account.server = profile.host
+        }
         return await this.accountRepository.create(account)
     }
 
@@ -17,11 +24,17 @@ export class AccountService {
     }
 
     async getByID(id: string): Promise<AccountModel | undefined> {
-        return await this.accountRepository.getByName(id)
+        return await this.accountRepository.getByID(id)
     }
 
     async update(id: string, dto:AccountUpdateDTO) {
-        this.accountRepository.updateByName(id, dto)
+        if (dto.profile){
+            const profile = getProfile(dto.profile)
+            dto.port = profile.port
+            dto.version = profile.version
+            dto.server = profile.host
+        }
+        this.accountRepository.update(id, dto)
     }
 
     async getAll(): Promise<AccountModel[]>{

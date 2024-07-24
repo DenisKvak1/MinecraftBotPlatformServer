@@ -1,12 +1,12 @@
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
 import { IChatService } from '../../core/service/ChatService';
-import { IncomingSendChatMessageMessage, OutgoingReplayMessage } from '../../../env/types';
 import { checkNotOnlineBot } from '../express/helper/checkOnline';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
 import exp from 'node:constants';
 import { clientManagerService } from '../services/ClientManagerService';
 import { chatService } from '../services/ChatService';
+import { IncomingSendChatMessageMessage, OutgoingReplayMessage } from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketChatService {
 	constructor(
@@ -27,7 +27,7 @@ export class WebSocketChatService {
 
 			returnWSOk(message, this.wsClients)
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 }

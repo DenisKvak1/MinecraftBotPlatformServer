@@ -1,7 +1,7 @@
-import {IClientBot} from "../../../core/service/ClientBot";
-import {ClientBot} from "../../services/ClientBot";
-import {AccountModel} from "../../../core/model/AccountModel";
-import {ClientBotRepository} from "../../../core/repository/ClientBotRepository/clientBotRepository";
+import { IClientBot } from '../../../core/service/ClientBot';
+import { ClientBot } from '../../services/ClientBot';
+import { AccountModel } from '../../../core/model/AccountModel';
+import { ClientBotRepository } from '../../../core/repository/ClientBotRepository/clientBotRepository';
 
 export class BotInRAMRepository implements ClientBotRepository{
     private readonly bots: IClientBot[] = [];

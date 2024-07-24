@@ -1,11 +1,11 @@
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
 import { IHeadService } from '../../core/service/HeadService';
-import { IncomingRotateHeadMessage, OutgoingReplayMessage } from '../../../env/types';
 import { checkNotOnlineBot } from '../express/helper/checkOnline';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
 import { headService } from '../services/HeadService';
 import { clientManagerService } from '../services/ClientManagerService';
+import { IncomingRotateHeadMessage, OutgoingReplayMessage } from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketHeadBotController {
 	constructor(
@@ -55,7 +55,7 @@ export class WebSocketHeadBotController {
 
 			returnWSOk(message, this.wsClients)
 		} catch (e){
-			returnWSError(message, e.errorMessage, this.wsClients)
+			returnWSError(message, e.message, this.wsClients)
 		}
 	}
 }

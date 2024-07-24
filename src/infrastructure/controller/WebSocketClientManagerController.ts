@@ -1,8 +1,8 @@
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { IncomingConnectBotMessage, OutgoingReplayMessage, STATUS } from '../../../env/types';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
 import { clientManagerService } from '../services/ClientManagerService';
+import { IncomingConnectBotMessage, OutgoingReplayMessage, STATUS } from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketClientManagerController {
 	constructor(
@@ -11,12 +11,12 @@ export class WebSocketClientManagerController {
 	) {
 	}
 
-	turnConnectBot(message: IncomingConnectBotMessage) {
+	async turnConnectBot(message: IncomingConnectBotMessage) {
 		try {
 			const botID = message.botID;
 			const action = message.data.action;
 
-			const isOnline = this.clientManager.checkOnline(botID);
+			const isOnline = await this.clientManager.checkOnline(botID);
 			if (action === 'CONNECT') {
 				if (isOnline) {
 					return this.wsClients.broadcast<OutgoingReplayMessage>({
@@ -30,7 +30,7 @@ export class WebSocketClientManagerController {
 				this.clientManager.connect(botID);
 			}
 			if (action === 'DISCONNECT') {
-				if (isOnline) {
+				if (!isOnline) {
 					return this.wsClients.broadcast<OutgoingReplayMessage>({
 						command: message.command,
 						botID: botID,
@@ -45,7 +45,7 @@ export class WebSocketClientManagerController {
 
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients);
+			returnWSError(message, e.message, this.wsClients);
 		}
 	}
 }

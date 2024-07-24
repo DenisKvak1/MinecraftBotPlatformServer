@@ -3,12 +3,11 @@ import { ClientBotRepository } from '../../core/repository/ClientBotRepository/c
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { captchaService } from './CaptchaService';
 import { ICaptchaService } from '../../core/service/CaptchaService';
-import { FuntimeCaptcha, getProfileCaptcha } from '../../core/config';
-import { AccountService } from '../../core/service/AccountService';
-import { AccountRepository } from '../../core/repository/AccountRepository/AccountRepository';
-import { inMemoryAccountRepository } from '../database/repository/inMemoryAccountRepository';
+import { getProfileCaptcha } from '../../core/config';
+import { accountService, AccountService } from '../../core/service/AccountService';
 import { BotStatus } from '../../core/model/AccountModel';
 import { Observable, Subscribe } from '../../../env/helpers/observable';
+import { inMemoryAccountRepository } from '../database/repository/inMemoryAccountRepository';
 
 export class ClientManagerService implements IClientManagerService{
 	$connect = new Observable<{id: string}>()
@@ -16,7 +15,7 @@ export class ClientManagerService implements IClientManagerService{
 
 	constructor(
 		private botRepository: ClientBotRepository,
-		private accountRepository: AccountRepository,
+		private accountService: AccountService,
 		private captchaService: ICaptchaService,
 	) {
 	}
@@ -24,11 +23,13 @@ export class ClientManagerService implements IClientManagerService{
 
 	connect(id: string) {
 		const profile = this.botRepository.getById(id)
+		if (profile._bot) return
 		profile.connect()
 		const bot = this.botRepository.getById(id)._bot
-		this.accountRepository.update(id, {status: BotStatus.CONNECT})
-
-		this.$connect.next({id})
+		bot.once('login', ()=> {
+			this.accountService.update(id, {status: BotStatus.CONNECT})
+			this.$connect.next({id})
+		})
 
 		bot.once('login', async ()=>{
 			const captchaProfile = getProfileCaptcha(profile.accountModel.profile)
@@ -36,14 +37,23 @@ export class ClientManagerService implements IClientManagerService{
 			const imageBuffer = await this.captchaService.loadCaptcha(id, captchaProfile)
 			profile.$captcha.next(imageBuffer)
 		})
+		process.on('SIGTERM', ()=>{
+			this.accountService.update(id, {status: BotStatus.DISCONNECT})
+			process.exit(0);
+		})
+		process.on('SIGINT', ()=>{
+			this.accountService.update(id, {status: BotStatus.DISCONNECT})
+			process.exit(0);
+		})
 		bot.once('end', ()=>{
+			this.accountService.update(id, {status: BotStatus.DISCONNECT})
 			this.$disconnect.next({id})
 		})
 	}
 
 	disconnect(id: string) {
 		this.botRepository.getById(id)?.disconnect();
-		this.accountRepository.update(id, {status: BotStatus.DISCONNECT})
+		this.accountService.update(id, {status: BotStatus.DISCONNECT})
 	}
 
 	onDisconnect(id: string, callback: (reason: string) => void) {
@@ -79,8 +89,13 @@ export class ClientManagerService implements IClientManagerService{
 	}
 
 	async checkOnline(id: string): Promise<boolean> {
-		return (await this.accountRepository.getByID(id)).status === "CONNECT"
+		return (await this.accountService.getByID(id)).status === "CONNECT"
+	}
+
+	async isPossibleBot(id: string): Promise<boolean> {
+		const account = await this.accountService.getByID(id)
+		return Boolean(account)
 	}
 }
 
-export const clientManagerService = new ClientManagerService(botInRAMRepository, inMemoryAccountRepository, captchaService);
+export const clientManagerService = new ClientManagerService(botInRAMRepository, accountService, captchaService);

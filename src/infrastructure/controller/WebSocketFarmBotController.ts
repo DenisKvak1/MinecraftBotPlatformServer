@@ -1,12 +1,16 @@
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
 import { IFoodService } from '../../core/service/FoodService';
-import { IncomingToggleFarmMessage, IncomingToggleFoodMessage, OutgoingReplayMessage } from '../../../env/types';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
 import { checkNotOnlineBot } from '../express/helper/checkOnline';
 import { IFarmService } from '../../core/service/FarmService';
 import { farmService } from '../services/FarmService';
 import { clientManagerService } from '../services/ClientManagerService';
+import {
+	IncomingToggleFarmMessage,
+	IncomingToggleFoodMessage,
+	OutgoingReplayMessage,
+} from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketFarmBotController {
 	constructor(
@@ -33,7 +37,7 @@ export class WebSocketFarmBotController {
 
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients);
+			returnWSError(message, e.message, this.wsClients);
 		}
 	}
 }

@@ -1,17 +1,16 @@
 import { IFarmService } from '../../core/service/FarmService';
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import {
-	IncomingAttackMessage,
-	IncomingToggleClickerMessage,
-	IncomingToggleFarmMessage,
-	OutgoingReplayMessage,
-} from '../../../env/types';
 import { checkNotOnlineBot } from '../express/helper/checkOnline';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
 import { IClickerService } from '../../core/service/ClickerService';
 import { clickerService } from '../services/ClickerService';
 import { clientManagerService } from '../services/ClientManagerService';
+import {
+	IncomingAttackMessage,
+	IncomingToggleClickerMessage,
+	IncomingToggleFarmMessage, OutgoingReplayMessage,
+} from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketClickerBotController {
 	constructor(
@@ -32,7 +31,7 @@ export class WebSocketClickerBotController {
 
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients);
+			returnWSError(message, e.message, this.wsClients);
 		}
 	}
 
@@ -64,7 +63,7 @@ export class WebSocketClickerBotController {
 
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
-			returnWSError(message, e.errorMessage, this.wsClients);
+			returnWSError(message, e.message, this.wsClients);
 		}
 	}
 }

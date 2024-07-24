@@ -75,9 +75,9 @@ export class Captcha {
 
 				const frame = packet.entityId;
 				const mapID =
-					packet.metadata.find((item: any) => item.key === 7)?.value.nbtData.value.map.value
+					packet.metadata.find((item: any) => item.key === 7)?.value?.nbtData?.value?.map?.value
 					||
-					packet.metadata.find((item: any) => item.key === 8)?.value.nbtData.value.map.value;
+					packet.metadata.find((item: any) => item.key === 8)?.value?.nbtData?.value?.map?.value;
 				const mapDirection = packet.metadata.find((item: any) => item.key === 8)?.value | 0;
 
 				this.iframeMap.set(frame, { mapID, mapDirection });
@@ -91,6 +91,9 @@ export class Captcha {
 				}
 			};
 
+			setTimeout(()=> {
+				this.bot._client.off('packet', onPacket);
+			}, 10 * 1000)
 			this.bot._client.on('packet', onPacket);
 		});
 	}
@@ -113,6 +116,9 @@ export class Captcha {
 				this.iframePos.set(packet.entityId, { x: packet.x, y: packet.y, z: packet.z });
 			};
 
+			setTimeout(()=> {
+				this.bot._client.off('packet', onPacket);
+			}, 10 * 1000)
 			this.bot._client.on('packet', onPacket);
 		});
 	}

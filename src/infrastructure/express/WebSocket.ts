@@ -2,14 +2,13 @@ import express from 'express';
 import http from 'http';
 import WebSocket from 'ws';
 import { WebSocketClientsController } from './module/WebSocketClientsController';
-import { ApplyEvents } from './module/ApplyEvents';
+import { ApplyWSBotEvents } from './module/ApplyWSBotEvents';
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { IInventoryService } from '../../core/service/InventoryService';
 import { IWindowService } from '../../core/service/WindowService';
 import { IChatService } from '../../core/service/ChatService';
 import { ICaptchaService } from '../../core/service/CaptchaService';
 import { IncomingMessage } from 'node:http';
-import { UNIVERSAL_COMMAND_LIST } from '../../../env/types';
 import { websocketAccountController } from '../controller/WebSocketAccountService';
 import { webSocketClientManagerController } from '../controller/WebSocketClientManagerController';
 import { webSocketChatServiceController } from '../controller/WebSocketChatService';
@@ -20,6 +19,8 @@ import { websocketHeadBotController } from '../controller/WebSocketHeadBotContro
 import { websocketInventoryBotController } from '../controller/WebSocketInventoryBotController';
 import { webSocketWalkBotController } from '../controller/WebSocketWalkBotController';
 import { websocketWindowController } from '../controller/WebSocketWindowBotController';
+import { UNIVERSAL_COMMAND_LIST } from './types/webSocketBotCommandTypes';
+import path from 'path';
 
 export class App {
 	private express = express()
@@ -39,7 +40,7 @@ export class App {
 	}
 
 	private async init() {
-		const eventSubscribe = await ApplyEvents(
+		const eventSubscribe = await ApplyWSBotEvents(
 			this.webSocketController,
 			this.clientManagerService,
 			this.inventoryService,
@@ -48,6 +49,7 @@ export class App {
 			this.captchaService,
 		)
 		this.initRoutes()
+		this.initStatic()
 
 		this.wss.on('connection', (ws: WebSocket) => {
 			this.webSocketController.addClient(ws)
@@ -85,6 +87,10 @@ export class App {
 		};
 	}
 
+	initStatic(){
+		this.express.use(express.static(path.join(process.cwd(), 'static')));
+	}
+
 	private setupRoutes(ws: WebSocket) {
 		ws.on('message', (data)=>{
 			const jsonData = JSON.parse(data.toString())
@@ -93,7 +99,7 @@ export class App {
 	}
 
 	start(port: number){
-		this.server.listen(port, ()=> {
+		this.server.listen(port,'0.0.0.0',()=> {
 			console.log(`webSocket client start on ${port}`)
 		});
 	}

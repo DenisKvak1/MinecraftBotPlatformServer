@@ -33,9 +33,12 @@ export class InventoryService implements IInventoryService {
 		});
 	}
 
-	getSlots(id: string):(Item | null)[] {
+	getSlots(id: string) {
 		const bot = this.repository.getById(id)._bot;
-		return bot.inventory.slots
+		return {
+			slots: bot.inventory.slots,
+			selectedSlot: bot.quickBarSlot
+		}
 	}
 
 	onUpdateSlot(id: string, callback: (dto: InventoryUpdateDTO) => void): Subscribe {

@@ -6,6 +6,7 @@ export interface IClientManagerService {
 	connect(id: string): void;
 	disconnect(id: string): void;
 	onDisconnect(id: string, callback: (reason: string) => void): Subscribe;
+	isPossibleBot(id: string): Promise<boolean>;
 	onceSpawn(id: string, callback: () => void): void;
 	checkOnline(id: string): Promise<boolean>
 	onSpawn(id: string, callback: () => void): Subscribe

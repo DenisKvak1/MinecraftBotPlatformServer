@@ -1,5 +1,5 @@
 import { WebSocketClientsController } from '../module/WebSocketClientsController';
-import { IncomingMessage, OutgoingReplayMessage, STATUS } from '../../../../env/types';
+import { IncomingMessage, OutgoingReplayMessage, STATUS } from '../types/webSocketBotCommandTypes';
 
 export function returnWSOk(message: IncomingMessage, wsClients: WebSocketClientsController) {
 	wsClients.broadcast<OutgoingReplayMessage>({

@@ -1,14 +1,5 @@
 import { CaptchaPreset } from './service/CaptchaService';
 import path from 'node:path';
-
-export function getProfile(botProfile: BotProfile) {
-    switch (botProfile) {
-        case BotProfile.FUNTIME:
-            return FuntimeProfile
-        case BotProfile.HOLYWORLD:
-            return HolyWorldProfile
-    }
-}
 export function getProfileCaptcha(botProfile: BotProfile) {
     switch (botProfile) {
         case BotProfile.FUNTIME:
@@ -17,6 +8,15 @@ export function getProfileCaptcha(botProfile: BotProfile) {
             return HolyWorldCaptcha
     }
 }
+export function getProfile(botProfile: BotProfile) {
+    switch (botProfile) {
+        case BotProfile.FUNTIME:
+            return FuntimeProfile
+        case BotProfile.HOLYWORLD:
+            return HolyWorldProfile
+    }
+}
+
 
 export enum BotProfile {
     FUNTIME = "FUNTIME",
@@ -31,7 +31,7 @@ export const FuntimeProfile = {
 export const HolyWorldProfile = {
     host: 'mc.holyworld.io',
     port: 25565,
-    version: '1.20.2'
+    version: '1.18.1'
 }
 
 export const FuntimeCaptcha: CaptchaPreset = {
