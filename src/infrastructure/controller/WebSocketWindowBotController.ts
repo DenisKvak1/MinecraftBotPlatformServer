@@ -5,7 +5,12 @@ import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
 import { windowsService } from '../services/WindowService';
 import { clientManagerService } from '../services/ClientManagerService';
-import { IncomingClickWindowMessage, OutgoingReplayMessage, STATUS } from '../express/types/webSocketBotCommandTypes';
+import {
+	IncomingClickWindowMessage,
+	IncomingGetCurrentWindow, OutgoingGetCurrentWindowReplayMessage, OutgoingGetSlotsReplayMessage,
+	OutgoingReplayMessage,
+	STATUS,
+} from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketWindowBotController {
 	constructor(
@@ -36,6 +41,27 @@ export class WebSocketWindowBotController {
 			await this.windowService.click(botID, slotIndex);
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
+			returnWSError(message, e.message, this.wsClients);
+		}
+	}
+
+	async getCurrentWindow(message: IncomingGetCurrentWindow){
+		try {
+			const { botID } = message;
+
+			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager);
+			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline);
+
+			const currentWindow = this.windowService.getCurrentWindow(botID)
+			return this.wsClients.broadcast<OutgoingGetCurrentWindowReplayMessage>({
+				command: message.command,
+				status: STATUS.SUCCESS,
+				botID,
+				data: {
+					slots: currentWindow?.slots || []
+				}
+			})
+		} catch (e){
 			returnWSError(message, e.message, this.wsClients);
 		}
 	}

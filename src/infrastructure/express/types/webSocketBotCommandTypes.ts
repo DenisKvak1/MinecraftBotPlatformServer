@@ -81,6 +81,7 @@ export type IncomingGotoMessage = IncomingMessage<{
 export type IncomingClickWindowMessage = IncomingMessage<{
 	slotIndex: number
 }>
+export type IncomingGetCurrentWindow = IncomingMessage
 export type IncomingGetBotsMessage = IncomingMessage
 export type IncomingJumpBotMessage = IncomingMessage
 export type IncomingGetBotInfoIDMessage = IncomingMessage<{
@@ -117,8 +118,11 @@ export type OutgoingChatBotMessage = {
 	id: string,
 	message: string
 }
+export type OutgoingGetCurrentWindowReplayMessage = OutgoingReplayMessage<{
+	slots: (Item | null)[]
+}>
 export type OutgoingGetSlotsReplayMessage = OutgoingReplayMessage<{
-	slots?: (Item | null)[],
+	slots: (Item | null)[],
 	selectedSlot: number
 }>
 export type OutgoingCreateBotReplayMessage = OutgoingReplayMessage<{
@@ -173,6 +177,7 @@ export enum UNIVERSAL_COMMAND_LIST {
 	JUMP_BOT = 'JUMP_BOT',
 	CLICK_WINDOW = 'CLICK_WINDOW',
 	GET_INVENTORY_SLOTS = 'GET_INVENTORY_SLOTS',
+	GET_CURRENT_WINDOW = 'GET_CURRENT_WINDOW',
 	ACTIVATE_SLOT = 'ACTIVATE_SLOT'
 }
 

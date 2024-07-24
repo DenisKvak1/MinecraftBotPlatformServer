@@ -82,6 +82,7 @@ export class App {
 			[UNIVERSAL_COMMAND_LIST.MOVEMENT_BOT]: (message: IncomingMessage) => webSocketWalkBotController.move(message as any),
 			[UNIVERSAL_COMMAND_LIST.JUMP_BOT]: (message: IncomingMessage) => webSocketWalkBotController.jump(message as any),
 			[UNIVERSAL_COMMAND_LIST.CLICK_WINDOW]: (message: IncomingMessage) => websocketWindowController.click(message as any),
+			[UNIVERSAL_COMMAND_LIST.GET_CURRENT_WINDOW]: (message: IncomingMessage)=> websocketWindowController.getCurrentWindow(message as any),
 			[UNIVERSAL_COMMAND_LIST.GET_INVENTORY_SLOTS]: (message: IncomingMessage) => websocketInventoryBotController.getSlots(message as any),
 			[UNIVERSAL_COMMAND_LIST.ACTIVATE_SLOT]: (message: IncomingMessage)=> websocketInventoryBotController.activateSlot(message as any)
 		};

@@ -28,7 +28,7 @@ export class WindowService implements IWindowService {
 		await bot.clickWindow(slot, 0, 0)
 	}
 
-	getCurrentWindow(id: string): Window {
+	getCurrentWindow(id: string): Window | null{
 		const bot = this.repository.getById(id)._bot
 		return bot.currentWindow
 	}
