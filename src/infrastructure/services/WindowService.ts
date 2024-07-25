@@ -1,10 +1,10 @@
 import { IWindowService } from '../../core/service/WindowService';
 import { ClientBotRepository } from '../../core/repository/ClientBotRepository/clientBotRepository';
-import { Item } from 'prismarine-item';
 import { Subscribe } from '../../../env/helpers/observable';
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import EventEmitter from 'node:events';
 import { Window } from 'prismarine-windows';
+import { GeneralizedItem } from '../../../env/types';
 
 export class WindowService implements IWindowService {
 	constructor(
@@ -17,7 +17,7 @@ export class WindowService implements IWindowService {
 		})
 	}
 
-	onOpenWindow(id: string, callback: (slots: (Item | null)[]) => void): Subscribe {
+	onOpenWindow(id: string, callback: (slots: (GeneralizedItem | null)[]) => void): Subscribe {
 		return this.repository.getById(id)?.$openWindow.subscribe((window)=>{
 			callback(window)
 		})

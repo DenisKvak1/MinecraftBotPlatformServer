@@ -12,8 +12,8 @@ export class BotInRAMRepository implements ClientBotRepository{
         return bot
     }
 
-    delete(name: string): void {
-        const index = this.bots.findIndex((item) => item.accountModel.nickname === name);
+    delete(id: string): void {
+        const index = this.bots.findIndex((item) => item.accountModel.id === id);
         this.bots.splice(index, 1);
     }
 

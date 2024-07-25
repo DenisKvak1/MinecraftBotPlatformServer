@@ -1,11 +1,12 @@
 [
   {
     "id": "18839b9b-5d21-4793-b175-3790dd7302ef",
-    "nickname": "Zancerio2",
-    "server": "127.0.0.1",
+    "nickname": "Zancerio",
+    "server": "mc.funtime.su",
     "version": "1.16.5",
     "port": 25565,
-    "status": "DISCONNECT"
+    "status": "DISCONNECT",
+    "profile": "FUNTIME"
   },
   {
     "id": "18839b9b-5d21-4793-b175-3790dd7302eg",
@@ -14,6 +15,6 @@
     "version": "1.16.5",
     "port": 25565,
     "profile": "",
-    "status": "DISCONNECT"
+    "status": "CONNECT"
   }
 ]

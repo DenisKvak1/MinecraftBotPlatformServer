@@ -114,7 +114,7 @@ export class WebSocketInventoryBotController {
 			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager)
 			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline)
 
-			if (slotIndex > 0 || slotIndex > 8){
+			if (slotIndex < 0 || slotIndex > 8){
 				return this.wsClients.broadcast<OutgoingReplayMessage>({
 					command: message.command,
 					botID: message.botID,

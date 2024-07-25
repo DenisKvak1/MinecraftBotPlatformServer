@@ -11,6 +11,7 @@ import {
 	OutgoingReplayMessage,
 	STATUS,
 } from '../express/types/webSocketBotCommandTypes';
+import { ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 
 export class WebSocketWindowBotController {
 	constructor(
@@ -52,13 +53,16 @@ export class WebSocketWindowBotController {
 			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager);
 			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline);
 
+
 			const currentWindow = this.windowService.getCurrentWindow(botID)
+			const slots = ToGeneralizedItems(currentWindow?.slots.slice(0, -36) || [])
+
 			return this.wsClients.broadcast<OutgoingGetCurrentWindowReplayMessage>({
 				command: message.command,
 				status: STATUS.SUCCESS,
 				botID,
 				data: {
-					slots: currentWindow?.slots || []
+					slots: slots
 				}
 			})
 		} catch (e){

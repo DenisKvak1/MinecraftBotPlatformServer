@@ -1,9 +1,9 @@
 import { IObservable, Subscribe } from '../../../env/helpers/observable';
-import { Item } from 'prismarine-item';
 import { Window } from 'prismarine-windows'
+import { GeneralizedItem } from '../../../env/types';
 
 export interface IWindowService {
-	onOpenWindow: (id: string, callback: (slots: (Item | null)[]) => void) => Subscribe;
+	onOpenWindow: (id: string, callback: (slots: (GeneralizedItem | null)[]) => void) => Subscribe;
 	onCloseWindow: (id: string, callback: Function) => Subscribe
 
 	getCurrentWindow(id: string): Window | null

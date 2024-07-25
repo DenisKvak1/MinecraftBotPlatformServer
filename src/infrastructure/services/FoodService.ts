@@ -3,9 +3,6 @@ import { ClientBotRepository } from '../../core/repository/ClientBotRepository/c
 import { Bot } from 'mineflayer';
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { isEdible } from '../../../env/helpers/isEdible';
-import { IClickerService } from '../../core/service/ClickerService';
-import { Item } from 'prismarine-item';
-import { Subscribe } from '../../../env/helpers/observable';
 
 export class FoodService implements IFoodService {
 	private foodIntervals: Map<string, NodeJS.Timeout> = new Map();

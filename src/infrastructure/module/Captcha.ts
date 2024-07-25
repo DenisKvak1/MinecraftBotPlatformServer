@@ -93,7 +93,7 @@ export class Captcha {
 
 			setTimeout(()=> {
 				this.bot._client.off('packet', onPacket);
-			}, 10 * 1000)
+			}, 5 * 1000)
 			this.bot._client.on('packet', onPacket);
 		});
 	}
@@ -118,7 +118,7 @@ export class Captcha {
 
 			setTimeout(()=> {
 				this.bot._client.off('packet', onPacket);
-			}, 10 * 1000)
+			}, 5 * 1000)
 			this.bot._client.on('packet', onPacket);
 		});
 	}

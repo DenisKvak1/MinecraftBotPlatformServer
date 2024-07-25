@@ -3,7 +3,7 @@ import { ClientBotRepository } from '../../core/repository/ClientBotRepository/c
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { InventoryUpdateDTO } from '../../core/service/ClientBot';
 import { Subscribe } from '../../../env/helpers/observable';
-import { Item } from 'prismarine-item';
+import { ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 
 export class InventoryService implements IInventoryService {
 	constructor(
@@ -36,7 +36,7 @@ export class InventoryService implements IInventoryService {
 	getSlots(id: string) {
 		const bot = this.repository.getById(id)._bot;
 		return {
-			slots: bot.inventory.slots,
+			slots: ToGeneralizedItems(bot.inventory.slots),
 			selectedSlot: bot.quickBarSlot
 		}
 	}

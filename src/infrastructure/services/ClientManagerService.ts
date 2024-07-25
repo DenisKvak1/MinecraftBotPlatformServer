@@ -34,17 +34,24 @@ export class ClientManagerService implements IClientManagerService{
 		bot.once('login', async ()=>{
 			const captchaProfile = getProfileCaptcha(profile.accountModel.profile)
 			if (!captchaProfile) return
-			const imageBuffer = await this.captchaService.loadCaptcha(id, captchaProfile)
-			profile.$captcha.next(imageBuffer)
+
+			const checkCaptcha = async (message: any)=>{
+				if (message.toString().startsWith('BotFilter >> Вы ввели капчу неправильно, пожалуйста попробуйте ещё раз.')){
+					try {
+						const imageBuffer = await this.captchaService.loadCaptcha(id, captchaProfile)
+						profile.$captcha.next(imageBuffer)
+					} catch (e){}
+				}
+			}
+
+			bot.on('message', checkCaptcha)
+			setTimeout(()=> bot.off('message', checkCaptcha), 10000)
+			try {
+				const imageBuffer = await this.captchaService.loadCaptcha(id, captchaProfile)
+				profile.$captcha.next(imageBuffer)
+			} catch (e){}
 		})
-		process.on('SIGTERM', ()=>{
-			this.accountService.update(id, {status: BotStatus.DISCONNECT})
-			process.exit(0);
-		})
-		process.on('SIGINT', ()=>{
-			this.accountService.update(id, {status: BotStatus.DISCONNECT})
-			process.exit(0);
-		})
+
 		bot.once('end', ()=>{
 			this.accountService.update(id, {status: BotStatus.DISCONNECT})
 			this.$disconnect.next({id})

@@ -1,11 +1,11 @@
 import { AccountModel } from '../model/AccountModel';
 import { Bot } from 'mineflayer';
 import { IObservable } from '../../../env/helpers/observable';
-import { Item } from 'prismarine-item';
+import { GeneralizedItem } from '../../../env/types';
 
 export type InventoryUpdateDTO = {
     itemSlot: number
-    newItem: Item | null
+    newItem: GeneralizedItem | null
 }
 export interface IClientBot{
     _bot: Bot;
@@ -14,7 +14,7 @@ export interface IClientBot{
     $captcha: IObservable<Buffer>
     $disconnect: IObservable<string>
     $spawn: IObservable<null>
-    $openWindow: IObservable<Item[]>
+    $openWindow: IObservable<GeneralizedItem[]>
     $closeWindow: IObservable<void>
     $chat: IObservable<string>
     $inventoryUpdate: IObservable<InventoryUpdateDTO>

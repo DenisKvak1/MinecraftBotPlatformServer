@@ -1,5 +1,6 @@
 import sharp from 'sharp';
 import path from 'path';
+import fs from 'fs';
 
 type captchDetail = {
 	path: string,
@@ -18,15 +19,17 @@ export class CaptchaSharp {
 	) {
 	}
 
-	execute() {
+	async execute() {
 		const mapForSharrp = this.options.captchaMap.map((captcha) => {
 			return {
 				path: path.join(this.options.pathMap, `./map_${captcha.id.toString().padStart(6, '0')}.png`),
 				direction: captcha.direction,
 			};
 		});
-
-		return this.joinImages(mapForSharrp, this.options.rows, this.options.cols, this.options.pathFile);
+		await new Promise(resolve => setTimeout(resolve, 500));
+		const result =  await this.joinImages(mapForSharrp, this.options.rows, this.options.cols, this.options.pathFile);
+		this.deleteFiles(mapForSharrp)
+		return result;
 	}
 
 	private async joinImages(captchDetails: captchDetail[], rows: number, columns: number, pathFile: string) {
@@ -62,7 +65,14 @@ export class CaptchaSharp {
 		}
 		await canvas.composite(compositeOperations).toFile(pathFile);
 
-		return canvas.composite(compositeOperations).toBuffer();
+		return canvas.composite(compositeOperations).jpeg().toBuffer();
+	}
+
+	private deleteFiles(fileArray: {path: string}[]) {
+		fileArray.forEach(fileObj => {
+			const filePath = fileObj.path;
+			fs.unlink(filePath, ()=>{});
+		});
 	}
 
 	private async rotateImage(imagePath: string, angle: number): Promise<Buffer> {

@@ -13,6 +13,7 @@ import {
 	OutgoingConnectingBotMessage,
 	OutgoingInventoryUpdateBotMessage,
 } from '../types/webSocketBotCommandTypes';
+import { it } from 'node:test';
 
 
 export async function ApplyWSBotEvents(
@@ -53,10 +54,7 @@ export async function ApplyWSBotEvents(
 				command: OUTGHOING_COMMAND_LIST.INVENTORY_UPDATE,
 				id: connectData.id,
 				index: dto.itemSlot,
-				item: dto.newItem ? {
-					name: dto.newItem.name,
-					count: dto.newItem.count
-				} : null
+				item: dto.newItem ?  dto.newItem : null
 			})
 		})
 
@@ -65,7 +63,7 @@ export async function ApplyWSBotEvents(
 				command: OUTGHOING_COMMAND_LIST.WINDOW,
 				action: 'OPEN',
 				id: connectData.id,
-				items
+				items: items.slice(0, -36)
 			})
 		})
 

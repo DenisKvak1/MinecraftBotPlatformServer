@@ -1,18 +1,18 @@
 import { IClientBot, InventoryUpdateDTO } from '../../core/service/ClientBot';
 import { AccountModel } from '../../core/model/AccountModel';
 import { Bot, createBot } from 'mineflayer';
-import { IObservable, Observable } from '../../../env/helpers/observable';
+import { Observable } from '../../../env/helpers/observable';
 import { Movements, pathfinder } from 'mineflayer-pathfinder';
-import { Item } from 'prismarine-item';
-import { FuntimeCaptcha, getProfile } from '../../core/config';
+import { FuntimeCaptcha } from '../../core/config';
 import { mapDownloader } from 'mineflayer-item-map-downloader';
-import { AccountRepository } from '../../core/repository/AccountRepository/AccountRepository';
+import { GeneralizedItem } from '../../../env/types';
+import { ToGeneralizedItem, ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 
 export class ClientBot implements IClientBot {
 	_bot: Bot;
 	$disconnect = new Observable<string>;
 	$spawn = new Observable<null>;
-	$openWindow = new Observable<Item[]>();
+	$openWindow = new Observable<GeneralizedItem[]>();
 	$closeWindow = new Observable<void>();
 	$chat = new Observable<string>();
 	$captcha = new Observable<Buffer>();
@@ -27,15 +27,18 @@ export class ClientBot implements IClientBot {
 
 	connect() {
 		if (this._bot) return;
+		try {
+			this._bot = createBot({
+				username: this.accountModel.nickname,
+				host: this.accountModel.server,
+				port: this.accountModel.port,
+				version: this.accountModel.version,
+				hideErrors: true,
+				logErrors: false,
+				'mapDownloader-outputDir': FuntimeCaptcha.mapsPath,
+			});
+		} catch (e){}
 
-		this._bot = createBot({
-			username: this.accountModel.nickname,
-			host: this.accountModel.server,
-			port: this.accountModel.port,
-			version: this.accountModel.version,
-
-			'mapDownloader-outputDir': FuntimeCaptcha.mapsPath,
-		});
 		this._bot.loadPlugin(mapDownloader);
 		this._bot.loadPlugin(pathfinder);
 		this.initEvents();
@@ -53,13 +56,17 @@ export class ClientBot implements IClientBot {
 			this._bot.inventory.on('updateSlot', (slot: number, oldItem: Item | null, newItem: Item | null) => {
 				this.$inventoryUpdate.next({
 					itemSlot: slot,
-					newItem: newItem,
+					newItem: ToGeneralizedItem(newItem),
 				});
 			});
 		});
 		this._bot.on('spawn', () => this.$spawn.next());
 
-		this._bot.on('windowOpen', (window) => this.$openWindow.next(window.slots));
+		this._bot.on('windowOpen', (window) => {
+			console.log(window)
+			const slots = ToGeneralizedItems(window.slots)
+			this.$openWindow.next(slots)
+		});
 		this._bot.on('windowClose', () => this.$closeWindow.next());
 		this._bot.on('message', (json) => this.$chat.next(json.toString()));
 		this._bot.on('health', ()=> this.$health.next())

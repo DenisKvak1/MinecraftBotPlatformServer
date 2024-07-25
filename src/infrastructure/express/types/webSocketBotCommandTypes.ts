@@ -1,8 +1,7 @@
 import { HeadRotateDirection } from '../../services/HeadService';
 import { AccountModel } from '../../../core/model/AccountModel';
 import { MovementDirection } from '../../services/WalkService';
-import { Item } from 'prismarine-item';
-import { toggle } from '../../../../env/types';
+import { GeneralizedItem, toggle } from '../../../../env/types';
 import { BotProfile } from '../../../core/config';
 
 export type IncomingMessage<T = any> = {
@@ -111,7 +110,7 @@ export type OutgoingActionWindowBotMessage = {
 	command: OUTGHOING_COMMAND_LIST.WINDOW
 	id: string,
 	action: "OPEN" | "CLOSE"
-	items?: (Item | null)[]
+	items?: (GeneralizedItem | null)[]
 }
 export type OutgoingChatBotMessage = {
 	command: OUTGHOING_COMMAND_LIST.CHAT_MESSAGE
@@ -119,10 +118,10 @@ export type OutgoingChatBotMessage = {
 	message: string
 }
 export type OutgoingGetCurrentWindowReplayMessage = OutgoingReplayMessage<{
-	slots: (Item | null)[]
+	slots: (GeneralizedItem | null)[]
 }>
 export type OutgoingGetSlotsReplayMessage = OutgoingReplayMessage<{
-	slots: (Item | null)[],
+	slots: (GeneralizedItem | null)[],
 	selectedSlot: number
 }>
 export type OutgoingCreateBotReplayMessage = OutgoingReplayMessage<{
@@ -132,10 +131,7 @@ export type OutgoingInventoryUpdateBotMessage = {
 	command: OUTGHOING_COMMAND_LIST.INVENTORY_UPDATE
 	id: string,
 	index: number,
-	item: {
-		name: string
-		count: number
-	} | null
+	item: GeneralizedItem | null
 }
 export type OutgoingChangePositionBotMessage = {
 	command: OUTGHOING_COMMAND_LIST.POSITION_BOT

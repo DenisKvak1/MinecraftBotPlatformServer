@@ -6,8 +6,8 @@ import { Bot } from 'mineflayer';
 export type HeadRotateDirection = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT'
 
 export class HeadService implements IHeadService {
-	private interval = 100;
-	private angle = 4;
+	private interval = 90;
+	private angle = 6;
 	private upRotateInterval: Map<string, NodeJS.Timeout> = new Map();
 	private downRotateInterval: Map<string, NodeJS.Timeout> = new Map();
 	private rightRotateInterval: Map<string, NodeJS.Timeout> = new Map();
