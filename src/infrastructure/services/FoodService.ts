@@ -3,6 +3,7 @@ import { ClientBotRepository } from '../../core/repository/ClientBotRepository/c
 import { Bot } from 'mineflayer';
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { isEdible } from '../../../env/helpers/isEdible';
+import { logger } from '../logger/Logger';
 
 export class FoodService implements IFoodService {
 	private foodIntervals: Map<string, NodeJS.Timeout> = new Map();
@@ -14,6 +15,7 @@ export class FoodService implements IFoodService {
 
 	startAutoFood(id: string): void {
 		const bot = this.repository.getById(id)._bot;
+		logger.info(`${id}: Запустил автоеду`)
 		const interval = setInterval(async ()=> {
 			const isHunger = this.checkHunger(bot)
 			const slot = bot.inventory.slots[45]?.name
@@ -33,6 +35,7 @@ export class FoodService implements IFoodService {
 		const interval = this.foodIntervals.get(id)
 		clearInterval(interval)
 		this.foodIntervals.delete(id);
+		logger.info(`${id}: Остановил автоеду`)
 	}
 
 	private checkHunger(bot: Bot) {

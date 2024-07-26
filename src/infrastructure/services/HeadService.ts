@@ -2,6 +2,7 @@ import { IHeadService } from '../../core/service/HeadService';
 import { ClientBotRepository } from '../../core/repository/ClientBotRepository/clientBotRepository';
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { Bot } from 'mineflayer';
+import { logger } from '../logger/Logger';
 
 export type HeadRotateDirection = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT'
 
@@ -42,6 +43,7 @@ export class HeadService implements IHeadService {
 	}
 
 	private stopRotateDirection(id: string, direction: HeadRotateDirection): void {
+		logger.info(`${id}: Запустил остановил ${direction}`)
 		switch (direction) {
 			case 'LEFT':
 				const interval = this.leftRotateInterval.get(id);
@@ -71,6 +73,7 @@ export class HeadService implements IHeadService {
 	}
 
 	private startRotate(id: string, direction: HeadRotateDirection) {
+		logger.info(`${id}: Запустил поворот головы ${direction}`)
 		const bot = this.repository.getById(id)._bot
 		return setInterval(() => {
 			this.rotate(bot, direction, this.angle);

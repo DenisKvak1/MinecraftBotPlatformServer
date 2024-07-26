@@ -5,6 +5,7 @@ import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import EventEmitter from 'node:events';
 import { Window } from 'prismarine-windows';
 import { GeneralizedItem } from '../../../env/types';
+import { logger } from '../logger/Logger';
 
 export class WindowService implements IWindowService {
 	constructor(
@@ -26,6 +27,7 @@ export class WindowService implements IWindowService {
 	async click(id: string, slot: number): Promise<void> {
 		const bot = this.repository.getById(id)._bot
 		await bot.clickWindow(slot, 0, 0)
+		logger.info(`${id}: Кликнул в окне по слоту с индексом ${slot}`)
 	}
 
 	getCurrentWindow(id: string): Window | null{

@@ -7,6 +7,7 @@ import { FuntimeCaptcha } from '../../core/config';
 import { mapDownloader } from 'mineflayer-item-map-downloader';
 import { GeneralizedItem } from '../../../env/types';
 import { ToGeneralizedItem, ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
+import { logger } from '../logger/Logger';
 
 export class ClientBot implements IClientBot {
 	_bot: Bot;
@@ -40,7 +41,10 @@ export class ClientBot implements IClientBot {
 			});
 		} catch (e){}
 
-		this._bot.once('login', ()=> this.$status.next(BotStatus.CONNECT))
+		this._bot.once('login', ()=> {
+			this.$status.next(BotStatus.CONNECT)
+			logger.info(`${this.accountModel.id}: Зашёл на сервер ${this.accountModel.server}`)
+		})
 
 		this._bot.loadPlugin(mapDownloader);
 		this._bot.loadPlugin(pathfinder);
@@ -63,18 +67,36 @@ export class ClientBot implements IClientBot {
 				});
 			});
 		});
-		this._bot.on('error', (error)=> console.log(error))
-		this._bot.on('spawn', () => this.$spawn.next());
+		this._bot.on('error', (error)=> {
+			logger.error(`${this.accountModel.id}: ${error.message}`);
+		})
+		this._bot.on('spawn', () => {
+			this.$spawn.next()
+			logger.info(`${this.accountModel.id}: Заспавнился на сервере ${this.accountModel.server}`)
+		});
 
 		this._bot.on('windowOpen', (window) => {
+			logger.info(`${this.accountModel.id}: Открыл окно ${window.title}`)
 			const slots = ToGeneralizedItems(window.slots)
 			this.$openWindow.next(slots)
 		});
-		this._bot.on('windowClose', () => this.$closeWindow.next());
-		this._bot.on('message', (json) => this.$chat.next(json.toString()));
+		this._bot.on('windowClose', () => {
+			this.$closeWindow.next()
+			logger.info(`${this.accountModel.id}: Закрыл окно`)
+		});
+		this._bot.on('message', (json) => {
+			logger.info(`${this.accountModel.id}: Получил сообщение ${json.toString()}`)
+			this.$chat.next(json.toString())
+		});
 		this._bot.on('health', ()=> this.$health.next())
-		this._bot.on('death', ()=> this.$death.next())
-		this._bot.once('end', (reason) => this.onDisconnectHandler(reason));
+		this._bot.on('death', ()=> {
+			this.$death.next()
+			logger.warn(`${this.accountModel.id}: Был убит`)
+		})
+		this._bot.once('end', (reason) => {
+			this.onDisconnectHandler(reason)
+			logger.warn(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
+		});
 	}
 
 	disconnect() {
@@ -82,6 +104,7 @@ export class ClientBot implements IClientBot {
 		this._bot.end();
 		this._bot = null
 		this.$status.next(BotStatus.DISCONNECT);
+		logger.info(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
 	}
 
 	private onDisconnectHandler(reason: string) {

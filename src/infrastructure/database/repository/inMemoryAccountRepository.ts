@@ -72,9 +72,6 @@ class InMemoryAccountRepository implements AccountRepository{
             if (dto.version !== undefined) {
                 account.version = dto.version;
             }
-            if (dto.profile !== undefined) {
-                account.profile = dto.profile;
-            }
 
             this.JSONController.saveJSON(accounts);
         }

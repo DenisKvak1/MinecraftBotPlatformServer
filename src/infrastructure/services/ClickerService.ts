@@ -1,8 +1,11 @@
 import { IClickerService } from '../../core/service/ClickerService';
 import { ClientBotRepository } from '../../core/repository/ClientBotRepository/clientBotRepository';
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
-import { Vec3 } from 'vec3';
 import { clearInterval } from 'node:timers';
+import { logger } from '../logger/Logger';
+import { config } from '../../core/config';
+import { Entity } from 'prismarine-entity'
+
 export class ClickerService implements IClickerService {
 	private attackIntervals: Map<string, NodeJS.Timeout> = new Map();
 	private useIntervals: Map<string, NodeJS.Timeout> = new Map();
@@ -14,28 +17,45 @@ export class ClickerService implements IClickerService {
 
 	startAttackClicker(id: string, interval: number): void {
 		const bot = this.repository.getById(id)._bot;
+		logger.info(`${id}: Запустил кликер атаки с интервалом ${interval}`)
+
 		const intervalID = setInterval(async () => {
-			const nearestMob = bot.nearestEntity(entity => {
-				if (entity.type !== "mob" && entity.type !== "hostile" || entity.kind === "Immobile" || entity.kind === "Drops" || entity.kind === 'Vehicles') return false;
+			let nearestMob: Entity | undefined
 
-				const viewDistance = 4;
-				if (bot.entity.position.distanceTo(entity.position) > viewDistance) return false;
+			if (config.autoAIM){
+				nearestMob = bot.nearestEntity(entity => {
+					if (entity.type !== "mob" && entity.type !== "hostile" || entity.kind === "Immobile" || entity.kind === "Drops" || entity.kind === 'Vehicles') return false;
 
-				return true
-			});
+					const viewDistance = 4;
+					if (bot.entity.position.distanceTo(entity.position) > viewDistance) return false;
+
+					return true
+				});
+			}
 
 			let currentMob = bot.entityAtCursor();
 			if (!currentMob) {
-				if (nearestMob) {
-					const pos = nearestMob.position
-					await bot.lookAt(pos)
-					currentMob = nearestMob
+				if (config.autoAIM){
+					if (nearestMob) {
+						const pos = nearestMob.position
+						await bot.lookAt(pos)
+						currentMob = nearestMob
+					} else {
+						return
+					}
 				} else {
 					return
 				}
 			} else {
-				if (currentMob.type !== "mob" && currentMob.type !== "hostile" || currentMob.kind === "Immobile" || currentMob.kind === "Drops" || currentMob.kind === 'Vehicles') return
+				if (
+					currentMob.type !== "mob"
+					&& currentMob.type !== "hostile"
+					|| currentMob.kind === "Immobile"
+					|| currentMob.kind === "Drops"
+					|| currentMob.kind === 'Vehicles'
+				) return
 			}
+
 			bot.attack(currentMob)
 		}, interval);
 		if (this.attackIntervals.get(id)) clearInterval(this.attackIntervals.get(id))
@@ -45,9 +65,11 @@ export class ClickerService implements IClickerService {
 
 	startUseItemClicker(id: string, interval: number): void {
 		const bot = this.repository.getById(id)._bot;
-		const intervalID = setInterval(() => {
+		logger.info(`${id}: Запустил кликер использавание предмтов с интервалом ${interval}`)
+
+		const intervalID = setInterval(async () => {
 			const block = bot.blockAtCursor(4)
-			if (block) bot.activateBlock(block)
+			if (block) await bot.activateBlock(block)
 			bot.activateItem()
 		}, interval);
 		if (this.useIntervals.get(id)) clearInterval(this.useIntervals.get(id))
@@ -58,11 +80,13 @@ export class ClickerService implements IClickerService {
 	stopAttackClicker(id: string): void {
 		clearInterval(this.attackIntervals.get(id))
 		this.attackIntervals.delete(id);
+		logger.info(`${id}: Остановил кликер атаки`)
 	}
 
 	stopUseItemClicker(id: string): void {
 		clearInterval(this.useIntervals.get(id))
 		this.useIntervals.delete(id);
+		logger.info(`${id}: Остановил кликер использавание предметов`)
 	}
 
 	attack(id: string): void {

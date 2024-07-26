@@ -17,5 +17,6 @@ const app = new App(
 	windowsService,
 	chatService,
 	captchaService,
+	farmService
 );
 app.start(3000);

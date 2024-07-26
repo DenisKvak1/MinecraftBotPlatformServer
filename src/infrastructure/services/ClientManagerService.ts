@@ -8,6 +8,7 @@ import { accountService, AccountService } from '../../core/service/AccountServic
 import { BotStatus, ClientAccountModel } from '../../core/model/AccountModel';
 import { Observable, Subscribe } from '../../../env/helpers/observable';
 import { Bot } from 'mineflayer';
+import { logger } from '../logger/Logger';
 
 export class ClientManagerService implements IClientManagerService{
 	$connect = new Observable<{id: string}>()
@@ -31,15 +32,18 @@ export class ClientManagerService implements IClientManagerService{
 		})
 
 		bot.once('login', async ()=>{
-			const captchaProfile = getProfileCaptcha(profile.accountModel.profile)
+			const captchaProfile = getProfileCaptcha(profile.accountModel.server)
 			if (!captchaProfile) return
 
 			const checkCaptcha = async (message: any)=>{
 				if (message.toString().startsWith('BotFilter >> Вы ввели капчу неправильно, пожалуйста попробуйте ещё раз.')){
 					try {
 						const imageBuffer = await this.captchaService.loadCaptcha(id, captchaProfile)
+						logger.info(`${id}: Капча полученна`)
 						profile.$captcha.next(imageBuffer)
-					} catch (e){}
+					} catch (e){
+						logger.warn(`${id}: Ошибка при получении капчи ${e.message}`)
+					}
 				}
 			}
 
@@ -47,8 +51,11 @@ export class ClientManagerService implements IClientManagerService{
 			setTimeout(()=> bot.off('message', checkCaptcha), 10000)
 			try {
 				const imageBuffer = await this.captchaService.loadCaptcha(id, captchaProfile)
+				logger.info(`${id}: Капча полученна`)
 				profile.$captcha.next(imageBuffer)
-			} catch (e){}
+			} catch (e){
+				logger.warn(`${id}: Ошибка при получении капчи ${e.message}`)
+			}
 		})
 
 		bot.once('end', ()=>{

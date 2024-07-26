@@ -4,6 +4,7 @@ import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { InventoryUpdateDTO } from '../../core/service/ClientBot';
 import { Subscribe } from '../../../env/helpers/observable';
 import { ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
+import { logger } from '../logger/Logger';
 
 export class InventoryService implements IInventoryService {
 	constructor(
@@ -12,6 +13,7 @@ export class InventoryService implements IInventoryService {
 	}
 
 	async dropSlot(id: string, slot: number): Promise<void> {
+		logger.info(`${id}: Выкинул предмет с индексом ${slot}`)
 		const bot = this.repository.getById(id)._bot;
 		const item = bot.inventory.slots[slot];
 		if (!item) return;
@@ -20,6 +22,7 @@ export class InventoryService implements IInventoryService {
 	}
 
 	setHotBarSlot(id: string, slot: number): void {
+		logger.info(`${id}: Выбрал стот хотбара с индексом ${slot}`)
 		const bot = this.repository.getById(id)._bot;
 		bot.setQuickBarSlot(slot);
 	}
@@ -27,6 +30,7 @@ export class InventoryService implements IInventoryService {
 	dropAll(id: string): void {
 		const bot = this.repository.getById(id)._bot;
 		const inventory = bot.inventory.items();
+		logger.info(`${id}: Выкинул все предметы из инвентаря`)
 
 		inventory.forEach((item, index) => {
 			setTimeout(()=> bot.tossStack(item), 100)
@@ -49,6 +53,8 @@ export class InventoryService implements IInventoryService {
 
 	useSlot(id: string, slotID: number): void {
 		const bot = this.repository.getById(id)._bot
+		logger.info(`${id}: Активирован предмет в слоте с индексом ${slotID}`)
+
 		bot.setQuickBarSlot(slotID)
 		bot.activateItem()
 	}

@@ -1,7 +1,6 @@
-import {AccountUpdateDTO, CreateAccountDTO} from "../repository/AccountRepository/dto/AccountDTO";
-import {AccountRepository} from "../repository/AccountRepository/AccountRepository";
-import {inMemoryAccountRepository} from "../../infrastructure/database/repository/inMemoryAccountRepository";
-import { getProfile } from '../config';
+import { AccountUpdateDTO, CreateAccountDTO } from '../repository/AccountRepository/dto/AccountDTO';
+import { AccountRepository } from '../repository/AccountRepository/AccountRepository';
+import { inMemoryAccountRepository } from '../../infrastructure/database/repository/inMemoryAccountRepository';
 import { ClientBotRepository } from '../repository/ClientBotRepository/clientBotRepository';
 import { botInRAMRepository } from '../../infrastructure/database/repository/inRAMBotDateBase';
 import { AccountModel, BotStatus, ClientAccountModel } from '../model/AccountModel';
@@ -13,12 +12,6 @@ export class AccountService {
     ) {}
 
     async create(account: CreateAccountDTO): Promise<ClientAccountModel> {
-        if (account.profile){
-            const profile = getProfile(account.profile)
-            account.version = profile.version;
-            account.port = profile.port
-            account.server = profile.host
-        }
         const newAccount = await this.accountRepository.create(account)
         const clientAccount = {
             ...newAccount,
@@ -58,12 +51,6 @@ export class AccountService {
     }
 
     async update(id: string, dto:AccountUpdateDTO) {
-        if (dto.profile){
-            const profile = getProfile(dto.profile)
-            dto.port = profile.port
-            dto.version = profile.version
-            dto.server = profile.host
-        }
         this.accountRepository.update(id, dto)
     }
 

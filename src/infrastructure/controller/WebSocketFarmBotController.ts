@@ -7,9 +7,10 @@ import { IFarmService } from '../../core/service/FarmService';
 import { farmService } from '../services/FarmService';
 import { clientManagerService } from '../services/ClientManagerService';
 import {
+	IncomingGetFarmState,
 	IncomingToggleFarmMessage,
-	IncomingToggleFoodMessage,
-	OutgoingReplayMessage,
+	IncomingToggleFoodMessage, OutgoingBotFarmStatusMessage, OutgoingGetFarmStatusMessage,
+	OutgoingReplayMessage, STATUS, UNIVERSAL_COMMAND_LIST,
 } from '../express/types/webSocketBotCommandTypes';
 
 export class WebSocketFarmBotController {
@@ -37,6 +38,26 @@ export class WebSocketFarmBotController {
 
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
+			returnWSError(message, e.message, this.wsClients);
+		}
+	}
+
+	async getFarmStatus(message: IncomingGetFarmState) {
+		try {
+			const botID = message.botID;
+
+
+			const status = this.farmService.getFarmState(botID)
+
+			this.wsClients.broadcast<OutgoingGetFarmStatusMessage>({
+				command: UNIVERSAL_COMMAND_LIST.GET_FARM_STATUS,
+				botID,
+				status: STATUS.SUCCESS,
+				data: {
+					status: status
+				}
+			})
+		}	catch (e) {
 			returnWSError(message, e.message, this.wsClients);
 		}
 	}

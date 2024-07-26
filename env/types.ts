@@ -1,4 +1,5 @@
 export type toggle = "START" | "STOP"
+export type toggleInfo = 'ON' | 'OFF'
 
 export type GeneralizedItem = {
 	name: string,

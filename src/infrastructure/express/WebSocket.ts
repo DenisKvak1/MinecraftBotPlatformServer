@@ -21,6 +21,7 @@ import { webSocketWalkBotController } from '../controller/WebSocketWalkBotContro
 import { websocketWindowController } from '../controller/WebSocketWindowBotController';
 import { UNIVERSAL_COMMAND_LIST } from './types/webSocketBotCommandTypes';
 import path from 'path';
+import { IFarmService } from '../../core/service/FarmService';
 
 export class App {
 	private express = express()
@@ -35,6 +36,7 @@ export class App {
 		private windowService: IWindowService,
 		private chatService: IChatService,
 		private captchaService: ICaptchaService,
+		private farmService: IFarmService
 	) {
 		this.init();
 	}
@@ -47,6 +49,7 @@ export class App {
 			this.windowService,
 			this.chatService,
 			this.captchaService,
+			this.farmService
 		)
 		this.initRoutes()
 		this.initStatic()
@@ -62,6 +65,7 @@ export class App {
 
 	private initRoutes(){
 		this.routes = {
+			[UNIVERSAL_COMMAND_LIST.GET_FARM_STATUS]: (message: IncomingMessage)=> websocketFarmController.getFarmStatus(message as any),
 			[UNIVERSAL_COMMAND_LIST.CREATE_BOT]: (message: IncomingMessage) => websocketAccountController.createBot(message as any),
 			[UNIVERSAL_COMMAND_LIST.DELETE_BOT]: (message: IncomingMessage) => websocketAccountController.deleteBot(message as any),
 			[UNIVERSAL_COMMAND_LIST.GET_BOT_ID]: (message: IncomingMessage) => websocketAccountController.getByID(message as any),
