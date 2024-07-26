@@ -12,6 +12,7 @@ import {
 	OutgoingGetBotInfoMessage,
 	OutgoingGetBotsInfoMessage, OutgoingReplayMessage, STATUS,
 } from '../express/types/webSocketBotCommandTypes';
+import { ClientAccountModel } from '../../core/model/AccountModel';
 
 export class WebSocketAccountServiceController {
 	constructor(
@@ -41,7 +42,10 @@ export class WebSocketAccountServiceController {
 				botID,
 				status: STATUS.SUCCESS,
 				data: {
-					account,
+					account: {
+						...account,
+						status: this.clientManager.getStatus(account.id)
+					},
 				},
 			});
 		} catch (e) {
@@ -72,7 +76,7 @@ export class WebSocketAccountServiceController {
 	async getByID(message: IncomingGetBotInfoIDMessage) {
 		try {
 			const id = message.data.id;
-			const account = await this.accountService.getByID(id);
+			const account = await this.clientManager.getClientAccount(id)
 
 			if (!account) {
 				return this.wsClients.broadcast<OutgoingReplayMessage>({
@@ -99,7 +103,7 @@ export class WebSocketAccountServiceController {
 	async getByName(message: IncomingGetBotInfoNameMessage) {
 		try {
 			const name = message.data.name;
-			const account = await this.accountService.getByName(name);
+			const account = await this.clientManager.getClientAccountByName(name)
 
 			if (!account) {
 				return this.wsClients.broadcast<OutgoingReplayMessage>({
@@ -115,7 +119,7 @@ export class WebSocketAccountServiceController {
 				botID: message.botID,
 				status: STATUS.SUCCESS,
 				data: {
-					account,
+					account
 				},
 			});
 		} catch (e) {
@@ -126,14 +130,14 @@ export class WebSocketAccountServiceController {
 
 	async getBots(message: IncomingGetBotsMessage) {
 		try {
-			const accounts = await this.accountService.getAll();
+			const accounts = await this.clientManager.getClientsAccounts()
 
 			return this.wsClients.broadcast<OutgoingGetBotsInfoMessage>({
 				command: message.command,
 				botID: message.botID,
 				status: STATUS.SUCCESS,
 				data: {
-					accounts,
+					accounts
 				},
 			});
 		} catch (e) {

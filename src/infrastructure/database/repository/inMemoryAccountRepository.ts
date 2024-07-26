@@ -39,9 +39,17 @@ class InMemoryAccountRepository implements AccountRepository{
         this.JSONController.saveJSON(accounts);
     }
 
-    getAll(): Promise<AccountModel[]> {
-        return this.JSONController.loadJSON();
+    async getAll(): Promise<AccountModel[]> {
+        const accounts: AccountModel[] = await this.JSONController.loadJSON();
+        accounts.forEach(account => {
+            const bot = this.botRepository.getByName(account.nickname);
+            if (!bot) {
+                this.botRepository.create(account);
+            }
+        });
+        return accounts;
     }
+
 
     async getByID(id: string): Promise<AccountModel> | undefined {
         const accounts: AccountModel    [] = this.JSONController.loadJSON();
@@ -85,9 +93,6 @@ class InMemoryAccountRepository implements AccountRepository{
                 account.profile = dto.profile;
             }
 
-            if (dto.status !== undefined) {
-                account.status = dto.status;
-            }
             this.JSONController.saveJSON(accounts);
         }
     }

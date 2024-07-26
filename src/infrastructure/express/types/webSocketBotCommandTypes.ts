@@ -1,8 +1,8 @@
 import { HeadRotateDirection } from '../../services/HeadService';
-import { AccountModel } from '../../../core/model/AccountModel';
 import { MovementDirection } from '../../services/WalkService';
 import { GeneralizedItem, toggle } from '../../../../env/types';
 import { BotProfile } from '../../../core/config';
+import { ClientAccountModel } from '../../../core/model/AccountModel';
 
 export type IncomingMessage<T = any> = {
 	command: UNIVERSAL_COMMAND_LIST
@@ -90,10 +90,10 @@ export type IncomingGetBotInfoNameMessage = IncomingMessage<{
 	name: string
 }>
 export type OutgoingGetBotInfoMessage = OutgoingReplayMessage<{
-	account: AccountModel
+	account: ClientAccountModel 
 }>
 export type OutgoingGetBotsInfoMessage = OutgoingReplayMessage<{
-	accounts: AccountModel[]
+	accounts: ClientAccountModel[]
 }>
 export type IncomingGetSlotsMessage = IncomingMessage
 export type OutgoingCaptchaMessage = {
@@ -125,7 +125,7 @@ export type OutgoingGetSlotsReplayMessage = OutgoingReplayMessage<{
 	selectedSlot: number
 }>
 export type OutgoingCreateBotReplayMessage = OutgoingReplayMessage<{
-	account: AccountModel
+	account: ClientAccountModel
 }>
 export type OutgoingInventoryUpdateBotMessage = {
 	command: OUTGHOING_COMMAND_LIST.INVENTORY_UPDATE
