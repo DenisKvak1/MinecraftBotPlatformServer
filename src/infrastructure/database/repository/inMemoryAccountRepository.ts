@@ -1,15 +1,14 @@
-import {AccountRepository} from "../../../core/repository/AccountRepository/AccountRepository";
-import {IJSONController, JSONController, JSONControllerImpl} from "../../module/JSONController";
-import {AccountUpdateDTO, CreateAccountDTO} from "../../../core/repository/AccountRepository/dto/AccountDTO";
-import {AccountModel} from "../../../core/model/AccountModel";
+import { AccountRepository } from '../../../core/repository/AccountRepository/AccountRepository';
+import { IJSONController, JSONControllerImpl } from '../../module/JSONController';
+import { AccountUpdateDTO, CreateAccountDTO } from '../../../core/repository/AccountRepository/dto/AccountDTO';
+import { AccountModel } from '../../../core/model/AccountModel';
 import { v4 as uuidv4 } from 'uuid';
 import { ClientBotRepository } from '../../../core/repository/ClientBotRepository/clientBotRepository';
 import { botInRAMRepository } from './inRAMBotDateBase';
 
 class InMemoryAccountRepository implements AccountRepository{
     constructor(
-        private JSONController: IJSONController,
-        private botRepository: ClientBotRepository
+        private JSONController: IJSONController
     ) {}
 
 
@@ -21,7 +20,6 @@ class InMemoryAccountRepository implements AccountRepository{
         } as AccountModel;
         account.push(createAccount);
         this.JSONController.saveJSON(account);
-        this.botRepository.create(createAccount)
         return createAccount
     }
 
@@ -40,14 +38,7 @@ class InMemoryAccountRepository implements AccountRepository{
     }
 
     async getAll(): Promise<AccountModel[]> {
-        const accounts: AccountModel[] = await this.JSONController.loadJSON();
-        accounts.forEach(account => {
-            const bot = this.botRepository.getByName(account.nickname);
-            if (!bot) {
-                this.botRepository.create(account);
-            }
-        });
-        return accounts;
+        return await this.JSONController.loadJSON();
     }
 
 
@@ -55,10 +46,6 @@ class InMemoryAccountRepository implements AccountRepository{
         const accounts: AccountModel    [] = this.JSONController.loadJSON();
         const account = accounts.find((item) => item.id === id);
         if (!account) return undefined;
-        const bot = this.botRepository.getByName(account.nickname)
-        if (!bot) {
-            this.botRepository.create(account)
-        }
 
         return account
     }
@@ -67,10 +54,6 @@ class InMemoryAccountRepository implements AccountRepository{
         const accounts: AccountModel    [] = this.JSONController.loadJSON();
         const account = accounts.find((item) => item.nickname === name);
         if (!account) return undefined;
-        const bot = this.botRepository.getByName(account.nickname)
-        if (!bot) {
-            this.botRepository.create(account)
-        }
 
         return account
     }
@@ -111,4 +94,4 @@ class InMemoryAccountRepository implements AccountRepository{
         }
     }
 }
-export const inMemoryAccountRepository = new InMemoryAccountRepository(JSONControllerImpl, botInRAMRepository)
+export const inMemoryAccountRepository = new InMemoryAccountRepository(JSONControllerImpl)

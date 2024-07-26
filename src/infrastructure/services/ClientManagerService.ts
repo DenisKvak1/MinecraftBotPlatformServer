@@ -93,36 +93,6 @@ export class ClientManagerService implements IClientManagerService{
 		})
 	}
 
-	async getClientAccountByName(name: string): Promise<ClientAccountModel | undefined> {
-		const account = await this.accountService.getByName(name)
-		if (!account) return undefined
-		const clientAccount = {
-			...account,
-			status: this.getStatus(account.id)
-		}
-		return clientAccount
-	}
-
-	async getClientAccount(id: string): Promise<ClientAccountModel | undefined> {
-		const account = await this.accountService.getByID(id)
-		if (!account) return undefined
-		const clientAccount = {
-			...account,
-			status: this.getStatus(account.id)
-		}
-		return clientAccount
-	}
-
-	async getClientsAccounts(): Promise<ClientAccountModel[]> {
-		const clientsAccounts = (await this.accountService.getAll()).map((account)=>{
-			return {
-				...account,
-				status: this.getStatus(account.id)
-			}
-		})
-		return clientsAccounts
-	}
-
 	getStatus(id: string): BotStatus {
 		return this.botRepository.getById(id).$status.getValue()
 	}
