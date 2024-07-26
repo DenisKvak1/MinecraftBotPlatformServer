@@ -1,5 +1,5 @@
 import { IClientBot, InventoryUpdateDTO } from '../../core/service/ClientBot';
-import { AccountModel } from '../../core/model/AccountModel';
+import { AccountModel, BotStatus } from '../../core/model/AccountModel';
 import { Bot, createBot } from 'mineflayer';
 import { Observable } from '../../../env/helpers/observable';
 import { Movements, pathfinder } from 'mineflayer-pathfinder';
@@ -10,6 +10,7 @@ import { ToGeneralizedItem, ToGeneralizedItems } from '../../../env/helpers/ToGe
 
 export class ClientBot implements IClientBot {
 	_bot: Bot;
+	$status = new Observable<BotStatus>(BotStatus.DISCONNECT)
 	$disconnect = new Observable<string>;
 	$spawn = new Observable<null>;
 	$openWindow = new Observable<GeneralizedItem[]>();
@@ -39,6 +40,8 @@ export class ClientBot implements IClientBot {
 			});
 		} catch (e){}
 
+		this._bot.once('login', ()=> this.$status.next(BotStatus.CONNECT))
+
 		this._bot.loadPlugin(mapDownloader);
 		this._bot.loadPlugin(pathfinder);
 		this.initEvents();
@@ -60,10 +63,10 @@ export class ClientBot implements IClientBot {
 				});
 			});
 		});
+		this._bot.on('error', (error)=> console.log(error))
 		this._bot.on('spawn', () => this.$spawn.next());
 
 		this._bot.on('windowOpen', (window) => {
-			console.log(window)
 			const slots = ToGeneralizedItems(window.slots)
 			this.$openWindow.next(slots)
 		});
@@ -77,7 +80,8 @@ export class ClientBot implements IClientBot {
 	disconnect() {
 		if (!this._bot) return;
 		this._bot.end();
-		this._bot = null;
+		this._bot = null
+		this.$status.next(BotStatus.DISCONNECT);
 	}
 
 	private onDisconnectHandler(reason: string) {

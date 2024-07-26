@@ -7,9 +7,12 @@ export type AccountModel = {
     server: string,
     version: string,
     port: number,
-    status: BotStatus
     profile: BotProfile
 }
+export type ClientAccountModel = AccountModel & {
+    status: BotStatus
+}
+
 export enum BotStatus {
     CONNECT= "CONNECT",
     DISCONNECT = "DISCONNECT",

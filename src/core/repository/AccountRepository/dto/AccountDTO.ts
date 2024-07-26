@@ -13,5 +13,4 @@ export type AccountUpdateDTO = {
     server?: string
     version?: string,
     profile?: BotProfile
-    status?: BotStatus
 }

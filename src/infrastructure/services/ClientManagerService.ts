@@ -5,9 +5,9 @@ import { captchaService } from './CaptchaService';
 import { ICaptchaService } from '../../core/service/CaptchaService';
 import { getProfileCaptcha } from '../../core/config';
 import { accountService, AccountService } from '../../core/service/AccountService';
-import { BotStatus } from '../../core/model/AccountModel';
+import { BotStatus, ClientAccountModel } from '../../core/model/AccountModel';
 import { Observable, Subscribe } from '../../../env/helpers/observable';
-import { inMemoryAccountRepository } from '../database/repository/inMemoryAccountRepository';
+import { Bot } from 'mineflayer';
 
 export class ClientManagerService implements IClientManagerService{
 	$connect = new Observable<{id: string}>()
@@ -27,7 +27,6 @@ export class ClientManagerService implements IClientManagerService{
 		profile.connect()
 		const bot = this.botRepository.getById(id)._bot
 		bot.once('login', ()=> {
-			this.accountService.update(id, {status: BotStatus.CONNECT})
 			this.$connect.next({id})
 		})
 
@@ -53,14 +52,13 @@ export class ClientManagerService implements IClientManagerService{
 		})
 
 		bot.once('end', ()=>{
-			this.accountService.update(id, {status: BotStatus.DISCONNECT})
 			this.$disconnect.next({id})
 		})
 	}
 
 	disconnect(id: string) {
-		this.botRepository.getById(id)?.disconnect();
-		this.accountService.update(id, {status: BotStatus.DISCONNECT})
+		const client = this.botRepository.getById(id)
+		client?.disconnect()
 	}
 
 	onDisconnect(id: string, callback: (reason: string) => void) {
@@ -95,8 +93,12 @@ export class ClientManagerService implements IClientManagerService{
 		})
 	}
 
+	getStatus(id: string): BotStatus {
+		return this.botRepository.getById(id).$status.getValue()
+	}
+
 	async checkOnline(id: string): Promise<boolean> {
-		return (await this.accountService.getByID(id)).status === "CONNECT"
+		return this.botRepository.getById(id).$status.getValue() === BotStatus.CONNECT
 	}
 
 	async isPossibleBot(id: string): Promise<boolean> {
