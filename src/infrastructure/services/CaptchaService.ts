@@ -6,6 +6,7 @@ import { CaptchaSharp } from '../module/CaptchaSharp';
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { Captcha } from '../module/Captcha';
 import { Subscribe } from '../../../env/helpers/observable';
+import { logger } from '../logger/Logger';
 
 
 export class CaptchaService implements ICaptchaService {
@@ -22,6 +23,7 @@ export class CaptchaService implements ICaptchaService {
 
 	async loadCaptcha(id: string, captchaPreset: CaptchaPreset): Promise<Buffer> {
 		const bot = this.repository.getById(id)._bot;
+		logger.info(`${id}: Запрос на прохождение капчи`)
 
 		const captcha = new Captcha(bot,  captchaPreset)
 		return captcha.execute()

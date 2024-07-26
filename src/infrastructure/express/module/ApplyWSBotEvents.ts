@@ -6,14 +6,17 @@ import { IClientManagerService } from '../../../core/service/ClientManagerServic
 import { WebSocketClientsController } from './WebSocketClientsController';
 import { Subscribe } from '../../../../env/helpers/observable';
 import {
-	OUTGHOING_COMMAND_LIST, OutgoingActionWindowBotMessage,
+	OUTGHOING_COMMAND_LIST,
+	OutgoingActionWindowBotMessage,
 	OutgoingBotDamageMessage,
-	OutgoingBotDeathMessage, OutgoingCaptchaMessage,
+	OutgoingBotDeathMessage,
+	OutgoingBotFarmStatusMessage,
+	OutgoingCaptchaMessage,
 	OutgoingChatBotMessage,
 	OutgoingConnectingBotMessage,
 	OutgoingInventoryUpdateBotMessage,
 } from '../types/webSocketBotCommandTypes';
-import { it } from 'node:test';
+import { IFarmService } from '../../../core/service/FarmService';
 
 
 export async function ApplyWSBotEvents(
@@ -23,6 +26,7 @@ export async function ApplyWSBotEvents(
 	windowService: IWindowService,
 	chatService: IChatService,
 	captchaService: ICaptchaService,
+	farmService: IFarmService
 ) {
 	const subscribeMap = new Map<string, Subscribe[]>();
 
@@ -113,18 +117,26 @@ export async function ApplyWSBotEvents(
 			onCloseWindowSubscribe
 		])
 	});
-
 	const unConnectSubscribe = clientManagerService.$disconnect.subscribe((disconnectData)=> {
 		subscribeMap.get(disconnectData.id)?.forEach((subscribe)=> {
 			subscribe.unsubscribe()
 		})
 		subscribeMap.delete(disconnectData.id)
 	})
+	const onFarmSubscribe = farmService.$farm.subscribe((data)=>{
+		webSocketController.broadcast<OutgoingBotFarmStatusMessage>({
+			command: OUTGHOING_COMMAND_LIST.FARM_ACTION,
+			id: data.id,
+			action: data.action
+		})
+	})
+
 
 	return {
 		unsubscribe: ()=>{
 			connectSubscribe.unsubscribe()
 			unConnectSubscribe.unsubscribe()
+			onFarmSubscribe.unsubscribe()
 		}
 	} as Subscribe;
 }

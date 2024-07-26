@@ -1,37 +1,18 @@
 import { CaptchaPreset } from './service/CaptchaService';
 import path from 'node:path';
-export function getProfileCaptcha(botProfile: BotProfile) {
-    switch (botProfile) {
-        case BotProfile.FUNTIME:
+
+export const config = {
+    autoAIM: true,
+    logger: true
+}
+
+export function getProfileCaptcha(server: string) {
+    switch (server) {
+        case 'mc.funtime.su':
             return FuntimeCaptcha
-        case BotProfile.HOLYWORLD:
+        case 'mc.hoylworld.io':
             return HolyWorldCaptcha
     }
-}
-export function getProfile(botProfile: BotProfile) {
-    switch (botProfile) {
-        case BotProfile.FUNTIME:
-            return FuntimeProfile
-        case BotProfile.HOLYWORLD:
-            return HolyWorldProfile
-    }
-}
-
-
-export enum BotProfile {
-    FUNTIME = "FUNTIME",
-    HOLYWORLD = "HOLYWORLD",
-}
-export const FuntimeProfile = {
-    host: 'mc.funtime.su',
-    port: 25565,
-    version: '1.16.5'
-}
-
-export const HolyWorldProfile = {
-    host: 'mc.holyworld.io',
-    port: 25565,
-    version: '1.18.1'
 }
 
 export const FuntimeCaptcha: CaptchaPreset = {

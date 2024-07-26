@@ -1,7 +1,6 @@
 import { HeadRotateDirection } from '../../services/HeadService';
 import { MovementDirection } from '../../services/WalkService';
-import { GeneralizedItem, toggle } from '../../../../env/types';
-import { BotProfile } from '../../../core/config';
+import { GeneralizedItem, toggle, toggleInfo } from '../../../../env/types';
 import { ClientAccountModel } from '../../../core/model/AccountModel';
 
 export type IncomingMessage<T = any> = {
@@ -31,7 +30,6 @@ export type IncomingCreateBotMessage = IncomingMessage<{
 }>
 export type IncomingDeleteBotMessage = IncomingMessage
 export type IncomingUpdateBotOptionsMessage = IncomingMessage<{
-	profile: BotProfile,
 	server?: string,
 	port?: number,
 	version?: string,
@@ -81,6 +79,8 @@ export type IncomingClickWindowMessage = IncomingMessage<{
 	slotIndex: number
 }>
 export type IncomingGetCurrentWindow = IncomingMessage
+export type IncomingGetFarmState = IncomingMessage
+
 export type IncomingGetBotsMessage = IncomingMessage
 export type IncomingJumpBotMessage = IncomingMessage
 export type IncomingGetBotInfoIDMessage = IncomingMessage<{
@@ -91,6 +91,9 @@ export type IncomingGetBotInfoNameMessage = IncomingMessage<{
 }>
 export type OutgoingGetBotInfoMessage = OutgoingReplayMessage<{
 	account: ClientAccountModel 
+}>
+export type OutgoingGetFarmStatusMessage = OutgoingReplayMessage<{
+	status: toggleInfo
 }>
 export type OutgoingGetBotsInfoMessage = OutgoingReplayMessage<{
 	accounts: ClientAccountModel[]
@@ -150,6 +153,12 @@ export type OutgoingBotDeathMessage = {
 	command: OUTGHOING_COMMAND_LIST.DEATH
 	id: string
 }
+export type OutgoingBotFarmStatusMessage = {
+	command: OUTGHOING_COMMAND_LIST.FARM_ACTION,
+	id: string,
+	action: toggle
+}
+
 
 export enum UNIVERSAL_COMMAND_LIST {
 	CREATE_BOT = 'CREATE_BOT',
@@ -163,6 +172,7 @@ export enum UNIVERSAL_COMMAND_LIST {
 	ATTACK = 'ATTACK',
 	TOGGLE_CLICKER = 'TOGGLE_CLICKER',
 	TOGGLE_FOOD = 'TOGGLE_FOOD',
+	GET_FARM_STATUS = 'GET_FARM_STATUS',
 	TOGGLE_FARM = 'TOGGLE_FARM',
 	ROTATE_HEAD = 'ROTATE_HEAD',
 	SET_HOTBAR_SLOT = 'SET_HOTBAR_SLOT',
@@ -184,6 +194,7 @@ export enum OUTGHOING_COMMAND_LIST {
 	POSITION_BOT = 'POSITION_BOT',
 	LOAD_CAPTCHA = 'LOAD_CAPTCHA',
 	INVENTORY_UPDATE = 'INVENTORY_UPDATE',
+	FARM_ACTION = 'FARM_ACTION',
 	DAMAGE = 'DAMAGE',
 	DEATH = 'DEATH'
 }
