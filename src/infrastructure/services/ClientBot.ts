@@ -3,11 +3,11 @@ import { AccountModel, BotStatus } from '../../core/model/AccountModel';
 import { Bot, createBot } from 'mineflayer';
 import { Observable } from '../../../env/helpers/observable';
 import { Movements, pathfinder } from 'mineflayer-pathfinder';
-import { FuntimeCaptcha } from '../../core/config';
 import { mapDownloader } from 'mineflayer-item-map-downloader';
 import { GeneralizedItem } from '../../../env/types';
 import { ToGeneralizedItem, ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 import { logger } from '../logger/Logger';
+import { FuntimeCaptcha } from '../controller/captchaConfig/captchaConfig';
 
 export class ClientBot implements IClientBot {
 	_bot: Bot;
@@ -40,6 +40,11 @@ export class ClientBot implements IClientBot {
 				'mapDownloader-outputDir': FuntimeCaptcha.mapsPath,
 			});
 		} catch (e){}
+
+		this._bot.on('login', ()=>{
+			this._bot.emit('windowClose', this._bot.currentWindow)
+			this._bot.currentWindow = null
+		})
 
 		this._bot.once('login', ()=> {
 			this.$status.next(BotStatus.CONNECT)
@@ -93,7 +98,10 @@ export class ClientBot implements IClientBot {
 			this.$death.next()
 			logger.warn(`${this.accountModel.id}: Был убит`)
 		})
-		this._bot.once('end', (reason) => {
+		this._bot.on('kicked', (reason)=>{
+			logger.warn(`${this.accountModel.id}: Был кикнут с сервера ${this.accountModel.server}, с причиной: ${reason.toString()}`)
+		})
+		this._bot.on('end', (reason) => {
 			this.onDisconnectHandler(reason)
 			logger.warn(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
 		});
@@ -109,6 +117,7 @@ export class ClientBot implements IClientBot {
 
 	private onDisconnectHandler(reason: string) {
 		this._bot = null;
+		this.$status.next(BotStatus.DISCONNECT);
 		this.$disconnect.next(reason);
 	}
 

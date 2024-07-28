@@ -13,12 +13,16 @@ export class InventoryService implements IInventoryService {
 	}
 
 	async dropSlot(id: string, slot: number): Promise<void> {
-		logger.info(`${id}: Выкинул предмет с индексом ${slot}`)
+		logger.info(`${id}: Попытка выкинуть предмет с индексом ${slot}`)
 		const bot = this.repository.getById(id)._bot;
 		const item = bot.inventory.slots[slot];
 		if (!item) return;
 
-		await bot.tossStack(item);
+		try {
+			await bot.tossStack(item);
+		} catch (e) {
+			logger.warn(`${id}: Ошибка при выкидывании предмета с индексом ${slot}: ${e.message}`)
+		}
 	}
 
 	setHotBarSlot(id: string, slot: number): void {

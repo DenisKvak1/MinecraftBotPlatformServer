@@ -22,9 +22,17 @@ export class ClickerService implements IClickerService {
 		const intervalID = setInterval(async () => {
 			let nearestMob: Entity | undefined
 
+
 			if (config.autoAIM){
 				nearestMob = bot.nearestEntity(entity => {
-					if (entity.type !== "mob" && entity.type !== "hostile" || entity.kind === "Immobile" || entity.kind === "Drops" || entity.kind === 'Vehicles') return false;
+					if (
+						entity.type !== "mob" &&
+						(entity.type as any) !== 'animal' &&
+						entity.type !== "hostile"
+						|| entity.kind === "Immobile"
+						|| entity.kind === "Drops"
+						|| entity.kind === 'Vehicles'
+					) return false;
 
 					const viewDistance = 4;
 					if (bot.entity.position.distanceTo(entity.position) > viewDistance) return false;
@@ -48,7 +56,8 @@ export class ClickerService implements IClickerService {
 				}
 			} else {
 				if (
-					currentMob.type !== "mob"
+					currentMob.type !== "mob" &&
+					(currentMob.type as any) !== 'animal'
 					&& currentMob.type !== "hostile"
 					|| currentMob.kind === "Immobile"
 					|| currentMob.kind === "Drops"

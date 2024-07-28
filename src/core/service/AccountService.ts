@@ -71,6 +71,7 @@ export class AccountService {
 
 
     async delete(id: string): Promise<void>{
+        this.botRepository.getById(id).disconnect();
         this.accountRepository.deleteByID(id);
         this.botRepository.delete(id)
     };

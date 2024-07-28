@@ -26,14 +26,6 @@ export class WebSocketAccountServiceController {
 			const botID = message.botID;
 			const data = message.data;
 
-			if (await this.accountService.getByName(data.nickname)) {
-				return this.wsClients.broadcast<OutgoingCreateBotReplayMessage>({
-					command: message.command,
-					botID,
-					status: STATUS.ERROR,
-					errorMessage: 'Такой бот уже существует',
-				});
-			}
 			const account = await this.accountService.create(data);
 
 			return this.wsClients.broadcast<OutgoingCreateBotReplayMessage>({
@@ -63,6 +55,7 @@ export class WebSocketAccountServiceController {
 			}
 
 			await this.accountService.delete(botID);
+
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
 			returnWSError(message, e.message, this.wsClients);

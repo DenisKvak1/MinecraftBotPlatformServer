@@ -1,7 +1,8 @@
 {
   "name": "minecraftbot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/index.ts",
+  "bin": "./src/index.ts",
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "dev": "nodemon ./src/index.ts",
@@ -17,6 +18,7 @@
     "mineflayer-pathfinder": "^2.4.5",
     "prismarine-viewer": "^1.28.0",
     "sharp": "^0.33.4",
+    "utf-8-validate": "^6.0.4",
     "uuid": "^10.0.0",
     "winston": "^3.13.1",
     "ws": "^8.18.0"
@@ -27,8 +29,9 @@
     "@types/uuid": "^10.0.0",
     "@types/ws": "^8.5.11",
     "nodemon": "^3.1.4",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "description": ""
 }

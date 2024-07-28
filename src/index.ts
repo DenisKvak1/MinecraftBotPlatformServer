@@ -9,14 +9,19 @@ import { captchaService } from './infrastructure/services/CaptchaService';
 import { farmService } from './infrastructure/services/FarmService';
 import { websocketHeadBotController } from './infrastructure/controller/WebSocketHeadBotController';
 import { UNIVERSAL_COMMAND_LIST } from './infrastructure/express/types/webSocketBotCommandTypes';
+import { logger } from './infrastructure/logger/Logger';
 
-const app = new App(
-	webSocketClients,
-	clientManagerService,
-	inventoryService,
-	windowsService,
-	chatService,
-	captchaService,
-	farmService
-);
-app.start(3000);
+try {
+	const app = new App(
+		webSocketClients,
+		clientManagerService,
+		inventoryService,
+		windowsService,
+		chatService,
+		captchaService,
+		farmService
+	);
+	app.start(3000);
+} catch (e) {
+	logger.error(e.message)
+}

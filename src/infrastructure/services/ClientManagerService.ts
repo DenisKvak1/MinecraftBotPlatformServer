@@ -3,12 +3,12 @@ import { ClientBotRepository } from '../../core/repository/ClientBotRepository/c
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { captchaService } from './CaptchaService';
 import { ICaptchaService } from '../../core/service/CaptchaService';
-import { getProfileCaptcha } from '../../core/config';
 import { accountService, AccountService } from '../../core/service/AccountService';
 import { BotStatus, ClientAccountModel } from '../../core/model/AccountModel';
 import { Observable, Subscribe } from '../../../env/helpers/observable';
 import { Bot } from 'mineflayer';
 import { logger } from '../logger/Logger';
+import { getProfileCaptcha } from '../controller/captchaConfig/captchaConfig';
 
 export class ClientManagerService implements IClientManagerService{
 	$connect = new Observable<{id: string}>()
@@ -67,6 +67,7 @@ export class ClientManagerService implements IClientManagerService{
 		const client = this.botRepository.getById(id)
 		client?.disconnect()
 	}
+
 
 	onDisconnect(id: string, callback: (reason: string) => void) {
 		return this.botRepository.getById(id).$disconnect.subscribe((reason) => {
