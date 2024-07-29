@@ -2,6 +2,7 @@ import { HeadRotateDirection } from '../../services/HeadService';
 import { MovementDirection } from '../../services/WalkService';
 import { GeneralizedItem, toggle, toggleInfo } from '../../../../env/types';
 import { ClientAccountModel } from '../../../core/model/AccountModel';
+import { WindowEvent } from '../../../core/service/ClientBot';
 
 export type IncomingMessage<T = any> = {
 	command: UNIVERSAL_COMMAND_LIST
@@ -109,11 +110,9 @@ export type OutgoingConnectingBotMessage = {
 	id: string,
 	state: 'CONNECT' | 'DISCONNECT' | 'SPAWN'
 }
-export type OutgoingActionWindowBotMessage = {
-	command: OUTGHOING_COMMAND_LIST.WINDOW
+export type OutgoingActionWindowBotMessage = WindowEvent & {
 	id: string,
-	action: "OPEN" | "CLOSE"
-	items?: (GeneralizedItem | null)[]
+	command: OUTGHOING_COMMAND_LIST.WINDOW
 }
 export type OutgoingChatBotMessage = {
 	command: OUTGHOING_COMMAND_LIST.CHAT_MESSAGE

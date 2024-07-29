@@ -7,6 +7,15 @@ export type InventoryUpdateDTO = {
     itemSlot: number
     newItem: GeneralizedItem | null
 }
+export type WindowEvent = {
+    title?: string,
+    action: "OPEN" | "CLOSE" | "UPDATE"
+    items?: (GeneralizedItem | null)[]
+    slotIndex?: number,
+    oldItem?: GeneralizedItem | null
+    newItem?: GeneralizedItem | null
+}
+
 export interface IClientBot{
     _bot: Bot;
     accountModel: AccountModel;
@@ -15,8 +24,7 @@ export interface IClientBot{
     $captcha: IObservable<Buffer>
     $disconnect: IObservable<string>
     $spawn: IObservable<null>
-    $openWindow: IObservable<GeneralizedItem[]>
-    $closeWindow: IObservable<void>
+    $window: IObservable<WindowEvent>
     $chat: IObservable<string>
     $inventoryUpdate: IObservable<InventoryUpdateDTO>
     $death: IObservable<void>
