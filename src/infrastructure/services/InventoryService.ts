@@ -5,6 +5,8 @@ import { InventoryUpdateDTO } from '../../core/service/ClientBot';
 import { Subscribe } from '../../../env/helpers/observable';
 import { ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 import { logger } from '../logger/Logger';
+import { PromiseTimeout } from '../../../env/helpers/promiseTimeout';
+import { Bot } from 'mineflayer';
 
 export class InventoryService implements IInventoryService {
 	constructor(
@@ -12,10 +14,19 @@ export class InventoryService implements IInventoryService {
 	) {
 	}
 
-	async dropSlot(id: string, slot: number): Promise<void> {
+	async dropSlot(id: string | Bot , slot: number): Promise<void> {
 		logger.info(`${id}: Попытка выкинуть предмет с индексом ${slot}`)
-		const bot = this.repository.getById(id)._bot;
+		let bot:Bot
+		if(typeof id === 'string') {
+			bot = this.repository.getById(id)._bot;
+		} else {
+			bot = id
+		}
+
 		const item = bot.inventory.slots[slot];
+		if(bot.currentWindow) {
+			item.slot = (bot.currentWindow.slots.length - 45) + item.slot
+		}
 		if (!item) return;
 
 		try {
@@ -33,11 +44,13 @@ export class InventoryService implements IInventoryService {
 
 	dropAll(id: string): void {
 		const bot = this.repository.getById(id)._bot;
-		const inventory = bot.inventory.items();
+		const inventory = bot.inventory.slots;
 		logger.info(`${id}: Выкинул все предметы из инвентаря`)
 
-		inventory.forEach((item, index) => {
-			setTimeout(()=> bot.tossStack(item), 100)
+		inventory.forEach(async (item) => {
+			if(!item) return
+			await PromiseTimeout(200)
+			await this.dropSlot(bot, item.slot)
 		});
 	}
 

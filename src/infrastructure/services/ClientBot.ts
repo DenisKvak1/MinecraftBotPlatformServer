@@ -1,6 +1,6 @@
-import { IClientBot, InventoryUpdateDTO } from '../../core/service/ClientBot';
+import { IClientBot, InventoryUpdateDTO, WindowEvent } from '../../core/service/ClientBot';
 import { AccountModel, BotStatus } from '../../core/model/AccountModel';
-import { Bot, createBot } from 'mineflayer';
+import { Bot, createBot, StorageEvents } from 'mineflayer';
 import { Observable } from '../../../env/helpers/observable';
 import { Movements, pathfinder } from 'mineflayer-pathfinder';
 import { mapDownloader } from 'mineflayer-item-map-downloader';
@@ -8,14 +8,15 @@ import { GeneralizedItem } from '../../../env/types';
 import { ToGeneralizedItem, ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 import { logger } from '../logger/Logger';
 import { FuntimeCaptcha } from '../controller/captchaConfig/captchaConfig';
+import { Window } from 'prismarine-windows';
+import { Item } from 'prismarine-item';
 
 export class ClientBot implements IClientBot {
 	_bot: Bot;
 	$status = new Observable<BotStatus>(BotStatus.DISCONNECT)
 	$disconnect = new Observable<string>;
 	$spawn = new Observable<null>;
-	$openWindow = new Observable<GeneralizedItem[]>();
-	$closeWindow = new Observable<void>();
+	$window = new Observable<WindowEvent>();
 	$chat = new Observable<string>();
 	$captcha = new Observable<Buffer>();
 	$inventoryUpdate = new Observable<InventoryUpdateDTO>();
@@ -42,6 +43,7 @@ export class ClientBot implements IClientBot {
 		} catch (e){}
 
 		this._bot.on('login', ()=>{
+			if(!this._bot.currentWindow) return
 			this._bot.emit('windowClose', this._bot.currentWindow)
 			this._bot.currentWindow = null
 		})
@@ -80,15 +82,30 @@ export class ClientBot implements IClientBot {
 			logger.info(`${this.accountModel.id}: Заспавнился на сервере ${this.accountModel.server}`)
 		});
 
-		this._bot.on('windowOpen', (window) => {
+		this._bot.on('windowOpen', (window:Window<StorageEvents>) => {
 			logger.info(`${this.accountModel.id}: Открыл окно ${window.title}`)
+
+
+			// @ts-ignore // Incorrect real argument and library types
+			window.on('updateSlot', (slot: number, oldItem: Item | null, newItem: Item | null)=>{
+				this.onWindowSlotUpdate(window, slot, oldItem, newItem)
+			})
 			const slots = ToGeneralizedItems(window.slots)
-			this.$openWindow.next(slots)
+			this.$window.next({
+				title: window.title,
+				action: "OPEN",
+				items: slots?.slice(0, -36)
+			})
 		});
-		this._bot.on('windowClose', () => {
-			this.$closeWindow.next()
+		this._bot.on('windowClose', (window:Window<StorageEvents>) => {
+			// @ts-ignore // Incorrect real argument and library types
+			window?.off('updateSlot', this.onWindowSlotUpdate)
+			this.$window.next({
+				action: "CLOSE",
+			})
 			logger.info(`${this.accountModel.id}: Закрыл окно`)
 		});
+
 		this._bot.on('message', (json) => {
 			logger.info(`${this.accountModel.id}: Получил сообщение ${json.toString()}`)
 			this.$chat.next(json.toString())
@@ -115,6 +132,18 @@ export class ClientBot implements IClientBot {
 		logger.info(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
 	}
 
+	private onWindowSlotUpdate(window: Window<StorageEvents>,slot: number, oldItem: Item | null, newItem: Item | null){
+		if(slot > window.slots.length - 37 ) return
+		if (this.itemsAreEqual(oldItem, newItem)) return
+
+		this.$window.next({
+			action: "UPDATE",
+			slotIndex: slot,
+			oldItem: ToGeneralizedItem(oldItem),
+			newItem: ToGeneralizedItem(newItem)
+		})
+	}
+
 	private onDisconnectHandler(reason: string) {
 		this._bot = null;
 		this.$status.next(BotStatus.DISCONNECT);
@@ -123,5 +152,12 @@ export class ClientBot implements IClientBot {
 
 	private onSpawnHandler() {
 		this.$spawn.next();
+	}
+
+	private itemsAreEqual(item1: Item | null, item2: Item | null): boolean {
+		if (item1 === null && item2 === null) return true;
+		if (item1 === null || item2 === null) return false;
+
+		return item1.name === item2.name && item1.count === item2.count;
 	}
 }

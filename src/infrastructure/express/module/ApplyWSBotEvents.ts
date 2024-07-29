@@ -62,22 +62,19 @@ export async function ApplyWSBotEvents(
 			})
 		})
 
-		const onOpenWindowSubscribe = windowService.onOpenWindow(connectData.id, (items)=>{
+		const onWindowEventSubscribe = windowService.onWindowEvent(connectData.id, (windowEvent)=>{
 			webSocketController.broadcast<OutgoingActionWindowBotMessage>({
-				command: OUTGHOING_COMMAND_LIST.WINDOW,
-				action: 'OPEN',
 				id: connectData.id,
-				items: items.slice(0, -36)
+				command: OUTGHOING_COMMAND_LIST.WINDOW,
+				title: windowEvent.title,
+				action: windowEvent.action,
+				items: windowEvent.items,
+				slotIndex: windowEvent.slotIndex,
+				newItem: windowEvent.newItem,
+				oldItem: windowEvent.oldItem,
 			})
 		})
 
-		const onCloseWindowSubscribe = windowService.onCloseWindow(connectData.id, ()=>{
-			webSocketController.broadcast<OutgoingActionWindowBotMessage>({
-				command: OUTGHOING_COMMAND_LIST.WINDOW,
-				action: 'CLOSE',
-				id: connectData.id,
-			})
-		})
 
 		const onChatMessageSubscribe = chatService.onChatMessage(connectData.id, (message)=>{
 			webSocketController.broadcast<OutgoingChatBotMessage>({
@@ -111,10 +108,9 @@ export async function ApplyWSBotEvents(
 
 		subscribeMap.set(connectData.id, [
 			onSpawnSubscribe, onDisconnectSubscribe,
-			onUpdateSlotInventorySubscribe, onOpenWindowSubscribe,
+			onUpdateSlotInventorySubscribe, onWindowEventSubscribe,
 			onChatMessageSubscribe, onCaptchaSubscribe,
 			onDamageSubscribe, onDeathSubscribe,
-			onCloseWindowSubscribe
 		])
 	});
 	const unConnectSubscribe = clientManagerService.$disconnect.subscribe((disconnectData)=> {

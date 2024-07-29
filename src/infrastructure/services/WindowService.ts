@@ -6,21 +6,16 @@ import EventEmitter from 'node:events';
 import { Window } from 'prismarine-windows';
 import { GeneralizedItem } from '../../../env/types';
 import { logger } from '../logger/Logger';
+import { WindowEvent } from '../../core/service/ClientBot';
 
 export class WindowService implements IWindowService {
 	constructor(
 		private repository: ClientBotRepository,
 	) {}
 
-	onCloseWindow(id: string, callback: ()=> void): Subscribe {
-		return this.repository.getById(id)?.$closeWindow.subscribe(()=>{
-			callback()
-		})
-	}
-
-	onOpenWindow(id: string, callback: (slots: (GeneralizedItem | null)[]) => void): Subscribe {
-		return this.repository.getById(id)?.$openWindow.subscribe((window)=>{
-			callback(window)
+	onWindowEvent(id: string, callback: (windowEvent: WindowEvent) => void): Subscribe {
+		return this.repository.getById(id)?.$window.subscribe((windowEvent)=>{
+			callback(windowEvent)
 		})
 	}
 
