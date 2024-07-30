@@ -68,6 +68,7 @@ export class ClientBot implements IClientBot {
 
 			// @ts-ignore // Incorrect real argument and library types
 			this._bot.inventory.on('updateSlot', (slot: number, oldItem: Item | null, newItem: Item | null) => {
+				if (this.itemsAreEqual(oldItem, newItem)) return
 				this.$inventoryUpdate.next({
 					itemSlot: slot,
 					newItem: ToGeneralizedItem(newItem),
