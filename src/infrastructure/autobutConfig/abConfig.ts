@@ -35,9 +35,26 @@ export const holyworldAutoBuy:abProfile = {
 			price: 11
 		},
 		"Gunpowder": {
-			"price": 10000,
+			"price": 9000,
 			"sellprice": ""
 		},
+		"Totem of Undying": {
+			"price": 200000,    "sellprice": ""
+		},  "- Топор ᴇᴛᴇʀɴɪᴛʏ -": {
+			"price": 100000,    "sellprice": ""
+		},  "- Кирка ᴇᴛᴇʀɴɪᴛʏ -": {
+			"price": 4000000,    "sellprice": ""
+		},  "- Меч ᴇᴛᴇʀɴɪᴛʏ -": {
+			"price": 1100000,    "sellprice": ""
+		},  "Универсальный ключ": {
+			"price": 8000000,    "sellprice": ""
+		},  "Enchanted Golden Apple": {
+			"price": 30000,    "sellprice": ""
+		},  "Netherite Ingot": {
+			"price": 30000,    "sellprice": ""
+		},  "Experience Bottle": {
+			"price": 200,    "sellprice": ""
+		}
 	}
 }
 

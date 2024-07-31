@@ -39,14 +39,14 @@ accountService.getByName('Zancerio45').then(async (data)=>{
 // 	const id = data.id
 // 	ab(id, 1200)
 // })
-accountService.getByName('Zancerio55').then(async (data)=>{
-	const id = data.id
-	ab(id, 1500)
-})
-accountService.getByName('Zancerio65').then(async (data)=>{
-	const id = data.id
-	ab(id, 2000)
-})
+// accountService.getByName('Zancerio55').then(async (data)=>{
+// 	const id = data.id
+// 	ab(id, 1500)
+// })
+// accountService.getByName('Zancerio65').then(async (data)=>{
+// 	const id = data.id
+// 	ab(id, 2000)
+// })
 // accountService.getByName('Zancerio65').then(async (data)=>{
 // 	const id = data.id
 // 	ab(id, 1900)
