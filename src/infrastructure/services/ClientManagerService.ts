@@ -8,7 +8,7 @@ import { BotStatus, ClientAccountModel } from '../../core/model/AccountModel';
 import { Observable, Subscribe } from '../../../env/helpers/observable';
 import { Bot } from 'mineflayer';
 import { logger } from '../logger/Logger';
-import { getProfileCaptcha } from '../controller/captchaConfig/captchaConfig';
+import { getProfileCaptcha } from '../captchaConfig/captchaConfig';
 
 export class ClientManagerService implements IClientManagerService{
 	$connect = new Observable<{id: string}>()

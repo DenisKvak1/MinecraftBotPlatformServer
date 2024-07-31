@@ -1,5 +1,5 @@
-import { CaptchaPreset } from '../../../core/service/CaptchaService';
 import path from 'node:path';
+import { CaptchaPreset } from '../../core/service/CaptchaService';
 
 export function getProfileCaptcha(server: string) {
 	switch (server) {

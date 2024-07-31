@@ -7,9 +7,9 @@ import { mapDownloader } from 'mineflayer-item-map-downloader';
 import { GeneralizedItem } from '../../../env/types';
 import { ToGeneralizedItem, ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 import { logger } from '../logger/Logger';
-import { FuntimeCaptcha } from '../controller/captchaConfig/captchaConfig';
 import { Window } from 'prismarine-windows';
 import { Item } from 'prismarine-item';
+import { FuntimeCaptcha } from '../captchaConfig/captchaConfig';
 
 export class ClientBot implements IClientBot {
 	_bot: Bot;
@@ -84,7 +84,7 @@ export class ClientBot implements IClientBot {
 		});
 
 		this._bot.on('windowOpen', (window:Window<StorageEvents>) => {
-			logger.info(`${this.accountModel.id}: Открыл окно ${window.title}`)
+			// logger.info(`${this.accountModel.id}: Открыл окно ${window.title}`)
 
 
 			// @ts-ignore // Incorrect real argument and library types
@@ -135,7 +135,7 @@ export class ClientBot implements IClientBot {
 
 	private onWindowSlotUpdate(window: Window<StorageEvents>,slot: number, oldItem: Item | null, newItem: Item | null){
 		if(slot > window.slots.length - 37 ) return
-		if (this.itemsAreEqual(oldItem, newItem)) return
+		if(this.itemsAreEqual(oldItem, newItem)) return;
 
 		this.$window.next({
 			action: "UPDATE",
@@ -158,6 +158,7 @@ export class ClientBot implements IClientBot {
 	private itemsAreEqual(item1: Item | null, item2: Item | null): boolean {
 		if (item1 === null && item2 === null) return true;
 		if (item1 === null || item2 === null) return false;
+
 
 		return item1.name === item2.name && item1.count === item2.count;
 	}

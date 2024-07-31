@@ -18,7 +18,8 @@ export const ToGeneralizedItem = (item: Item | null): GeneralizedItem | null => 
 		count: item.count,
 		displayName: item.displayName,
 		customName: convertCustomNameToString(item.customName),
-		customLore: convertCustomLoreToString(item.customLore)
+		customNameHTML: convertCustomNameToString(item.customName, true),
+		customLoreHTML: convertCustomLoreToString(item.customLore)
 	};
 
 
@@ -26,11 +27,11 @@ export const ToGeneralizedItem = (item: Item | null): GeneralizedItem | null => 
 };
 type CustomLore = string | string[] | null;
 
-function convertCustomNameToString(customName: CustomName): string {
+function convertCustomNameToString(customName: CustomName, HTML: boolean = false): string {
 	try {
 		if (typeof customName === 'string') {
 			const chatMessage = new ChatMessage(JSON.parse(customName));
-			return chatMessage.toHTML();
+			return HTML ? chatMessage.toHTML() : chatMessage.toString()
 		}
 		return '';
 	} catch (e) {
