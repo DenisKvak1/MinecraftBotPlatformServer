@@ -30,14 +30,14 @@ export type abProfile = {
 export const holyworldAutoBuy: abProfile = {
 	name: 'holyworld',
 	'priceRegex': /(\d[\d\s]*)¤/, 'updateIndex': 47,
-	'interval': 200, 'shift': false,
+	'interval': 620, 'shift': false,
 	'info': {
 		'Poppy': {
 			price: 11,
 		},
 		'Gunpowder': {
 			'price': 8000,
-			'sellprice': 11999,
+			'sellprice': 12999,
 		},
 		'Totem of Undying': {
 			'price': 200000,
