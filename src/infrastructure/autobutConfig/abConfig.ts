@@ -30,14 +30,14 @@ export type abProfile = {
 export const holyworldAutoBuy: abProfile = {
 	name: 'holyworld',
 	'priceRegex': /(\d[\d\s]*)¤/, 'updateIndex': 47,
-	'interval': 620, 'shift': false,
+	'interval': 500, 'shift': false,
 	'info': {
 		'Poppy': {
 			price: 11,
 		},
 		'Gunpowder': {
 			'price': 8000,
-			'sellprice': 12999,
+			'sellprice': 14999,
 		},
 		'Totem of Undying': {
 			'price': 200000,
@@ -85,9 +85,9 @@ export const holyworldAutoBuy: abProfile = {
 		}, 'Blaze Spawn Egg': {
 			'price': 2000000, 'sellprice': 4000000,
 		}, 'Skeleton Spawn Egg': {
-			'price': 2000000, 'sellprice': 3099000,
+			'price': 1500000, 'sellprice': 3099000,
 		}, 'Wither Skeleton Spawn Egg': {
-			'price': 1500000, 'sellprice': '',
+			'price': 1000000, 'sellprice': '',
 		}, 'Creeper Spawn Egg': {
 			'price': 4000000, 'sellprice': 1450000,
 		}, 'Witch Spawn Egg': {

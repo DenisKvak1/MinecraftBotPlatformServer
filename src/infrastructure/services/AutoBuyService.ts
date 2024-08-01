@@ -49,7 +49,7 @@ export class AutoBuyService implements IAutoBuyService {
 					bot.clickWindow(slotIndex, 0, 1);
 				} else {
 					await this.buyClick(bot, slotIndex);
-					await new Promise<void>((r) => setTimeout(() => r(), 150));
+					await new Promise<void>((r) => setTimeout(() => r(), 250));
 
 					this.checkErrorSelectItem(bot, targetItem, profile)
 					this.sellOnUpdate(bot, profileAccount, profile, targetItem)
@@ -143,6 +143,7 @@ export class AutoBuyService implements IAutoBuyService {
 			stop: () => clearTimeout(timeoutId),
 		};
 	}
+
 
 
 	private onNewItem(profile: abProfile, item: GeneralizedItem | null) {
