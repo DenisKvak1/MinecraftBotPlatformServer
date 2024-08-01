@@ -10,13 +10,14 @@ import {
 	OutgoingActionWindowBotMessage,
 	OutgoingBotDamageMessage,
 	OutgoingBotDeathMessage,
-	OutgoingBotFarmStatusMessage,
+	OutgoingBotFarmStatusMessage, OutgoingBotToggleAB,
 	OutgoingCaptchaMessage,
 	OutgoingChatBotMessage,
 	OutgoingConnectingBotMessage,
 	OutgoingInventoryUpdateBotMessage,
 } from '../types/webSocketBotCommandTypes';
 import { IFarmService } from '../../../core/service/FarmService';
+import { IAutoBuyService } from '../../../core/service/AutoBuy';
 
 
 export async function ApplyWSBotEvents(
@@ -26,7 +27,8 @@ export async function ApplyWSBotEvents(
 	windowService: IWindowService,
 	chatService: IChatService,
 	captchaService: ICaptchaService,
-	farmService: IFarmService
+	farmService: IFarmService,
+	ABService: IAutoBuyService
 ) {
 	const subscribeMap = new Map<string, Subscribe[]>();
 
@@ -59,6 +61,14 @@ export async function ApplyWSBotEvents(
 				id: connectData.id,
 				index: dto.itemSlot,
 				item: dto.newItem ?  dto.newItem : null
+			})
+		})
+
+		const onABSubscribe = ABService.$ab.subscribe((data)=>{
+			webSocketController.broadcast<OutgoingBotToggleAB>({
+				command: OUTGHOING_COMMAND_LIST.AB_ACTION,
+				id: data.id,
+				action: data.action
 			})
 		})
 
@@ -111,6 +121,7 @@ export async function ApplyWSBotEvents(
 			onUpdateSlotInventorySubscribe, onWindowEventSubscribe,
 			onChatMessageSubscribe, onCaptchaSubscribe,
 			onDamageSubscribe, onDeathSubscribe,
+			onABSubscribe
 		])
 	});
 	const unConnectSubscribe = clientManagerService.$disconnect.subscribe((disconnectData)=> {

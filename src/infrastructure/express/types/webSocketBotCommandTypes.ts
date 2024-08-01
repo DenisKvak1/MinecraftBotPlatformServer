@@ -47,6 +47,10 @@ export type IncomingToggleClickerMessage = IncomingMessage<{
 	type: 'ATTACK' | 'USEITEM',
 	interval: number
 }>
+export type IncomingToggleAbMessage = IncomingMessage<{
+	action: toggle
+}>
+
 export type IncomingToggleFoodMessage = IncomingMessage<{
 	action: toggle
 }>
@@ -79,6 +83,7 @@ export type IncomingGotoMessage = IncomingMessage<{
 export type IncomingClickWindowMessage = IncomingMessage<{
 	slotIndex: number
 }>
+export type IncomingGetABState = IncomingMessage
 export type IncomingGetCurrentWindow = IncomingMessage
 export type IncomingGetFarmState = IncomingMessage
 
@@ -94,6 +99,9 @@ export type OutgoingGetBotInfoMessage = OutgoingReplayMessage<{
 	account: ClientAccountModel 
 }>
 export type OutgoingGetFarmStatusMessage = OutgoingReplayMessage<{
+	status: toggleInfo
+}>
+export type OutgoingGetABStatusMessage = OutgoingReplayMessage<{
 	status: toggleInfo
 }>
 export type OutgoingGetBotsInfoMessage = OutgoingReplayMessage<{
@@ -148,6 +156,11 @@ export type OutgoingBotDamageMessage = {
 	command: OUTGHOING_COMMAND_LIST.DAMAGE
 	id: string
 }
+export type OutgoingBotToggleAB = {
+	command: OUTGHOING_COMMAND_LIST.AB_ACTION
+	id: string,
+	action: toggle
+}
 export type OutgoingBotDeathMessage = {
 	command: OUTGHOING_COMMAND_LIST.DEATH
 	id: string
@@ -173,6 +186,8 @@ export enum UNIVERSAL_COMMAND_LIST {
 	TOGGLE_FOOD = 'TOGGLE_FOOD',
 	GET_FARM_STATUS = 'GET_FARM_STATUS',
 	TOGGLE_FARM = 'TOGGLE_FARM',
+	GET_AB_STATUS = 'GET_AB_STATUS',
+	TOGGLE_AB = 'TOGGLE_AB',
 	ROTATE_HEAD = 'ROTATE_HEAD',
 	SET_HOTBAR_SLOT = 'SET_HOTBAR_SLOT',
 	DROP_SLOT = 'DROP_SLOT',
@@ -194,6 +209,7 @@ export enum OUTGHOING_COMMAND_LIST {
 	LOAD_CAPTCHA = 'LOAD_CAPTCHA',
 	INVENTORY_UPDATE = 'INVENTORY_UPDATE',
 	FARM_ACTION = 'FARM_ACTION',
+	AB_ACTION = 'AB_ACTION',
 	DAMAGE = 'DAMAGE',
 	DEATH = 'DEATH'
 }

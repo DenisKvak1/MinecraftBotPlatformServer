@@ -20,7 +20,8 @@ try {
 		windowsService,
 		chatService,
 		captchaService,
-		farmService
+		farmService,
+		autoBuyService
 	);
 	app.start(3000);
 } catch (e) {
@@ -31,7 +32,7 @@ process.on('uncaughtException', (reason)=>{
 	logger.error(reason.message)
 })
 
-accountService.getByName('Zancerio45').then(async (data)=>{
+accountService.getByName('alopKop').then(async (data)=>{
 	const id = data.id
 	ab(id, 1000)
 })

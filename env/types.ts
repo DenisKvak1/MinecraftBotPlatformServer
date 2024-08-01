@@ -4,6 +4,7 @@ export type toggleInfo = 'ON' | 'OFF'
 export type GeneralizedItem = {
 	name: string,
 	count: number,
+	stackSize: number
 	displayName: string,
 
 	customName?: string

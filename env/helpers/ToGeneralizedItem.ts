@@ -16,6 +16,7 @@ export const ToGeneralizedItem = (item: Item | null): GeneralizedItem | null => 
 	const newItem: GeneralizedItem = {
 		name: item.name,
 		count: item.count,
+		stackSize: item.stackSize,
 		displayName: item.displayName,
 		customName: convertCustomNameToString(item.customName),
 		customNameHTML: convertCustomNameToString(item.customName, true),
