@@ -1,14 +1,11 @@
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { ClientBotRepository } from '../../core/repository/ClientBotRepository/clientBotRepository';
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
-import { captchaService } from './CaptchaService';
 import { ICaptchaService } from '../../core/service/CaptchaService';
 import { accountService, AccountService } from '../../core/service/AccountService';
-import { BotStatus, ClientAccountModel } from '../../core/model/AccountModel';
+import { BotStatus } from '../../core/model/AccountModel';
 import { Observable, Subscribe } from '../../../env/helpers/observable';
-import { Bot } from 'mineflayer';
-import { logger } from '../logger/Logger';
-import { getProfileCaptcha } from '../captchaConfig/captchaConfig';
+import { captchaService } from './CaptchaService/CaptchaService';
 
 export class ClientManagerService implements IClientManagerService{
 	$connect = new Observable<{id: string}>()
@@ -31,32 +28,7 @@ export class ClientManagerService implements IClientManagerService{
 			this.$connect.next({id})
 		})
 
-		bot.once('login', async ()=>{
-			const captchaProfile = getProfileCaptcha(profile.accountModel.server)
-			if (!captchaProfile) return
-
-			const checkCaptcha = async (message: any)=>{
-				if (message.toString().startsWith('BotFilter >> Вы ввели капчу неправильно, пожалуйста попробуйте ещё раз.')){
-					try {
-						const imageBuffer = await this.captchaService.loadCaptcha(id, captchaProfile)
-						logger.info(`${id}: Капча полученна`)
-						profile.$captcha.next(imageBuffer)
-					} catch (e){
-						logger.warn(`${id}: Ошибка при получении капчи ${e.message}`)
-					}
-				}
-			}
-
-			bot.on('message', checkCaptcha)
-			setTimeout(()=> bot.off('message', checkCaptcha), 10000)
-			try {
-				const imageBuffer = await this.captchaService.loadCaptcha(id, captchaProfile)
-				logger.info(`${id}: Капча полученна`)
-				profile.$captcha.next(imageBuffer)
-			} catch (e){
-				logger.warn(`${id}: Ошибка при получении капчи ${e.message}`)
-			}
-		})
+		bot.once('login', ()=> this.captchaService.processingCaptcha(id, bot, profile))
 
 		bot.once('end', ()=>{
 			this.$disconnect.next({id})

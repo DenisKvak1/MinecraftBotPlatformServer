@@ -1,11 +1,11 @@
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { IHeadService } from '../../core/service/HeadService';
-import { checkNotOnlineBot } from '../express/helper/checkOnline';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
-import { headService } from '../services/HeadService';
-import { clientManagerService } from '../services/ClientManagerService';
-import { IncomingRotateHeadMessage, OutgoingReplayMessage } from '../express/types/webSocketBotCommandTypes';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { IHeadService } from '../../../core/service/HeadService';
+import { checkNotOnlineBot } from '../../express/helper/checkOnline';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
+import { headService } from '../../services/HeadService';
+import { clientManagerService } from '../../services/ClientManagerService';
+import { IncomingRotateHeadMessage, OutgoingReplayMessage } from '../../express/types/webSocketBotCommandTypes';
 
 export class WebSocketHeadBotController {
 	constructor(

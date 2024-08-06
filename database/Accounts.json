@@ -1,12 +1,5 @@
 [
   {
-    "id": "d1b2802e-6c77-4edf-a1ab-9a5549822ae3",
-    "nickname": "Anufri1000",
-    "server": "mc.holyworld.io",
-    "port": 25565,
-    "version": "1.18.2"
-  },
-  {
     "id": "fe36c0cd-7d41-455e-9eaf-3e4e9879688d",
     "nickname": "Zancerio",
     "server": "mc.holyworld.io",
@@ -47,5 +40,31 @@
     "server": "mc.holyworld.io",
     "port": 25565,
     "version": "1.18.2"
+  },
+  {
+    "id": "95991579-f92a-479e-b9fa-7ffbacc2367d",
+    "nickname": "kirieshka3301",
+    "server": "mc.holyworld.io",
+    "port": 25565,
+    "version": "1.18.2"
+  },
+  {
+    "id": "f5d93639-75cb-413c-a58f-7cd725128274",
+    "whiteList": [
+      "Zancerio45",
+      "alopKop"
+    ],
+    "nickname": "jukMayski103",
+    "server": "mc.holyworld.io",
+    "port": 25565,
+    "version": "1.18.2"
+  },
+  {
+    "id": "14ab19de-b0aa-460c-a0ee-9450b9a32ba6",
+    "nickname": "Anifrim",
+    "server": "127.0.0.1",
+    "port": 25565,
+    "version": "1.16.5",
+    "whiteList": []
   }
 ]

@@ -1,18 +1,18 @@
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { IInventoryService } from '../../core/service/InventoryService';
-import { checkNotOnlineBot } from '../express/helper/checkOnline';
-import { IClientManagerService } from '../../core/service/ClientManagerService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { IInventoryService } from '../../../core/service/InventoryService';
+import { checkNotOnlineBot } from '../../express/helper/checkOnline';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
 import exp from 'node:constants';
-import { inventoryService } from '../services/InventoryService';
-import { clientManagerService } from '../services/ClientManagerService';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
+import { inventoryService } from '../../services/InventoryService';
+import { clientManagerService } from '../../services/ClientManagerService';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import {
 	IncomingActivateSlotMessage,
 	IncomingDropAllSlotMessage, IncomingDropSlotMessage,
 	IncomingGetSlotsMessage, IncomingSetHotBarSlotMessage,
 	OutgoingGetSlotsReplayMessage, OutgoingReplayMessage, STATUS,
 	UNIVERSAL_COMMAND_LIST,
-} from '../express/types/webSocketBotCommandTypes';
+} from '../../express/types/webSocketBotCommandTypes';
 
 export class WebSocketInventoryBotController {
 	constructor(

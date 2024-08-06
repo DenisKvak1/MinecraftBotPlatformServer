@@ -1,7 +1,7 @@
 import { Bot } from 'mineflayer';
-import { CaptchaPreset } from '../../core/service/CaptchaService';
 import path from 'node:path';
 import { CaptchaSharp } from './CaptchaSharp';
+import { CaptchaConfig } from '../services/CaptchaService/captchaConfig';
 
 
 type mapID = number
@@ -23,7 +23,7 @@ export class Captcha {
 
 	constructor(
 		private bot: Bot,
-		private options: CaptchaPreset
+		private options: CaptchaConfig
 	) { }
 
 

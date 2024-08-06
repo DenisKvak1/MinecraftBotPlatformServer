@@ -1,15 +1,16 @@
 import fs from 'fs';
+import { AccountModel } from '../../core/model/AccountModel';
 
 export interface IJSONController {
     saveJSON(data: any): void;
     loadJSON(): any;
 }
 
-export class JSONController {
+export class JSONController<T> {
 
     constructor(private filePath: string) {}
 
-    saveJSON(data: any): void {
+    saveJSON(data: T[]): void {
         try {
             const json = JSON.stringify(data, null, 2);
             fs.writeFileSync(this.filePath, json, 'utf8');
@@ -19,7 +20,7 @@ export class JSONController {
         }
     }
 
-    loadJSON(): any {
+    loadJSON(): T | undefined{
         try {
             if (fs.existsSync(this.filePath)) {
                 const json = fs.readFileSync(this.filePath, 'utf8');
@@ -34,4 +35,4 @@ export class JSONController {
         }
     }
 }
-export const JSONControllerImpl = new JSONController(`${process.cwd()}/database/Accounts.json`)
+export const JSONControllerAccountImpl = new JSONController<AccountModel>(`${process.cwd()}/database/Accounts.json`)

@@ -4,6 +4,7 @@ export type AccountModel = {
     server: string,
     version: string,
     port: number,
+    whiteList: string[]
 }
 export type ClientAccountModel = AccountModel & {
     status: BotStatus

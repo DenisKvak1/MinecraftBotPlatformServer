@@ -81,7 +81,8 @@ export type IncomingGotoMessage = IncomingMessage<{
 	z: number
 }>
 export type IncomingClickWindowMessage = IncomingMessage<{
-	slotIndex: number
+	slotIndex: number,
+	mode: number
 }>
 export type IncomingGetABState = IncomingMessage
 export type IncomingGetCurrentWindow = IncomingMessage

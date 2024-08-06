@@ -9,7 +9,7 @@ import { ToGeneralizedItem, ToGeneralizedItems } from '../../../env/helpers/ToGe
 import { logger } from '../logger/Logger';
 import { Window } from 'prismarine-windows';
 import { Item } from 'prismarine-item';
-import { FuntimeCaptcha } from '../captchaConfig/captchaConfig';
+import path from 'node:path';
 
 export class ClientBot implements IClientBot {
 	_bot: Bot;
@@ -28,6 +28,7 @@ export class ClientBot implements IClientBot {
 	) {
 	}
 
+
 	connect() {
 		if (this._bot) return;
 		try {
@@ -38,20 +39,11 @@ export class ClientBot implements IClientBot {
 				version: this.accountModel.version,
 				hideErrors: true,
 				logErrors: false,
-				'mapDownloader-outputDir': FuntimeCaptcha.mapsPath,
+				'mapDownloader-outputDir': path.resolve(process.cwd(), 'captcha/maps/'),
 			});
 		} catch (e){}
 
-		this._bot.on('login', ()=>{
-			if(!this._bot.currentWindow) return
-			this._bot.emit('windowClose', this._bot.currentWindow)
-			this._bot.currentWindow = null
-		})
-
-		this._bot.once('login', ()=> {
-			this.$status.next(BotStatus.CONNECT)
-			logger.info(`${this.accountModel.id}: Зашёл на сервер ${this.accountModel.server}`)
-		})
+		this.fixCloseWindowOnSwitchSubserver()
 
 		this._bot.loadPlugin(mapDownloader);
 		this._bot.loadPlugin(pathfinder);
@@ -59,21 +51,72 @@ export class ClientBot implements IClientBot {
 	}
 
 	private initEvents() {
+		this.setupBaseEvents()
 		this._bot.once('spawn', () => {
-			const defaultMove = new Movements(this._bot);
-			defaultMove.canDig = false;
-			defaultMove.allow1by1towers = false;
+			this.setupMovementSetting()
+			this.setupInventoryUpdateEvent()
+		});
+		this.initWindowAction()
+	}
 
-			this._bot.pathfinder.setMovements(defaultMove);
 
-			// @ts-ignore // Incorrect real argument and library types
-			this._bot.inventory.on('updateSlot', (slot: number, oldItem: Item | null, newItem: Item | null) => {
-				if (this.itemsAreEqual(oldItem, newItem)) return
-				this.$inventoryUpdate.next({
-					itemSlot: slot,
-					newItem: ToGeneralizedItem(newItem),
-				});
+	private fixCloseWindowOnSwitchSubserver(){
+		this._bot.on('login', ()=>{
+			if(!this._bot.currentWindow) return
+			this._bot.emit('windowClose', this._bot.currentWindow)
+			this._bot.currentWindow = null
+		})
+	}
+
+
+	private setupMovementSetting(){
+		const defaultMove = new Movements(this._bot);
+		defaultMove.canDig = false;
+		defaultMove.allow1by1towers = false;
+
+		this._bot.pathfinder.setMovements(defaultMove);
+	}
+
+	private setupInventoryUpdateEvent(){
+		// @ts-ignore // Incorrect real argument and library types
+		this._bot.inventory.on('updateSlot', (slot: number, oldItem: Item | null, newItem: Item | null) => {
+			if (this.itemsAreEqual(oldItem, newItem)) return
+			this.$inventoryUpdate.next({
+				itemSlot: slot,
+				newItem: ToGeneralizedItem(newItem),
 			});
+		});
+	}
+
+	disconnect() {
+		if (!this._bot) return;
+		this._bot.end();
+		this._bot = null
+		this.$status.next(BotStatus.DISCONNECT);
+		logger.info(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
+	}
+
+
+	private setupBaseEvents(){
+		this._bot.once('login', ()=> {
+			this.$status.next(BotStatus.CONNECT)
+			logger.info(`${this.accountModel.id}: Зашёл на сервер ${this.accountModel.server}`)
+		})
+		this._bot.on('message', (json) => {
+			logger.info(`${this.accountModel.id}: Получил сообщение ${json.toString()}`)
+			this.$chat.next(json.toString())
+		});
+		this._bot.on('health', ()=> this.$health.next())
+		this._bot.on('death', ()=> {
+			this.$death.next()
+			logger.warn(`${this.accountModel.id}: Был убит`)
+		})
+		this._bot.on('kicked', (reason)=>{
+			logger.warn(`${this.accountModel.id}: Был кикнут с сервера ${this.accountModel.server}, с причиной: ${reason.toString()}`)
+		})
+		this._bot.on('end', (reason) => {
+			this.onDisconnectHandler(reason)
+			logger.warn(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
 		});
 		this._bot.on('error', (error)=> {
 			logger.error(`${this.accountModel.id}: ${error.message}`);
@@ -82,11 +125,9 @@ export class ClientBot implements IClientBot {
 			this.$spawn.next()
 			logger.info(`${this.accountModel.id}: Заспавнился на сервере ${this.accountModel.server}`)
 		});
-
+	}
+	private initWindowAction(){
 		this._bot.on('windowOpen', (window:Window<StorageEvents>) => {
-			// logger.info(`${this.accountModel.id}: Открыл окно ${window.title}`)
-
-
 			// @ts-ignore // Incorrect real argument and library types
 			window.on('updateSlot', (slot: number, oldItem: Item | null, newItem: Item | null)=>{
 				this.onWindowSlotUpdate(window, slot, oldItem, newItem)
@@ -106,31 +147,6 @@ export class ClientBot implements IClientBot {
 			})
 			logger.info(`${this.accountModel.id}: Закрыл окно`)
 		});
-
-		this._bot.on('message', (json) => {
-			logger.info(`${this.accountModel.id}: Получил сообщение ${json.toString()}`)
-			this.$chat.next(json.toString())
-		});
-		this._bot.on('health', ()=> this.$health.next())
-		this._bot.on('death', ()=> {
-			this.$death.next()
-			logger.warn(`${this.accountModel.id}: Был убит`)
-		})
-		this._bot.on('kicked', (reason)=>{
-			logger.warn(`${this.accountModel.id}: Был кикнут с сервера ${this.accountModel.server}, с причиной: ${reason.toString()}`)
-		})
-		this._bot.on('end', (reason) => {
-			this.onDisconnectHandler(reason)
-			logger.warn(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
-		});
-	}
-
-	disconnect() {
-		if (!this._bot) return;
-		this._bot.end();
-		this._bot = null
-		this.$status.next(BotStatus.DISCONNECT);
-		logger.info(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
 	}
 
 	private onWindowSlotUpdate(window: Window<StorageEvents>,slot: number, oldItem: Item | null, newItem: Item | null){

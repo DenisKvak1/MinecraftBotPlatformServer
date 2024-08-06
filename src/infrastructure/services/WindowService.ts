@@ -13,15 +13,20 @@ export class WindowService implements IWindowService {
 		private repository: ClientBotRepository,
 	) {}
 
+	closeWindow(id: string) {
+		const bot = this.repository.getById(id)._bot
+		if(bot.currentWindow) bot.closeWindow(bot.currentWindow)
+	}
+
 	onWindowEvent(id: string, callback: (windowEvent: WindowEvent) => void): Subscribe {
 		return this.repository.getById(id)?.$window.subscribe((windowEvent)=>{
 			callback(windowEvent)
 		})
 	}
 
-	async click(id: string, slot: number): Promise<void> {
+	async click(id: string, slot: number, mouseMode: number = 0): Promise<void> {
 		const bot = this.repository.getById(id)._bot
-		await bot.clickWindow(slot, 0, 0)
+		await bot.clickWindow(slot, mouseMode, 0)
 		logger.info(`${id}: Кликнул в окне по слоту с индексом ${slot}`)
 	}
 

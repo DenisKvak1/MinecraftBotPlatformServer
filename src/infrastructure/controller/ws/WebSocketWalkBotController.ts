@@ -1,17 +1,17 @@
-import { IWindowService } from '../../core/service/WindowService';
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { IWalkService } from '../../core/service/WalkService';
-import { walkService } from '../services/WalkService';
-import { checkNotOnlineBot } from '../express/helper/checkOnline';
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { clientManagerService } from '../services/ClientManagerService';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
+import { IWindowService } from '../../../core/service/WindowService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { IWalkService } from '../../../core/service/WalkService';
+import { walkService } from '../../services/WalkService';
+import { checkNotOnlineBot } from '../../express/helper/checkOnline';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
+import { clientManagerService } from '../../services/ClientManagerService';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import { websocketWindowController } from './WebSocketWindowBotController';
 import {
 	IncomingClickWindowMessage, IncomingGotoMessage,
 	IncomingJumpBotMessage, IncomingMovementBotMessage, OutgoingReplayMessage, STATUS,
 	UNIVERSAL_COMMAND_LIST,
-} from '../express/types/webSocketBotCommandTypes';
+} from '../../express/types/webSocketBotCommandTypes';
 
 export class WebSocketWindowBotController {
 	constructor(

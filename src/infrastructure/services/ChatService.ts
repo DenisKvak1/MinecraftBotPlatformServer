@@ -21,5 +21,29 @@ export class ChatService implements IChatService {
 		bot.chat(message);
 		logger.info(`${id}: Послал сообщение ${message}`)
 	}
+
+	onPersonalMessage(id: string, callback: (message: string, username: string) => void) {
+		const bot = this.repository.getById(id)._bot;
+		bot.on('message', (message)=>{
+			const msg = message.toString()
+			const data = this.parseMessage(msg)
+			if(!data) return
+			callback(data.command, data.user)
+		})
+	}
+
+	private parseMessage(input: string): { user: string, command: string } | null {
+		const regex = /\[(.+?) -> я\] (.+)/;
+		const match = input.match(regex);
+
+		if (match) {
+			return {
+				user: match[1],
+				command: match[2]
+			};
+		} else {
+			return null;
+		}
+	}
 }
 export const chatService = new ChatService(botInRAMRepository)

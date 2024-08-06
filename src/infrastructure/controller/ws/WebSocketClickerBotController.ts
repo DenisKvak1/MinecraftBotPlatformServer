@@ -1,16 +1,16 @@
-import { IFarmService } from '../../core/service/FarmService';
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { checkNotOnlineBot } from '../express/helper/checkOnline';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
-import { IClickerService } from '../../core/service/ClickerService';
-import { clickerService } from '../services/ClickerService';
-import { clientManagerService } from '../services/ClientManagerService';
+import { IFarmService } from '../../../core/service/FarmService';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { checkNotOnlineBot } from '../../express/helper/checkOnline';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
+import { IClickerService } from '../../../core/service/ClickerService';
+import { clickerService } from '../../services/ClickerService';
+import { clientManagerService } from '../../services/ClientManagerService';
 import {
 	IncomingAttackMessage,
 	IncomingToggleClickerMessage,
 	IncomingToggleFarmMessage, OutgoingReplayMessage,
-} from '../express/types/webSocketBotCommandTypes';
+} from '../../express/types/webSocketBotCommandTypes';
 
 export class WebSocketClickerBotController {
 	constructor(

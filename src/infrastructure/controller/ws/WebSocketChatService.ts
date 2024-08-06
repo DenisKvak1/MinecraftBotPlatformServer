@@ -1,12 +1,12 @@
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { IChatService } from '../../core/service/ChatService';
-import { checkNotOnlineBot } from '../express/helper/checkOnline';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { IChatService } from '../../../core/service/ChatService';
+import { checkNotOnlineBot } from '../../express/helper/checkOnline';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import exp from 'node:constants';
-import { clientManagerService } from '../services/ClientManagerService';
-import { chatService } from '../services/ChatService';
-import { IncomingSendChatMessageMessage, OutgoingReplayMessage } from '../express/types/webSocketBotCommandTypes';
+import { clientManagerService } from '../../services/ClientManagerService';
+import { chatService } from '../../services/ChatService';
+import { IncomingSendChatMessageMessage, OutgoingReplayMessage } from '../../express/types/webSocketBotCommandTypes';
 
 export class WebSocketChatService {
 	constructor(

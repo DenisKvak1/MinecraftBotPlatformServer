@@ -1,8 +1,8 @@
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { accountService, AccountService } from '../../core/service/AccountService';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
-import { clientManagerService } from '../services/ClientManagerService';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { accountService, AccountService } from '../../../core/service/AccountService';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
+import { clientManagerService } from '../../services/ClientManagerService';
 import {
 	IncomingCreateBotMessage,
 	IncomingDeleteBotMessage,
@@ -11,7 +11,7 @@ import {
 	OutgoingCreateBotReplayMessage,
 	OutgoingGetBotInfoMessage,
 	OutgoingGetBotsInfoMessage, OutgoingReplayMessage, STATUS,
-} from '../express/types/webSocketBotCommandTypes';
+} from '../../express/types/webSocketBotCommandTypes';
 
 export class WebSocketAccountServiceController {
 	constructor(

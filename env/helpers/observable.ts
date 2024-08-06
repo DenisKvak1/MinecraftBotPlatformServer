@@ -1,23 +1,23 @@
-
 export type IObservable<T> = {
   subscribe: (callback: (eventData: T) => void) => Subscribe;
-  next: (eventData?: T) => void
-  unsubscribeAll: () => void
-  getValue: () => T
-  setValue: (value: T) => void
-  once: (callback: (eventData?: T) => void) => void
-}
-export type Subscribe = { unsubscribe: () => void }
+  next: (eventData?: T) => void;
+  unsubscribeAll: () => void;
+  getValue: () => T;
+  setValue: (value: T) => void;
+  once: (callback: (eventData?: T) => void, condition?: (eventData?: T) => boolean) => void;
+};
+
+export type Subscribe = { unsubscribe: () => void };
 
 export class Observable<T> implements IObservable<T> {
   private listeners: ((eventData: any) => void)[];
-  private onceListeners: ((eventData: any) => void)[];
+  private onceListeners: { callback: (eventData: any) => void; condition?: (eventData: any) => boolean }[];
   private value: T;
 
-  constructor(startValue?:T) {
-    this.value = startValue
+  constructor(startValue?: T) {
+    this.value = startValue;
     this.listeners = [];
-    this.onceListeners = []
+    this.onceListeners = [];
   }
 
   subscribe(callback: (eventData?: T) => void): Subscribe {
@@ -35,20 +35,32 @@ export class Observable<T> implements IObservable<T> {
     this.listeners.forEach(listener => {
       listener(eventData);
     });
-    this.onceListeners.forEach(listener => {
-      listener(eventData);
-    })
-    this.onceListeners = []
+
+    const toRemove: number[] = [];
+
+    this.onceListeners.forEach((listener, index) => {
+      const { callback, condition } = listener;
+      if (!condition || condition(eventData)) {
+        callback(eventData);
+        toRemove.push(index);
+      }
+    });
+
+    this.onceListeners = this.onceListeners.filter((_, index) => !toRemove.includes(index));
   }
-  once(callback: (eventData?: T) => void): void {
-    this.onceListeners.push(callback)
+
+  once(callback: (eventData?: T) => void, condition?: (eventData?: T) => boolean): void {
+    this.onceListeners.push({ callback, condition });
   }
+
   getValue() {
     return this.value;
   }
-  setValue(value:T) {
-    this.value = value
+
+  setValue(value: T) {
+    this.value = value;
   }
+
   unsubscribeAll(): void {
     this.listeners = [];
   }

@@ -1,5 +1,5 @@
 import { AccountRepository } from '../../../core/repository/AccountRepository/AccountRepository';
-import { IJSONController, JSONControllerImpl } from '../../module/JSONController';
+import { IJSONController, JSONControllerAccountImpl } from '../../module/JSONController';
 import { AccountUpdateDTO, CreateAccountDTO } from '../../../core/repository/AccountRepository/dto/AccountDTO';
 import { AccountModel } from '../../../core/model/AccountModel';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,6 +18,8 @@ class InMemoryAccountRepository implements AccountRepository{
             id: uuidv4(),
             ...dto
         } as AccountModel;
+        if(!createAccount.whiteList) createAccount.whiteList = [];
+
         account.push(createAccount);
         this.JSONController.saveJSON(account);
         return createAccount
@@ -72,6 +74,12 @@ class InMemoryAccountRepository implements AccountRepository{
             if (dto.version !== undefined) {
                 account.version = dto.version;
             }
+            if (dto.version !== undefined) {
+                account.version = dto.version;
+            }
+            if (dto.whiteList !== undefined) {
+                account.whiteList = dto.whiteList;
+            }
 
             this.JSONController.saveJSON(accounts);
         }
@@ -91,4 +99,4 @@ class InMemoryAccountRepository implements AccountRepository{
         }
     }
 }
-export const inMemoryAccountRepository = new InMemoryAccountRepository(JSONControllerImpl)
+export const inMemoryAccountRepository = new InMemoryAccountRepository(JSONControllerAccountImpl)

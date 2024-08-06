@@ -49,7 +49,7 @@ export class InventoryService implements IInventoryService {
 
 		inventory.forEach(async (item) => {
 			if(!item) return
-			await PromiseTimeout(200)
+			await PromiseTimeout(400)
 			await this.dropSlot(bot, item.slot)
 		});
 	}

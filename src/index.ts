@@ -5,12 +5,13 @@ import { webSocketClients } from './infrastructure/express/module/WebSocketClien
 import { inventoryService } from './infrastructure/services/InventoryService';
 import { windowsService } from './infrastructure/services/WindowService';
 import { chatService } from './infrastructure/services/ChatService';
-import { captchaService } from './infrastructure/services/CaptchaService';
 import { farmService } from './infrastructure/services/FarmService';
-import { websocketHeadBotController } from './infrastructure/controller/WebSocketHeadBotController';
-import { UNIVERSAL_COMMAND_LIST } from './infrastructure/express/types/webSocketBotCommandTypes';
 import { logger } from './infrastructure/logger/Logger';
-import { autoBuyService } from './infrastructure/services/AutoBuyService';
+import { autoBuyService } from './infrastructure/services/AutoBuy/AutoBuyService';
+import { captchaService } from './infrastructure/services/CaptchaService/CaptchaService';
+import { botInRAMRepository } from './infrastructure/database/repository/inRAMBotDateBase';
+import { foodService } from './infrastructure/services/FoodService';
+import { ChatController } from './infrastructure/chatController/ChatController';
 
 try {
 	const app = new App(
@@ -24,15 +25,19 @@ try {
 		autoBuyService
 	);
 	app.start(3000);
+
+	const chatController = new ChatController(clientManagerService, chatService, accountService)
+	chatController.start()
 } catch (e) {
 	logger.error(e.message)
 }
+
 
 process.on('uncaughtException', (reason)=>{
 	logger.error(reason.message)
 })
 
-accountService.getByName('alopKop').then(async (data)=>{
+accountService.getByName('jukMayski103').then(async (data)=>{
 	const id = data.id
 	ab(id, 1000)
 })
@@ -63,10 +68,14 @@ async function ab(id: string, intrval: number = 1000){
 	await new Promise<void>((r)=> setTimeout(()=> r(), 1500))
 	await windowsService.click(id, 12)
 	await new Promise<void>((r)=> setTimeout(()=> r(), 1500))
-	await windowsService.click(id, 3)
+	await windowsService.click(id, 4)
 	await new Promise<void>((r)=> setTimeout(()=> r(), 1500))
-	await windowsService.click(id, 20)
+	await windowsService.click(id, 35)
 	setTimeout(()=>{
-		autoBuyService.startAutoBuy(id)
+		botInRAMRepository.getById(id)._bot.setControlState('sneak', true)
+		foodService.startAutoFood(id)
+		chatService.sendMessage(id, '/ah')
+		setTimeout(()=> windowsService.click(id, 53, 1), 300)
+		setTimeout(()=> autoBuyService.startAutoBuy(id), 600)
 	}, intrval)
 }

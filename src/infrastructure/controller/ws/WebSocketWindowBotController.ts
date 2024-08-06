@@ -1,17 +1,17 @@
-import { IWindowService } from '../../core/service/WindowService';
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { checkNotOnlineBot } from '../express/helper/checkOnline';
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
-import { windowsService } from '../services/WindowService';
-import { clientManagerService } from '../services/ClientManagerService';
+import { IWindowService } from '../../../core/service/WindowService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { checkNotOnlineBot } from '../../express/helper/checkOnline';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
+import { windowsService } from '../../services/WindowService';
+import { clientManagerService } from '../../services/ClientManagerService';
 import {
 	IncomingClickWindowMessage,
 	IncomingGetCurrentWindow, OutgoingGetCurrentWindowReplayMessage, OutgoingGetSlotsReplayMessage,
 	OutgoingReplayMessage,
 	STATUS,
-} from '../express/types/webSocketBotCommandTypes';
-import { ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
+} from '../../express/types/webSocketBotCommandTypes';
+import { ToGeneralizedItems } from '../../../../env/helpers/ToGeneralizedItem';
 
 export class WebSocketWindowBotController {
 	constructor(
@@ -23,7 +23,7 @@ export class WebSocketWindowBotController {
 
 	async click(message: IncomingClickWindowMessage) {
 		try {
-			const slotIndex = message.data.slotIndex;
+			const {slotIndex, mode} = message.data
 			const { botID } = message;
 
 			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager);
@@ -39,7 +39,7 @@ export class WebSocketWindowBotController {
 				});
 			}
 
-			await this.windowService.click(botID, slotIndex);
+			await this.windowService.click(botID, slotIndex, mode);
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
 			returnWSError(message, e.message, this.wsClients);

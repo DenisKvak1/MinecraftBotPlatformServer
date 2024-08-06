@@ -1,16 +1,16 @@
-import { IChatService } from '../../core/service/ChatService';
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { IAutoBuyService } from '../../core/service/AutoBuy';
+import { IChatService } from '../../../core/service/ChatService';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { IAutoBuyService } from '../../../core/service/AutoBuy';
 import {
 	IncomingGetFarmState,
 	IncomingToggleFarmMessage, OutgoingGetABStatusMessage, OutgoingGetFarmStatusMessage,
 	OutgoingReplayMessage, STATUS, UNIVERSAL_COMMAND_LIST,
-} from '../express/types/webSocketBotCommandTypes';
-import { checkNotOnlineBot } from '../express/helper/checkOnline';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
-import { autoBuyService } from '../services/AutoBuyService';
-import { clientManagerService } from '../services/ClientManagerService';
+} from '../../express/types/webSocketBotCommandTypes';
+import { checkNotOnlineBot } from '../../express/helper/checkOnline';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
+import { clientManagerService } from '../../services/ClientManagerService';
+import { autoBuyService } from '../../services/AutoBuy/AutoBuyService';
 
 export class WebSocketAutoBuyController {
 	constructor(

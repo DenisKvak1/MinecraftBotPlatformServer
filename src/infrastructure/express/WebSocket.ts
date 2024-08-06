@@ -9,21 +9,21 @@ import { IWindowService } from '../../core/service/WindowService';
 import { IChatService } from '../../core/service/ChatService';
 import { ICaptchaService } from '../../core/service/CaptchaService';
 import { IncomingMessage } from 'node:http';
-import { websocketAccountController } from '../controller/WebSocketAccountService';
-import { webSocketClientManagerController } from '../controller/WebSocketClientManagerController';
-import { webSocketChatServiceController } from '../controller/WebSocketChatService';
-import { websocketClickerBotController } from '../controller/WebSocketClickerBotController';
-import { websocketFoodController } from '../controller/WebSocketFoodBotController';
-import { websocketFarmController } from '../controller/WebSocketFarmBotController';
-import { websocketHeadBotController } from '../controller/WebSocketHeadBotController';
-import { websocketInventoryBotController } from '../controller/WebSocketInventoryBotController';
-import { webSocketWalkBotController } from '../controller/WebSocketWalkBotController';
-import { websocketWindowController } from '../controller/WebSocketWindowBotController';
+import { websocketAccountController } from '../controller/ws/WebSocketAccountService';
+import { webSocketClientManagerController } from '../controller/ws/WebSocketClientManagerController';
+import { webSocketChatServiceController } from '../controller/ws/WebSocketChatService';
+import { websocketClickerBotController } from '../controller/ws/WebSocketClickerBotController';
+import { websocketFoodController } from '../controller/ws/WebSocketFoodBotController';
+import { websocketFarmController } from '../controller/ws/WebSocketFarmBotController';
+import { websocketHeadBotController } from '../controller/ws/WebSocketHeadBotController';
+import { websocketInventoryBotController } from '../controller/ws/WebSocketInventoryBotController';
+import { webSocketWalkBotController } from '../controller/ws/WebSocketWalkBotController';
+import { websocketWindowController } from '../controller/ws/WebSocketWindowBotController';
 import { UNIVERSAL_COMMAND_LIST } from './types/webSocketBotCommandTypes';
 import path from 'path';
 import { IFarmService } from '../../core/service/FarmService';
 import { IAutoBuyService } from '../../core/service/AutoBuy';
-import { websocketAutoBuyController } from '../controller/WebSocketAutoBuyController';
+import { websocketAutoBuyController } from '../controller/ws/WebSocketAutoBuyController';
 
 export class App {
 	private express = express()

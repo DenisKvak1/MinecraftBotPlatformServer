@@ -1,5 +1,6 @@
 import { Item } from 'prismarine-item';
 import { GeneralizedItem } from '../types';
+import { isRenamed } from './isRenamed';
 const registry = require('prismarine-registry')('1.20.4')
 const ChatMessage = require('prismarine-chat')(registry)
 
@@ -11,7 +12,6 @@ export const ToGeneralizedItems = (items: (Item | null)[]): (GeneralizedItem | n
 };
 export const ToGeneralizedItem = (item: Item | null): GeneralizedItem | null => {
 	if (item === null) return null;
-	const nbt = item.nbt;
 
 	const newItem: GeneralizedItem = {
 		name: item.name,
@@ -20,7 +20,8 @@ export const ToGeneralizedItem = (item: Item | null): GeneralizedItem | null => 
 		displayName: item.displayName,
 		customName: convertCustomNameToString(item.customName),
 		customNameHTML: convertCustomNameToString(item.customName, true),
-		customLoreHTML: convertCustomLoreToString(item.customLore)
+		customLoreHTML: convertCustomLoreToString(item.customLore),
+		renamed: isRenamed(item.customName)
 	};
 
 

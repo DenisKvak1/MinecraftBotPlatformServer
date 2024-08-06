@@ -1,8 +1,8 @@
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { webSocketClients, WebSocketClientsController } from '../express/module/WebSocketClientsController';
-import { returnWSError, returnWSOk } from '../express/helper/returnWSOk';
-import { clientManagerService } from '../services/ClientManagerService';
-import { IncomingConnectBotMessage, OutgoingReplayMessage, STATUS } from '../express/types/webSocketBotCommandTypes';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
+import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
+import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
+import { clientManagerService } from '../../services/ClientManagerService';
+import { IncomingConnectBotMessage, OutgoingReplayMessage, STATUS } from '../../express/types/webSocketBotCommandTypes';
 
 export class WebSocketClientManagerController {
 	constructor(
