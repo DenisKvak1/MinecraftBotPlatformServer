@@ -15,8 +15,8 @@
         "sellprice": 19999
       },
       "Totem of Undying": {
-        "price": 200000,
-        "sellprice": 399999
+        "price": 240000,
+        "sellprice": 449999
       },
       "- Топор ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 1,
@@ -28,15 +28,15 @@
       },
       "- Кирка ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 2500000,
-        "sellprice": 4099999
+        "sellprice": 4499999
       },
       "- Меч ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 900000,
-        "sellprice": 1700000
+        "price": 1200000,
+        "sellprice": 2100000
       },
       "Универсальный ключ": {
         "price": 12000000,
-        "sellprice": 16999900,
+        "sellprice": 18999900,
         "seellcount": 1
       },
       "Enchanted Golden Apple": {
