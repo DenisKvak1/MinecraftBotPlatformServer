@@ -5,7 +5,7 @@ import { InventoryUpdateDTO } from '../../core/service/ClientBot';
 import { Subscribe } from '../../../env/helpers/observable';
 import { ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 import { logger } from '../logger/Logger';
-import { PromiseTimeout } from '../../../env/helpers/promiseTimeout';
+import { syncTimeout } from '../../../env/helpers/syncTimeout';
 import { Bot } from 'mineflayer';
 
 export class InventoryService implements IInventoryService {
@@ -49,7 +49,7 @@ export class InventoryService implements IInventoryService {
 
 		inventory.forEach(async (item) => {
 			if(!item) return
-			await PromiseTimeout(400)
+			await syncTimeout(400)
 			await this.dropSlot(bot, item.slot)
 		});
 	}

@@ -1,22 +1,22 @@
 [
   {
-    "serverIps": ["mc.holyworld.ru", "mc.holyworld.io"],
+    "serverIps": [
+      "mc.holyworld.ru",
+      "mc.holyworld.io"
+    ],
     "name": "holyworld",
     "priceRegex": "(\\d[\\d\\s]*)¤",
     "updateIndex": 47,
     "interval": 780,
     "shift": false,
     "info": {
-      "Poppy": {
-        "price": 11
-      },
       "Gunpowder": {
-        "price": 12000,
-        "sellprice": 19999
+        "price": 11000,
+        "sellprice": 18999
       },
       "Totem of Undying": {
-        "price": 240000,
-        "sellprice": 449999
+        "price": 200000,
+        "sellprice": 399999
       },
       "- Топор ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 1,
@@ -24,24 +24,80 @@
       },
       "- Талисман ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 4000000,
-        "sellprice": 5999999
+        "sellprice": 5899999
       },
       "- Кирка ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 2500000,
-        "sellprice": 4499999
+        "price": 2200000,
+        "sellprice": 4099999
       },
       "- Меч ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1200000,
-        "sellprice": 2100000
+        "price": 1100000,
+        "sellprice": 1799000
+      },
+      "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
+        "price": 400000,
+        "sellprice": 899999
+      },
+      "- Нагрудник ᴇᴛᴇʀɴɪᴛʏ -": {
+        "price": 400000,
+        "sellprice": 899999
+      },
+      "- Штаны ᴇᴛᴇʀɴɪᴛʏ -": {
+        "price": 400000,
+        "sellprice": 879999
+      },
+      "- Ботинки ᴇᴛᴇʀɴɪᴛʏ -": {
+        "price": 400000,
+        "sellprice": 1499999
+      },
+      "Шлем Iɴғɪɴɪᴛʏ": {
+        "price": 2000000,
+        "sellprice": 2799999
+      },
+      "Нагрудник Iɴғɪɴɪᴛʏ": {
+        "price": 2000000,
+        "sellprice": 3799999
+      },
+      "Поножи Iɴғɪɴɪᴛʏ": {
+        "price": 2000000,
+        "sellprice": 2699999
+      },
+      "Ботинки Iɴғɪɴɪᴛʏ": {
+        "price": 2000000,
+        "sellprice": 2800000
+      },
+      "Талисман Iɴғɪɴɪᴛʏ": {
+        "price": 4500000,
+        "sellprice": 6999999
+      },
+      "- Талисман Stinger -": {
+        "price": 2000000,
+        "sellprice": 3999999
+      },
+      "Мифическая сфера": {
+        "price": 3000000,
+        "sellprice": 3999999
+      },
+      "Мифический талисман": {
+        "price": 3500000,
+        "sellprice": 4499999
+      },
+      "Сфера Цербера": {
+        "price": 10000000,
+        "sellprice": 18999999
+      },
+      "Сфера Флеша": {
+        "price": 6000000,
+        "sellprice": 8799999
       },
       "Универсальный ключ": {
-        "price": 12000000,
-        "sellprice": 18999900,
+        "price": 11000000,
+        "sellprice": 16999900,
         "seellcount": 1
       },
       "Enchanted Golden Apple": {
-        "price": 36000,
-        "sellprice": 53000,
+        "price": 37000,
+        "sellprice": 57000,
         "seellcount": 16
       },
       "Netherite Ingot": {
@@ -58,9 +114,9 @@
         "sellprice": 2999999
       },
       "Netherite Scrap": {
-        "price": 8000,
+        "price": 7000,
         "sellprice": 14999,
-        "seellcount": 20
+        "seellcount": 32
       },
       "Spawner": {
         "price": 300000,
@@ -97,18 +153,18 @@
         "sellprice": 7500
       },
       "TNT": {
-        "price": 3500,
-        "sellprice": 9000,
+        "price": 3300,
+        "sellprice": 7000,
         "seellcount": 10
       },
       "Динамит A": {
-        "price": 5000,
-        "sellprice": 10000,
+        "price": 4000,
+        "sellprice": 9000,
         "seellcount": 5
       },
       "Динамит B": {
-        "price": 70000,
-        "sellprice": 150000,
+        "price": 65000,
+        "sellprice": 145000,
         "seellcount": 5
       },
       "Разрывная волна": {
@@ -122,8 +178,8 @@
         "seellcount": 1
       },
       "Стиллер": {
-        "price": 600000,
-        "sellprice": 990000,
+        "price": 450000,
+        "sellprice": 820000,
         "seellcount": 1
       },
       "Меч《Выгодный фарм》": {

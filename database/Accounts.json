@@ -66,5 +66,29 @@
     "port": 25565,
     "version": "1.16.5",
     "whiteList": []
+  },
+  {
+    "id": "7ebbf317-231a-46d4-a656-d7c09bce8e1d",
+    "nickname": "Hepoptik",
+    "server": "mc.holyworld.io",
+    "port": 25565,
+    "version": "1.18.2",
+    "whiteList": [
+      "alopKop",
+      "Zancerio45",
+      "Zancerio55"
+    ]
+  },
+  {
+    "id": "541e9861-cc5a-417a-87e4-825d22c25239",
+    "nickname": "jonikor1s",
+    "server": "mc.holyworld.io",
+    "port": 25565,
+    "version": "1.18.2",
+    "whiteList": [
+      "alopKop",
+      "Zancerio45",
+      "Zancerio55"
+    ]
   }
 ]

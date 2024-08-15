@@ -9,7 +9,7 @@ import { botInRAMRepository } from '../../database/repository/inRAMBotDateBase';
 import { logger } from '../../logger/Logger';
 import { ToGeneralizedItem, ToGeneralizedItems } from '../../../../env/helpers/ToGeneralizedItem';
 import { getRandomInRange } from '../../../../env/helpers/randomGenerator';
-import { PromiseTimeout } from '../../../../env/helpers/promiseTimeout';
+import { syncTimeout } from '../../../../env/helpers/syncTimeout';
 
 
 export class AutoBuyService implements IAutoBuyService {
@@ -21,22 +21,43 @@ export class AutoBuyService implements IAutoBuyService {
 	) {
 	}
 
-	async startAutoBuy(id: string): Promise<void> {
-		if (this.getAutoBuyState(id) === 'ON') return;
+	async startAutoBuySystem(botIds: string[]): Promise<void> {
+		for (const id of botIds) {
+			const profileAccount = this.repository.getById(id);
+			const profile = getProfileAutobuy(profileAccount.accountModel.server);
 
+			await this.startAutoBuyWithOptions(id, profile, profileAccount, profile.interval * botIds.length);
+			await syncTimeout(profile.interval);
+		}
+	}
+
+	async stopAutoBuySystem(botIds: string[]): Promise<void>  {
+		botIds.forEach((id) => this.stopAutoBuy(id));
+	}
+
+	async startAutoBuy(id: string): Promise<void> {
 		const profileAccount = this.repository.getById(id);
-		const bot = profileAccount._bot;
 		const profile = getProfileAutobuy(profileAccount.accountModel.server);
 
+		return await this.startAutoBuyWithOptions(id, profile, profileAccount, profile.interval);
+	}
+
+	private async startAutoBuyWithOptions(id: string, profile: abProfile, profileAccount: IClientBot, checkInterval: number): Promise<void> {
+		if (this.getAutoBuyState(id) === 'ON') return;
+
+		const bot = profileAccount._bot;
+		const sellSubscribe = setInterval(() => {
+			this.inventorySell(bot, profile);
+		}, 9000);
+
 		this.$ab.next({ id, action: 'START' });
-		await PromiseTimeout(1000)
+		await syncTimeout(1000);
 		if (!bot.currentWindow) return;
 		const interval = this.startAsyncInterval(async () => {
 			try {
 				bot.clickWindow(profile.updateIndex, 0, 0);
-				await PromiseTimeout(profile.interval + getRandomInRange(-40, 100))
+				await syncTimeout(checkInterval + getRandomInRange(-40, 100));
 
-				setTimeout(()=> this.inventorySell(bot, profile), 500)
 				const searchInfo = this.searchItemToBuy(bot, profile);
 				if (!searchInfo) return;
 				const { slotIndex, targetItem } = searchInfo;
@@ -45,23 +66,32 @@ export class AutoBuyService implements IAutoBuyService {
 					bot.clickWindow(slotIndex, 0, 1);
 				} else {
 					await this.buyClick(bot, slotIndex);
-					await PromiseTimeout(250)
+					await syncTimeout(250);
 
 					this.checkErrorSelectItem(bot, targetItem, profile);
-					this.sellOnUpdate(bot, profileAccount, profile, targetItem);
+					this.sellOnUpdate(bot, profileAccount, profile);
 					this.bindReserveUndo(bot);
 				}
 			} catch (e) {
 
 			}
 		}, 0);
-		this.abIntervals.set(id, { interval });
+
+		const intervalSubscribe = {
+			stop: () => {
+				interval.stop();
+				clearInterval(sellSubscribe);
+			},
+			id: interval.id,
+		};
+
+		this.abIntervals.set(id, { interval: intervalSubscribe });
 		this.bindCloseAh(profileAccount);
 	}
 
 	stopAutoBuy(id: string): void {
 		const data = this.abIntervals.get(id);
-		if(!data) return
+		if (!data) return;
 		data.interval.stop();
 		this.abIntervals.delete(id);
 		this.$ab.next({ id, action: 'STOP' });
@@ -73,14 +103,18 @@ export class AutoBuyService implements IAutoBuyService {
 	}
 
 
-	private inventorySell(bot: Bot, profile: abProfile){
-		bot.inventory.slots.forEach((sItem, index)=>{
-			if(!sItem) return;
-			const item = ToGeneralizedItem(sItem)
-			const price = this.checkSellItem(profile, item, index)
-			if(!price) return
-			this.sellItem(bot, item, price, index)
-		})
+	private async inventorySell(bot: Bot, profile: abProfile) {
+		for (let index = 0; index < bot.inventory.slots.length; index++) {
+			const sItem = bot.inventory.slots[index];
+			if (!sItem) continue;
+
+			const item = ToGeneralizedItem(sItem);
+			const price = this.checkSellItem(profile, item, index);
+			if (!price) continue;
+
+			this.sellItem(bot, item, price, index);
+			await new Promise(resolve => setTimeout(resolve, 800));
+		}
 	}
 
 	private bindReserveUndo(bot: Bot) {
@@ -121,29 +155,29 @@ export class AutoBuyService implements IAutoBuyService {
 		return { slotIndex, targetItem };
 	}
 
-	private sellOnUpdate(bot: Bot, profileAccount: IClientBot, profile: abProfile, targetItem: GeneralizedItem) {
+	private sellOnUpdate(bot: Bot, profileAccount: IClientBot, profile: abProfile) {
 		profileAccount.$inventoryUpdate.once((inventory) => {
-			if(!inventory.newItem) return;
-			const price = this.checkSellItem(profile, inventory.newItem, inventory.itemSlot)
-			if(!price) return
-			this.sellItem(bot, inventory.newItem, price, inventory.itemSlot)
+			if (!inventory.newItem) return;
+			const price = this.checkSellItem(profile, inventory.newItem, inventory.itemSlot);
+			if (!price) return;
+			this.sellItem(bot, inventory.newItem, price, inventory.itemSlot);
 		});
 	}
 
-	private checkSellItem(profile:abProfile, item: GeneralizedItem, index: number){
+	private checkSellItem(profile: abProfile, item: GeneralizedItem, index: number) {
 		const name = item?.customName || item?.displayName;
 		const price = profile.info[name]?.sellprice;
 		const count = item?.count;
 		if (item?.count !== item.stackSize && (item?.count < profile.info[name]?.seellcount || !profile.info[name]?.seellcount)) return;
-		if (item.name !== item.name) return
-		if (!this.checkAutoBuy(name, profile)) return
-		if (!profile.info[name]?.sellprice) return
+		if (item.name !== item.name) return;
+		if (!this.checkAutoBuy(name, profile)) return;
+		if (!profile.info[name]?.sellprice) return;
 
-		if ((index - 36) < 0 || (index - 36) > 9) return
-		return price * count
+		if ((index - 36) < 0 || (index - 36) > 9) return;
+		return price * count;
 	}
 
-	private sellItem(bot:Bot, item: GeneralizedItem, price: number, slotIndex: number){
+	private sellItem(bot: Bot, item: GeneralizedItem, price: number, slotIndex: number) {
 		const name = item?.customName || item?.displayName;
 		bot.setQuickBarSlot(slotIndex - 36);
 		bot.chat(`/ah sell ${price}`);
@@ -177,7 +211,7 @@ export class AutoBuyService implements IAutoBuyService {
 
 	private onNewItem(profile: abProfile, item: GeneralizedItem | null) {
 		if (!item) return false;
-		if (item.renamed) return false
+		if (item.renamed) return false;
 		if (!this.checkAutoBuy(item.customName || item.displayName, profile)) return false;
 		const price = this.extractPrice(item?.customLoreHTML, profile.priceRegex);
 		if ((price / item?.count) > profile.info[item?.customName || item?.displayName]?.price) return false;
