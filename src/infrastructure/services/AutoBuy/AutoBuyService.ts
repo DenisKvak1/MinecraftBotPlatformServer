@@ -1,15 +1,19 @@
 import { ClientBotRepository } from '../../../core/repository/ClientBotRepository/clientBotRepository';
-import { Observable } from '../../../../env/helpers/observable';
+import { Observable, Subscribe } from '../../../../env/helpers/observable';
 import { IAutoBuyService } from '../../../core/service/AutoBuy';
 import { GeneralizedItem, toggle, toggleInfo } from '../../../../env/types';
 import { Bot } from 'mineflayer';
 import { abProfile, getProfileAutobuy } from './abConfig';
 import { IClientBot } from '../../../core/service/ClientBot';
 import { botInRAMRepository } from '../../database/repository/inRAMBotDateBase';
-import { logger } from '../../logger/Logger';
+import { buyLogger, logger } from '../../logger/Logger';
 import { ToGeneralizedItem, ToGeneralizedItems } from '../../../../env/helpers/ToGeneralizedItem';
 import { getRandomInRange } from '../../../../env/helpers/randomGenerator';
 import { syncTimeout } from '../../../../env/helpers/syncTimeout';
+import { IChatService } from '../../../core/service/ChatService';
+import { IWindowService } from '../../../core/service/WindowService';
+import { windowsService } from '../WindowService';
+import { chatService } from '../ChatService';
 
 
 export class AutoBuyService implements IAutoBuyService {
@@ -18,20 +22,54 @@ export class AutoBuyService implements IAutoBuyService {
 
 	constructor(
 		private repository: ClientBotRepository,
+		private chatService: IChatService,
+		private windowService: IWindowService,
 	) {
 	}
 
-	async startAutoBuySystem(botIds: string[]): Promise<void> {
+	async startAutoBuySystem(botIds: string[], customInterval?: number): Promise<void> {
+		const profileAccounts = {}
+		const profiles = {}
+		const sellSubscribes = {}
+		const buyLoggerSubscribe = {}
+
 		for (const id of botIds) {
 			const profileAccount = this.repository.getById(id);
 			const profile = getProfileAutobuy(profileAccount.accountModel.server);
 
-			await this.startAutoBuyWithOptions(id, profile, profileAccount, profile.interval * botIds.length);
-			await syncTimeout(profile.interval);
+			this.chatService.sendMessage(id, '/ah');
+			await syncTimeout(500);
+			if (profile.name === 'holyworld') await windowsService.click(id, 53, 1);
+
+			profiles[id] = profile
+			profileAccounts[id] = profileAccount
+		}
+
+		for (const id of botIds) {
+			const isOkInit = await this.autoBuyProccessInit(id, profiles[id], profileAccounts[id]);
+			if (!isOkInit) return;
+			const {sellSubscribe, buyLoggerSubscribe} = isOkInit
+			sellSubscribes[id] = sellSubscribe
+			buyLoggerSubscribe[id] = buyLoggerSubscribe
+		}
+
+		const interval = this.startAsyncInterval(async () => {
+			for (const id of botIds) {
+				const profile = getProfileAutobuy(profileAccounts[id].accountModel.server);
+				await this.updateAuction(profileAccounts[id]._bot, profile);
+				setTimeout(()=>{
+					this.proccesBuyCycle(profileAccounts[id]._bot, profile, profileAccounts[id]);
+				}, profile.interval)
+				await syncTimeout(profile.interval / 3);
+			}
+		}, 0);
+
+		for (const id of botIds) {
+			this.proccessOnCloseAutoBuy(id, profileAccounts[id], interval, sellSubscribes[id], buyLoggerSubscribe[id]);
 		}
 	}
 
-	async stopAutoBuySystem(botIds: string[]): Promise<void>  {
+	async stopAutoBuySystem(botIds: string[]): Promise<void> {
 		botIds.forEach((id) => this.stopAutoBuy(id));
 	}
 
@@ -39,27 +77,74 @@ export class AutoBuyService implements IAutoBuyService {
 		const profileAccount = this.repository.getById(id);
 		const profile = getProfileAutobuy(profileAccount.accountModel.server);
 
-		return await this.startAutoBuyWithOptions(id, profile, profileAccount, profile.interval);
+		const isOkInit = await this.autoBuyProccessInit(id, profile, profileAccount);
+		if (!isOkInit) return;
+		const {sellSubscribe, buyLoggerSubscribe} = isOkInit
+
+		const bot = profileAccount._bot;
+		const interval = this.startAsyncInterval(async () => {
+			await this.updateAuction(bot, profile);
+			await syncTimeout(profile.interval);
+			await this.proccesBuyCycle(bot, profile, profileAccount);
+		}, 0);
+
+		this.proccessOnCloseAutoBuy(id, profileAccount, interval, sellSubscribe, buyLoggerSubscribe);
 	}
 
-	private async startAutoBuyWithOptions(id: string, profile: abProfile, profileAccount: IClientBot, checkInterval: number): Promise<void> {
+
+	private async autoBuyProccessInit(id: string, profile: abProfile, profileAccount: IClientBot): Promise<{
+		sellSubscribe: NodeJS.Timeout,
+		buyLoggerSubscribe: Subscribe
+	} | undefined> {
 		if (this.getAutoBuyState(id) === 'ON') return;
 
 		const bot = profileAccount._bot;
+		if (!bot) return;
+
 		const sellSubscribe = setInterval(() => {
 			this.inventorySell(bot, profile);
 		}, 9000);
+		const buyLoggerSubscribe = this.initBuyLogger(profileAccount);
 
 		this.$ab.next({ id, action: 'START' });
 		await syncTimeout(1000);
 		if (!bot.currentWindow) return;
-		const interval = this.startAsyncInterval(async () => {
-			try {
-				bot.clickWindow(profile.updateIndex, 0, 0);
-				await syncTimeout(checkInterval + getRandomInRange(-40, 100));
 
-				const searchInfo = this.searchItemToBuy(bot, profile);
-				if (!searchInfo) return;
+		return { sellSubscribe, buyLoggerSubscribe };
+	}
+
+	private async updateAuction(bot: Bot, profile: abProfile) {
+		bot.clickWindow(profile.updateIndex, 0, 0);
+	}
+
+	private proccessOnCloseAutoBuy(id: string, profileAccount: IClientBot, interval: {
+		id: NodeJS.Timeout,
+		stop: () => void
+	}, sellSubscribe: NodeJS.Timeout, buyLoggerSubscribe: Subscribe) {
+		const intervalSubscribe = {
+			stop: () => {
+				interval.stop();
+				clearInterval(sellSubscribe);
+				buyLoggerSubscribe?.unsubscribe();
+			},
+			id: interval.id,
+		};
+
+		this.abIntervals.set(id, { interval: intervalSubscribe });
+		this.bindCloseAh(profileAccount);
+	}
+
+	private async proccesBuyCycle(bot: Bot, profile: abProfile, profileAccount: IClientBot) {
+		try {
+			if (profile.name === 'holyworld' && profile.savingBalanceAccount) {
+				const balance = this.getBotBalance(bot, profile.name);
+				if (balance >= profile.targetBalance * 1.2) {
+					this.sendMoneyOnSaveAccount(balance - profile.targetBalance, bot, profile);
+				}
+			}
+
+			const searchInfo = this.searchItemToBuy(bot, profile);
+			if (searchInfo) {
 				const { slotIndex, targetItem } = searchInfo;
 
 				if (profile.shift) {
@@ -68,25 +153,14 @@ export class AutoBuyService implements IAutoBuyService {
 					await this.buyClick(bot, slotIndex);
 					await syncTimeout(250);
 
-					this.checkErrorSelectItem(bot, targetItem, profile);
+					this.saveBuy(bot, targetItem, profile);
 					this.sellOnUpdate(bot, profileAccount, profile);
 					this.bindReserveUndo(bot);
 				}
-			} catch (e) {
-
 			}
-		}, 0);
+		} catch (e) {
 
-		const intervalSubscribe = {
-			stop: () => {
-				interval.stop();
-				clearInterval(sellSubscribe);
-			},
-			id: interval.id,
-		};
-
-		this.abIntervals.set(id, { interval: intervalSubscribe });
-		this.bindCloseAh(profileAccount);
+		}
 	}
 
 	stopAutoBuy(id: string): void {
@@ -102,6 +176,19 @@ export class AutoBuyService implements IAutoBuyService {
 		return data ? 'ON' : 'OFF';
 	}
 
+
+	private sendMoneyOnSaveAccount(money: number, bot: Bot, profile: abProfile) {
+		bot.chat(`/pay ${profile.savingBalanceAccount} ${money}`);
+	}
+
+	private getBotBalance(bot: Bot, name: string) {
+		switch (name) {
+			case 'holyworld': {
+				return bot.scoreboard['1']['itemsMap']['§2'].displayName.extra[2].text.replaceAll(',', '');
+			}
+		}
+		return undefined;
+	}
 
 	private async inventorySell(bot: Bot, profile: abProfile) {
 		for (let index = 0; index < bot.inventory.slots.length; index++) {
@@ -125,7 +212,7 @@ export class AutoBuyService implements IAutoBuyService {
 		}, 2000);
 	}
 
-	private checkErrorSelectItem(bot: Bot, targetItem: GeneralizedItem, profile: abProfile): void {
+	private saveBuy(bot: Bot, targetItem: GeneralizedItem, profile: abProfile): void {
 		const selectItem = ToGeneralizedItem(bot.currentWindow.slots[13]);
 		const name = targetItem.customName || targetItem?.displayName;
 
@@ -137,6 +224,14 @@ export class AutoBuyService implements IAutoBuyService {
 			logger.warn(`Отклонил неправильно выбранный предмет ${name} в количестве ${targetItem?.count}`);
 			bot.clickWindow(8, 0, 0);
 		}
+	}
+
+
+	private initBuyLogger(profileAccount: IClientBot) {
+		return this.chatService.onChatMessage(profileAccount.accountModel.id, (msg) => {
+			if (!msg.includes('▶ Вы успешно купили')) return;
+			buyLogger.info(`${profileAccount.accountModel.nickname}: ${msg}`);
+		});
 	}
 
 	private searchItemToBuy(bot: Bot, profile: abProfile) {
@@ -261,4 +356,4 @@ export class AutoBuyService implements IAutoBuyService {
 	}
 }
 
-export const autoBuyService = new AutoBuyService(botInRAMRepository);
+export const autoBuyService = new AutoBuyService(botInRAMRepository, chatService, windowsService);

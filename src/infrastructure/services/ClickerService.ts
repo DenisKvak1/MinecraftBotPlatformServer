@@ -5,6 +5,8 @@ import { clearInterval } from 'node:timers';
 import { logger } from '../logger/Logger';
 import { config } from '../../core/config';
 import { Entity } from 'prismarine-entity'
+import { block } from 'sharp';
+import { toggleInfo } from '../../../env/types';
 
 export class ClickerService implements IClickerService {
 	private attackIntervals: Map<string, NodeJS.Timeout> = new Map();
@@ -109,6 +111,22 @@ export class ClickerService implements IClickerService {
 		) return;
 
 		bot.attack(entity)
+	}
+
+	getAttackClickerStatus(id: string): toggleInfo {
+		if (this.attackIntervals.has(id)) {
+			return 'ON'
+		} else {
+			return 'OFF'
+		}
+	}
+
+	getUseItemClickerStatus(id: string): toggleInfo {
+		if (this.useIntervals.has(id)) {
+			return 'ON'
+		} else {
+			return 'OFF'
+		}
 	}
 }
 export const clickerService = new ClickerService(botInRAMRepository)

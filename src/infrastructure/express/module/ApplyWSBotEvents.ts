@@ -6,11 +6,12 @@ import { IClientManagerService } from '../../../core/service/ClientManagerServic
 import { WebSocketClientsController } from './WebSocketClientsController';
 import { Subscribe } from '../../../../env/helpers/observable';
 import {
+	BotFunctions,
 	OUTGHOING_COMMAND_LIST,
 	OutgoingActionWindowBotMessage,
 	OutgoingBotDamageMessage,
 	OutgoingBotDeathMessage,
-	OutgoingBotFarmStatusMessage, OutgoingBotToggleAB,
+	OutgoingBotFunctionsStatusMessage,
 	OutgoingCaptchaMessage,
 	OutgoingChatBotMessage,
 	OutgoingConnectingBotMessage,
@@ -65,8 +66,9 @@ export async function ApplyWSBotEvents(
 		})
 
 		const onABSubscribe = ABService.$ab.subscribe((data)=>{
-			webSocketController.broadcast<OutgoingBotToggleAB>({
-				command: OUTGHOING_COMMAND_LIST.AB_ACTION,
+			webSocketController.broadcast<OutgoingBotFunctionsStatusMessage>({
+				command: OUTGHOING_COMMAND_LIST.BOT_FUNCTIONS_ACTION,
+				type: BotFunctions.AUTO_BUY,
 				id: data.id,
 				action: data.action
 			})
@@ -131,8 +133,9 @@ export async function ApplyWSBotEvents(
 		subscribeMap.delete(disconnectData.id)
 	})
 	const onFarmSubscribe = farmService.$farm.subscribe((data)=>{
-		webSocketController.broadcast<OutgoingBotFarmStatusMessage>({
-			command: OUTGHOING_COMMAND_LIST.FARM_ACTION,
+		webSocketController.broadcast<OutgoingBotFunctionsStatusMessage>({
+			command: OUTGHOING_COMMAND_LIST.BOT_FUNCTIONS_ACTION,
+			type: BotFunctions.AUTO_FARM,
 			id: data.id,
 			action: data.action
 		})

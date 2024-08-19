@@ -6,13 +6,15 @@
     ],
     "name": "holyworld",
     "priceRegex": "(\\d[\\d\\s]*)¤",
+    "savingBalanceAccount": "Zancerio55",
+    "targetBalance": 20000000,
     "updateIndex": 47,
     "interval": 780,
     "shift": false,
     "info": {
       "Gunpowder": {
-        "price": 11000,
-        "sellprice": 18999
+        "price": 14000,
+        "sellprice": 24999
       },
       "Totem of Undying": {
         "price": 200000,
@@ -24,15 +26,15 @@
       },
       "- Талисман ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 4000000,
-        "sellprice": 5899999
+        "sellprice": 7899999
       },
       "- Кирка ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 2200000,
-        "sellprice": 4099999
+        "sellprice": 3099999
       },
       "- Меч ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1100000,
-        "sellprice": 1799000
+        "price": 700000,
+        "sellprice": 1100000
       },
       "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 400000,
@@ -48,27 +50,27 @@
       },
       "- Ботинки ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 400000,
-        "sellprice": 1499999
+        "sellprice": 879999
       },
       "Шлем Iɴғɪɴɪᴛʏ": {
         "price": 2000000,
-        "sellprice": 2799999
+        "sellprice": 2999999
       },
       "Нагрудник Iɴғɪɴɪᴛʏ": {
-        "price": 2000000,
-        "sellprice": 3799999
+        "price": 3000000,
+        "sellprice": 4499999
       },
       "Поножи Iɴғɪɴɪᴛʏ": {
         "price": 2000000,
-        "sellprice": 2699999
+        "sellprice": 2999000
       },
       "Ботинки Iɴғɪɴɪᴛʏ": {
         "price": 2000000,
-        "sellprice": 2800000
+        "sellprice": 2999000
       },
       "Талисман Iɴғɪɴɪᴛʏ": {
-        "price": 4500000,
-        "sellprice": 6999999
+        "price": 4000000,
+        "sellprice": 7999999
       },
       "- Талисман Stinger -": {
         "price": 2000000,
@@ -76,28 +78,31 @@
       },
       "Мифическая сфера": {
         "price": 3000000,
-        "sellprice": 3999999
+        "sellprice": 3999999,
+        "seellcount": 1
       },
       "Мифический талисман": {
         "price": 3500000,
         "sellprice": 4499999
       },
       "Сфера Цербера": {
-        "price": 10000000,
-        "sellprice": 18999999
+        "price": 12000000,
+        "sellprice": 22999999,
+        "seellcount": 1
       },
       "Сфера Флеша": {
-        "price": 6000000,
-        "sellprice": 8799999
+        "price": 4000000,
+        "sellprice": 5899999,
+        "seellcount": 1
       },
       "Универсальный ключ": {
-        "price": 11000000,
-        "sellprice": 16999900,
+        "price": 13000000,
+        "sellprice": 21999900,
         "seellcount": 1
       },
       "Enchanted Golden Apple": {
-        "price": 37000,
-        "sellprice": 57000,
+        "price": 50000,
+        "sellprice": 89900,
         "seellcount": 16
       },
       "Netherite Ingot": {
@@ -129,13 +134,13 @@
         "seellcount": 1
       },
       "Skeleton Spawn Egg": {
-        "price": 1500000,
-        "sellprice": 2099000,
+        "price": 2500000,
+        "sellprice": 3199000,
         "seellcount": 1
       },
       "Wither Skeleton Spawn Egg": {
-        "price": 800000,
-        "sellprice": 1250000,
+        "price": 2500000,
+        "sellprice": 3750000,
         "seellcount": 1
       },
       "Creeper Spawn Egg": {
@@ -149,27 +154,27 @@
         "seellcount": 1
       },
       "Firework Rocket": {
-        "price": 3000,
-        "sellprice": 7500
+        "price": 4500,
+        "sellprice": 9400
       },
       "TNT": {
-        "price": 3300,
-        "sellprice": 7000,
+        "price": 1,
+        "sellprice": 6500,
         "seellcount": 10
       },
       "Динамит A": {
-        "price": 4000,
-        "sellprice": 9000,
+        "price": 3500,
+        "sellprice": 8490,
         "seellcount": 5
       },
       "Динамит B": {
         "price": 65000,
-        "sellprice": 145000,
+        "sellprice": 129000,
         "seellcount": 5
       },
       "Разрывная волна": {
-        "price": 120000,
-        "sellprice": 490000,
+        "price": 220000,
+        "sellprice": 590000,
         "seellcount": 1
       },
       "C4 взрывчатка": {
@@ -178,8 +183,8 @@
         "seellcount": 1
       },
       "Стиллер": {
-        "price": 450000,
-        "sellprice": 820000,
+        "price": 600000,
+        "sellprice": 880000,
         "seellcount": 1
       },
       "Меч《Выгодный фарм》": {

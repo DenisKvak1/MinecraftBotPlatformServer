@@ -24,6 +24,7 @@ import path from 'path';
 import { IFarmService } from '../../core/service/FarmService';
 import { IAutoBuyService } from '../../core/service/AutoBuy';
 import { websocketAutoBuyController } from '../controller/ws/WebSocketAutoBuyController';
+import { webSocketFunctionsBotController } from '../controller/ws/webSocketFunctionsBotController';
 
 export class App {
 	private express = express()
@@ -69,9 +70,8 @@ export class App {
 
 	private initRoutes(){
 		this.routes = {
-			[UNIVERSAL_COMMAND_LIST.GET_AB_STATUS]: (message: IncomingMessage)=> websocketAutoBuyController.getAbStatus(message as any),
+			[UNIVERSAL_COMMAND_LIST.GET_BOT_FUNCTIONS_STATUS]: (message: IncomingMessage)=> webSocketFunctionsBotController.getFunctionsStatus(message as any),
 			[UNIVERSAL_COMMAND_LIST.TOGGLE_AB]: (message: IncomingMessage)=> websocketAutoBuyController.toggleAutoBuy(message as any),
-			[UNIVERSAL_COMMAND_LIST.GET_FARM_STATUS]: (message: IncomingMessage)=> websocketFarmController.getFarmStatus(message as any),
 			[UNIVERSAL_COMMAND_LIST.CREATE_BOT]: (message: IncomingMessage) => websocketAccountController.createBot(message as any),
 			[UNIVERSAL_COMMAND_LIST.DELETE_BOT]: (message: IncomingMessage) => websocketAccountController.deleteBot(message as any),
 			[UNIVERSAL_COMMAND_LIST.GET_BOT_ID]: (message: IncomingMessage) => websocketAccountController.getByID(message as any),
@@ -105,7 +105,7 @@ export class App {
 	private setupRoutes(ws: WebSocket) {
 		ws.on('message', (data)=>{
 			const jsonData = JSON.parse(data.toString())
-			this.routes[jsonData.command](jsonData)
+			if(this.routes[jsonData.command]) this.routes[jsonData.command](jsonData)
 		})
 	}
 

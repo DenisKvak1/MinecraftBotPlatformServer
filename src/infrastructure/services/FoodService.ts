@@ -4,6 +4,8 @@ import { Bot } from 'mineflayer';
 import { botInRAMRepository } from '../database/repository/inRAMBotDateBase';
 import { isEdible } from '../../../env/helpers/isEdible';
 import { logger } from '../logger/Logger';
+import { clearInterval } from 'node:timers';
+import { toggleInfo } from '../../../env/types';
 
 export class FoodService implements IFoodService {
 	private foodIntervals: Map<string, NodeJS.Timeout> = new Map();
@@ -70,6 +72,14 @@ export class FoodService implements IFoodService {
 		}
 		const isSuccess = await this.moveFoodToOffhand(bot)
 		return isSuccess
+	}
+
+	getAutoFoodStatus(id: string): toggleInfo {
+		if (this.foodIntervals.has(id)) {
+			return 'ON'
+		} else {
+			return 'OFF'
+		}
 	}
 }
 export const foodService = new FoodService(botInRAMRepository)

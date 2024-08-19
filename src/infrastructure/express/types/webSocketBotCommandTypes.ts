@@ -4,6 +4,14 @@ import { GeneralizedItem, toggle, toggleInfo } from '../../../../env/types';
 import { ClientAccountModel } from '../../../core/model/AccountModel';
 import { WindowEvent } from '../../../core/service/ClientBot';
 
+export enum BotFunctions {
+	AUTO_FARM = "AUTO_FARM",
+	AUTO_BUY = "AUTO_BUY",
+	AUTO_CLICKER_ATTACK = 'AUTO_CLICKER_ATTACK',
+	AUTO_CLICKER_USE = 'AUTO_CLICKER_USE',
+	AUTO_FOOD = 'AUTO_FOOD',
+}
+
 export type IncomingMessage<T = any> = {
 	command: UNIVERSAL_COMMAND_LIST
 	botID: string
@@ -84,9 +92,7 @@ export type IncomingClickWindowMessage = IncomingMessage<{
 	slotIndex: number,
 	mode: number
 }>
-export type IncomingGetABState = IncomingMessage
 export type IncomingGetCurrentWindow = IncomingMessage
-export type IncomingGetFarmState = IncomingMessage
 
 export type IncomingGetBotsMessage = IncomingMessage
 export type IncomingJumpBotMessage = IncomingMessage
@@ -99,12 +105,9 @@ export type IncomingGetBotInfoNameMessage = IncomingMessage<{
 export type OutgoingGetBotInfoMessage = OutgoingReplayMessage<{
 	account: ClientAccountModel 
 }>
-export type OutgoingGetFarmStatusMessage = OutgoingReplayMessage<{
-	status: toggleInfo
-}>
-export type OutgoingGetABStatusMessage = OutgoingReplayMessage<{
-	status: toggleInfo
-}>
+
+export type IncomingGetBotFunctionsStateMessage = IncomingMessage
+
 export type OutgoingGetBotsInfoMessage = OutgoingReplayMessage<{
 	accounts: ClientAccountModel[]
 }>
@@ -135,6 +138,9 @@ export type OutgoingGetSlotsReplayMessage = OutgoingReplayMessage<{
 	slots: (GeneralizedItem | null)[],
 	selectedSlot: number
 }>
+export type OutgoingGetBotFunctionStatusReplayMessage = OutgoingReplayMessage<{
+	functionsStatus: Record<BotFunctions, toggleInfo>
+}>
 export type OutgoingCreateBotReplayMessage = OutgoingReplayMessage<{
 	account: ClientAccountModel
 }>
@@ -157,20 +163,19 @@ export type OutgoingBotDamageMessage = {
 	command: OUTGHOING_COMMAND_LIST.DAMAGE
 	id: string
 }
-export type OutgoingBotToggleAB = {
-	command: OUTGHOING_COMMAND_LIST.AB_ACTION
+
+export type OutgoingBotFunctionsStatusMessage = {
+	command: OUTGHOING_COMMAND_LIST.BOT_FUNCTIONS_ACTION,
 	id: string,
+	type: BotFunctions
 	action: toggle
 }
+
 export type OutgoingBotDeathMessage = {
 	command: OUTGHOING_COMMAND_LIST.DEATH
 	id: string
 }
-export type OutgoingBotFarmStatusMessage = {
-	command: OUTGHOING_COMMAND_LIST.FARM_ACTION,
-	id: string,
-	action: toggle
-}
+
 
 
 export enum UNIVERSAL_COMMAND_LIST {
@@ -185,10 +190,9 @@ export enum UNIVERSAL_COMMAND_LIST {
 	ATTACK = 'ATTACK',
 	TOGGLE_CLICKER = 'TOGGLE_CLICKER',
 	TOGGLE_FOOD = 'TOGGLE_FOOD',
-	GET_FARM_STATUS = 'GET_FARM_STATUS',
 	TOGGLE_FARM = 'TOGGLE_FARM',
-	GET_AB_STATUS = 'GET_AB_STATUS',
 	TOGGLE_AB = 'TOGGLE_AB',
+	GET_BOT_FUNCTIONS_STATUS = 'GET_BOT_FUNCTIONS_STATUS',
 	ROTATE_HEAD = 'ROTATE_HEAD',
 	SET_HOTBAR_SLOT = 'SET_HOTBAR_SLOT',
 	DROP_SLOT = 'DROP_SLOT',
@@ -209,8 +213,7 @@ export enum OUTGHOING_COMMAND_LIST {
 	POSITION_BOT = 'POSITION_BOT',
 	LOAD_CAPTCHA = 'LOAD_CAPTCHA',
 	INVENTORY_UPDATE = 'INVENTORY_UPDATE',
-	FARM_ACTION = 'FARM_ACTION',
-	AB_ACTION = 'AB_ACTION',
+	BOT_FUNCTIONS_ACTION = 'BOT_FUNCTIONS_ACTION',
 	DAMAGE = 'DAMAGE',
 	DEATH = 'DEATH'
 }

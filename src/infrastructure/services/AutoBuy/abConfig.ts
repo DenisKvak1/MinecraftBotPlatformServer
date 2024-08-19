@@ -1,5 +1,6 @@
 import { parseJsonFile } from '../../../../env/helpers/parseJson';
 import path from 'node:path';
+import { Bot } from 'mineflayer';
 
 export function getProfileAutobuy(server: string) {
 	const autoBuyConfigPath = path.resolve(process.cwd(), 'configs/autoBuyConfig.json');
@@ -16,7 +17,12 @@ export function getProfileAutobuy(server: string) {
 	return targetConfig
 }
 
+
+
 export type abProfile = {
+	savingBalanceAccount?: string,
+	name: string
+	targetBalance?: number
 	serverIps: string | string[],
 	priceRegex: string,
 	updateIndex: number,

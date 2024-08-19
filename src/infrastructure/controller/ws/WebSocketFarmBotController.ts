@@ -1,17 +1,11 @@
 import { IClientManagerService } from '../../../core/service/ClientManagerService';
 import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
-import { IFoodService } from '../../../core/service/FoodService';
 import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import { checkNotOnlineBot } from '../../express/helper/checkOnline';
 import { IFarmService } from '../../../core/service/FarmService';
 import { farmService } from '../../services/FarmService';
 import { clientManagerService } from '../../services/ClientManagerService';
-import {
-	IncomingGetFarmState,
-	IncomingToggleFarmMessage,
-	IncomingToggleFoodMessage, OutgoingBotFarmStatusMessage, OutgoingGetFarmStatusMessage,
-	OutgoingReplayMessage, STATUS, UNIVERSAL_COMMAND_LIST,
-} from '../../express/types/webSocketBotCommandTypes';
+import { IncomingToggleFarmMessage, OutgoingReplayMessage } from '../../express/types/webSocketBotCommandTypes';
 
 export class WebSocketFarmBotController {
 	constructor(
@@ -38,26 +32,6 @@ export class WebSocketFarmBotController {
 
 			returnWSOk(message, this.wsClients);
 		} catch (e) {
-			returnWSError(message, e.message, this.wsClients);
-		}
-	}
-
-	async getFarmStatus(message: IncomingGetFarmState) {
-		try {
-			const botID = message.botID;
-
-
-			const status = this.farmService.getFarmState(botID)
-
-			this.wsClients.broadcast<OutgoingGetFarmStatusMessage>({
-				command: UNIVERSAL_COMMAND_LIST.GET_FARM_STATUS,
-				botID,
-				status: STATUS.SUCCESS,
-				data: {
-					status: status
-				}
-			})
-		}	catch (e) {
 			returnWSError(message, e.message, this.wsClients);
 		}
 	}
