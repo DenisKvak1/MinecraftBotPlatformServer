@@ -28,6 +28,7 @@ export interface IClientBot{
     $chat: IObservable<string>
     $inventoryUpdate: IObservable<InventoryUpdateDTO>
     $death: IObservable<void>
+    $reconnect: IObservable<void>
     connect(): void
     disconnect(): void
 }

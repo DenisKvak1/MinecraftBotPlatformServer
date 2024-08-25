@@ -1,0 +1,124 @@
+[
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a30a",
+    "name": "lite",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 4000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 44
+        }
+      }
+    ]
+  },
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a31d",
+    "name": "test",
+    "botActions": [
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "Реконнект ухты"
+        }
+      },
+      {
+        "command": "GOTO",
+        "value": {
+          "x": 100,
+          "y": 70,
+          "z": 100
+        }
+      }
+    ]
+  },
+  {
+    "id": "d3234c80-6c48-4964-afe3-887910b99364",
+    "name": "testol",
+    "botActions": [
+      {
+        "command": "TOGGLE_FARM",
+        "value": {
+          "message": "edd"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ad9cf354-2edb-42e5-8515-1c5206a40cef",
+    "name": "s",
+    "botActions": []
+  },
+  {
+    "id": "b0e055b5-6567-4605-9fa9-d4fc16529e07",
+    "name": "x",
+    "botActions": [
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "Реконнект ухты"
+        }
+      },
+      {
+        "command": "GOTO",
+        "value": {
+          "x": 100,
+          "y": 70,
+          "z": 100
+        }
+      }
+    ]
+  },
+  {
+    "id": "b3e372f5-1b44-42e5-90b4-b6c754ec804e",
+    "name": "Тестовый скрипт",
+    "botActions": [
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "ухтыы"
+        }
+      },
+      {
+        "command": "GOTO",
+        "value": {
+          "x": "150",
+          "y": "70",
+          "z": "150"
+        }
+      }
+    ]
+  }
+]

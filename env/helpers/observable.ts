@@ -4,7 +4,7 @@ export type IObservable<T> = {
   unsubscribeAll: () => void;
   getValue: () => T;
   setValue: (value: T) => void;
-  once: (callback: (eventData?: T) => void, condition?: (eventData?: T) => boolean) => void;
+  once: (callback: (eventData?: T) => void, condition?: (eventData?: T) => boolean) => Subscribe;
 };
 
 export type Subscribe = { unsubscribe: () => void };
@@ -49,8 +49,14 @@ export class Observable<T> implements IObservable<T> {
     this.onceListeners = this.onceListeners.filter((_, index) => !toRemove.includes(index));
   }
 
-  once(callback: (eventData?: T) => void, condition?: (eventData?: T) => boolean): void {
+  once(callback: (eventData?: T) => void, condition?: (eventData?: T) => boolean): Subscribe {
     this.onceListeners.push({ callback, condition });
+
+    return {
+      unsubscribe: (): void => {
+        this.onceListeners = this.onceListeners.filter(listener => listener.callback !== callback);
+      }
+    };
   }
 
   getValue() {

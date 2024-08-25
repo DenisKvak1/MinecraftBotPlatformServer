@@ -1,4 +1,4 @@
-import { winstonLogger, winstonLoggerBuyInBot } from './index';
+import { winstonLogger, minecraftBotInfoLogger } from './index';
 import { config } from '../../core/config';
 import { windowsService } from '../services/WindowService';
 import winston from 'winston';
@@ -29,4 +29,4 @@ export class Logger {
 	}
 }
 export const logger = new Logger(winstonLogger)
-export const buyLogger = new Logger(winstonLoggerBuyInBot)
+export const buyLogger = new Logger(minecraftBotInfoLogger)

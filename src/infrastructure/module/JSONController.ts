@@ -36,3 +36,4 @@ export class JSONController<T> {
     }
 }
 export const JSONControllerAccountImpl = new JSONController<AccountModel>(`${process.cwd()}/database/Accounts.json`)
+export const JSONControllerBotScriptsImpl = new JSONController<AccountModel>(`${process.cwd()}/database/BotScripts.json`)

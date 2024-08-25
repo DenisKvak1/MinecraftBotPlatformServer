@@ -14,10 +14,25 @@ import { IChatService } from '../../../core/service/ChatService';
 import { IWindowService } from '../../../core/service/WindowService';
 import { windowsService } from '../WindowService';
 import { chatService } from '../ChatService';
+import { promises } from 'node:dns';
+import { forEachResolvedProjectReference } from 'ts-loader/dist/instances';
+import { availableParallelism, type } from 'node:os';
+import { minecraftBotInfoLogger } from '../../logger';
+import { v4 as uuidv4 } from 'uuid';
+import { nodeIntervalToSubscribe } from '../../../../env/helpers/NodeTimeoutToSubscribe';
 
 
 export class AutoBuyService implements IAutoBuyService {
 	private abIntervals: Map<string, { interval: { id: NodeJS.Timeout, stop: () => void } }> = new Map();
+	private massAbIds: Record<string, {
+		botsIds: string[],
+		stopped: boolean,
+		profilesAccounts: Record<string, IClientBot>,
+		profiles: Record<string, abProfile>
+		interval?: { id: NodeJS.Timeout, stop: () => void },
+		subscribes: Record<string, Subscribe[]>
+	}> = {};
+
 	$ab = new Observable<{ id: string; action: toggle }>();
 
 	constructor(
@@ -27,111 +42,260 @@ export class AutoBuyService implements IAutoBuyService {
 	) {
 	}
 
-	async startAutoBuySystem(botIds: string[], customInterval?: number): Promise<void> {
-		const profileAccounts = {}
-		const profiles = {}
-		const sellSubscribes = {}
-		const buyLoggerSubscribe = {}
+	async startAutoBuySystem(botIds: string[]): Promise<string> {
+		const massAutoBuyId = uuidv4();
 
-		for (const id of botIds) {
-			const profileAccount = this.repository.getById(id);
-			const profile = getProfileAutobuy(profileAccount.accountModel.server);
+		this.massAbIds[massAutoBuyId] = {
+			botsIds: [],
+			profiles: {},
+			profilesAccounts: {},
+			subscribes: {},
+			stopped: false
+		};
 
-			this.chatService.sendMessage(id, '/ah');
-			await syncTimeout(500);
-			if (profile.name === 'holyworld') await windowsService.click(id, 53, 1);
-
-			profiles[id] = profile
-			profileAccounts[id] = profileAccount
-		}
-
-		for (const id of botIds) {
-			const isOkInit = await this.autoBuyProccessInit(id, profiles[id], profileAccounts[id]);
-			if (!isOkInit) return;
-			const {sellSubscribe, buyLoggerSubscribe} = isOkInit
-			sellSubscribes[id] = sellSubscribe
-			buyLoggerSubscribe[id] = buyLoggerSubscribe
-		}
+		const operations = botIds.map(async botId => {
+			await this.addToAutoBuySystem(massAutoBuyId, botId)
+		});
+		await Promise.all(operations);
 
 		const interval = this.startAsyncInterval(async () => {
-			for (const id of botIds) {
-				const profile = getProfileAutobuy(profileAccounts[id].accountModel.server);
-				await this.updateAuction(profileAccounts[id]._bot, profile);
-				setTimeout(()=>{
-					this.proccesBuyCycle(profileAccounts[id]._bot, profile, profileAccounts[id]);
-				}, profile.interval)
-				await syncTimeout(profile.interval / 3);
+			if (this.massAbIds[massAutoBuyId].stopped) return;
+			const bots = this.massAbIds[massAutoBuyId].botsIds
+			for (const id of bots) {
+				if(!this.massAbIds[massAutoBuyId].botsIds.includes(id)) return
+
+				const profile = this.massAbIds[massAutoBuyId].profiles[id];
+				const profileAccount = this.massAbIds[massAutoBuyId].profilesAccounts[id]
+				await this.updateAuction(profileAccount._bot, profile);
+				setTimeout(() => {
+					if(!this.massAbIds[massAutoBuyId].botsIds.includes(id)) return
+					this.proccesBuyCycle(profileAccount._bot, profile, profileAccount);
+				}, profile.interval);
+
+				await syncTimeout((profile.interval / bots.length) / 3 * 5);
 			}
 		}, 0);
 
-		for (const id of botIds) {
-			this.proccessOnCloseAutoBuy(id, profileAccounts[id], interval, sellSubscribes[id], buyLoggerSubscribe[id]);
-		}
+
+		this.massAbIds[massAutoBuyId].interval = interval
+		return massAutoBuyId
 	}
 
-	async stopAutoBuySystem(botIds: string[]): Promise<void> {
-		botIds.forEach((id) => this.stopAutoBuy(id));
+	async stopAutoBuySystem(massId: string): Promise<void> {
+		this.massAbIds[massId].botsIds.forEach((id)=>{
+			this.clearSubscribes(this.massAbIds[massId].subscribes[id])
+		})
+		delete this.massAbIds[massId]
+	}
+
+	async addToAutoBuySystem(massId: string, botId: string){
+		const { profile, profileAccount } = await this.massAutoBuyFirstInit(botId)
+		const isOkInit = await this.autoBuyProccessInit(botId, profile, profileAccount);
+		if (!isOkInit) return;
+		const { sellSubscribe, buyLoggerSubscribe, updatePrice, $updatePrice, $stopSetPrice } = isOkInit;
+		$updatePrice.subscribe(() => {
+			this.massAbIds[massId].stopped = true;
+		});
+		$stopSetPrice.subscribe(async (newProfile) => {
+			this.massAbIds[massId].profiles[botId] = newProfile;
+			this.massAbIds[massId].profilesAccounts[botId]._bot.chat('/ah');
+			await syncTimeout(600);
+			if (profile.name === 'holyworld') await windowsService.click(botId, 53, 1);
+			await syncTimeout(600);
+			this.massAbIds[massId].stopped
+		});
+
+
+		this.massAbIds[massId].subscribes[botId] = [nodeIntervalToSubscribe(updatePrice), nodeIntervalToSubscribe(sellSubscribe), buyLoggerSubscribe]
+		this.massAbIds[massId].botsIds.push(botId)
+		this.massAbIds[massId].profiles[botId] = profile;
+		this.massAbIds[massId].profilesAccounts[botId] = profileAccount;
+		this.bindCloseAh(profileAccount, true, massId)
+	}
+
+	async deleteMassAutoBuyBot(massId: string, botId: string) {
+		this.clearSubscribes(this.massAbIds[massId].subscribes[botId])
+		this.massAbIds[massId].botsIds = this.massAbIds[massId].botsIds.filter((id)=> id !== botId)
+		console.log(this.massAbIds[massId].botsIds)
+		delete this.massAbIds[massId].profiles[botId]
+		delete this.massAbIds[massId].profilesAccounts[botId]
+		delete this.massAbIds[massId].subscribes[botId]
+		await syncTimeout(2000)
+		this.windowService.closeWindow(botId)
 	}
 
 	async startAutoBuy(id: string): Promise<void> {
 		const profileAccount = this.repository.getById(id);
-		const profile = getProfileAutobuy(profileAccount.accountModel.server);
+		let profile = getProfileAutobuy(profileAccount.accountModel.server);
+		let isStopped = false;
 
 		const isOkInit = await this.autoBuyProccessInit(id, profile, profileAccount);
 		if (!isOkInit) return;
-		const {sellSubscribe, buyLoggerSubscribe} = isOkInit
-
+		const { sellSubscribe, buyLoggerSubscribe, updatePrice, $updatePrice, $stopSetPrice } = isOkInit;
 		const bot = profileAccount._bot;
+
+		profile =  await this.setBuyPrice(bot, profile)
+
+		$updatePrice.subscribe(() => {
+			isStopped = true;
+		});
+		$stopSetPrice.subscribe(async (newProfile) => {
+			profile = newProfile;
+			bot.chat('/ah');
+			await syncTimeout(600);
+			isStopped = false;
+		});
+
 		const interval = this.startAsyncInterval(async () => {
+			if (isStopped) return;
 			await this.updateAuction(bot, profile);
 			await syncTimeout(profile.interval);
 			await this.proccesBuyCycle(bot, profile, profileAccount);
 		}, 0);
 
-		this.proccessOnCloseAutoBuy(id, profileAccount, interval, sellSubscribe, buyLoggerSubscribe);
+		this.bindCloseAh(profileAccount);
+		this.setOnCloseSubscribe(id, interval, sellSubscribe, buyLoggerSubscribe, updatePrice);
+	}
+
+	private clearSubscribes(subscribes: Subscribe[]){
+		subscribes.forEach((subsc)=> subsc.unsubscribe())
+	}
+
+	private async setBuyPrice(bot: Bot, profile: abProfile): Promise<abProfile> {
+		const newProfile = { ...profile };
+
+		for (const abKey in profile.info) {
+			const abInfo = profile.info[abKey];
+
+			if (!abInfo.searchName) continue;
+			const priceData = await this.checkMinprice(abInfo?.searchName, bot, profile);
+			if (!priceData) continue;
+			newProfile.info[abKey].price = (priceData.averagePrice / 100) * (100 - abInfo?.procentDown || profile.defaultProcentDown);
+			newProfile.info[abKey].sellprice = Math.floor(priceData.minPrice * 0.99);
+			await syncTimeout(700);
+		}
+		return newProfile;
 	}
 
 
+	private async checkMinprice(name: string, bot: Bot, profile: abProfile) {
+		let minPrice: number;
+		let averagePrice: number;
+
+		bot.chat(`/ah search ${name}`);
+		await syncTimeout(700);
+
+		let window = bot.currentWindow;
+		if (!window) return;
+
+		await bot.clickWindow(52, 1, 0);
+		await syncTimeout(1200);
+		await bot.clickWindow(52, 1, 0);
+		await syncTimeout(2500);
+
+		window = bot.currentWindow;
+		if (!window) return;
+
+		if (!window.slots[0]) return;
+		if (window.slots[1] && window.slots[2]) {
+			const items = [ToGeneralizedItem(window.slots[0]), ToGeneralizedItem(window.slots[1]), ToGeneralizedItem(window.slots[1])];
+			const prices = items.map((item) => this.extractPrice(item.customLoreHTML, profile.priceRegex) / item.count);
+			const sumPrice = prices.reduce((a, c) => a += c, 0);
+
+			minPrice = Math.min(...prices);
+			averagePrice = sumPrice / items.length;
+		} else {
+			const item = ToGeneralizedItem(window.slots[0]);
+			averagePrice = this.extractPrice(item.customLoreHTML, profile.priceRegex) / item.count;
+			minPrice = averagePrice;
+		}
+		return { averagePrice: Math.floor(averagePrice), minPrice: Math.floor(minPrice) };
+	}
+
+	private async massAutoBuyFirstInit(id: string, ){
+		const profileAccount = this.repository.getById(id);
+		let profile = getProfileAutobuy(profileAccount.accountModel.server);
+		if (profile.percentMode) profile = await this.setBuyPrice(profileAccount._bot, profile);
+
+		await syncTimeout(500);
+		profileAccount._bot.chat('/ah');
+		await syncTimeout(500);
+
+		if (profile.name === 'holyworld') {
+			await windowsService.click(id, 53, 1);
+		}
+		return {profile, profileAccount}
+	}
+
 	private async autoBuyProccessInit(id: string, profile: abProfile, profileAccount: IClientBot): Promise<{
 		sellSubscribe: NodeJS.Timeout,
-		buyLoggerSubscribe: Subscribe
+		updatePrice: NodeJS.Timeout,
+		buyLoggerSubscribe: Subscribe,
+		$updatePrice: Observable<undefined>,
+		$stopSetPrice: Observable<abProfile>
 	} | undefined> {
 		if (this.getAutoBuyState(id) === 'ON') return;
 
 		const bot = profileAccount._bot;
 		if (!bot) return;
 
+		const $updatePrice = new Observable<undefined>();
+		const $stopSetPrice = new Observable<abProfile>();
+		let updatePrice;
+
 		const sellSubscribe = setInterval(() => {
 			this.inventorySell(bot, profile);
 		}, 9000);
+
+		if (profile.percentMode) {
+			updatePrice = setInterval(async () => {
+				$updatePrice.next();
+				await syncTimeout(2000);
+				const newProfile = await this.setBuyPrice(bot, profile);
+				$stopSetPrice.next(newProfile);
+			}, profile.reloadPriceInterval || 99 * 99 * 99 * 99 * 99 * 99 * 99 * 99);
+		}
+
 		const buyLoggerSubscribe = this.initBuyLogger(profileAccount);
 
 		this.$ab.next({ id, action: 'START' });
 		await syncTimeout(1000);
 		if (!bot.currentWindow) return;
 
-		return { sellSubscribe, buyLoggerSubscribe };
+		return { sellSubscribe, buyLoggerSubscribe, updatePrice, $updatePrice, $stopSetPrice };
 	}
 
 	private async updateAuction(bot: Bot, profile: abProfile) {
 		bot.clickWindow(profile.updateIndex, 0, 0);
 	}
 
-	private proccessOnCloseAutoBuy(id: string, profileAccount: IClientBot, interval: {
-		id: NodeJS.Timeout,
-		stop: () => void
-	}, sellSubscribe: NodeJS.Timeout, buyLoggerSubscribe: Subscribe) {
-		const intervalSubscribe = {
+	private setOnCloseSubscribe(
+		id: string,
+		interval: {
+			id: NodeJS.Timeout,
+			stop: () => void
+		}, sellSubscribe: NodeJS.Timeout, buyLoggerSubscribe: Subscribe, updatePriceSubscribe: NodeJS.Timeout) {
+
+		const intervalSubscribe = this.getOnCloseSubscribe(interval, sellSubscribe, buyLoggerSubscribe, updatePriceSubscribe);
+		this.abIntervals.set(id, { interval: intervalSubscribe });
+	}
+
+
+	private getOnCloseSubscribe(
+		interval: {
+			id: NodeJS.Timeout,
+			stop: () => void
+		}, sellSubscribe: NodeJS.Timeout, buyLoggerSubscribe: Subscribe, updatePriceSubscribe: NodeJS.Timeout,
+	) {
+		return {
 			stop: () => {
-				interval.stop();
+				interval?.stop();
 				clearInterval(sellSubscribe);
+				clearInterval(updatePriceSubscribe);
 				buyLoggerSubscribe?.unsubscribe();
 			},
 			id: interval.id,
 		};
-
-		this.abIntervals.set(id, { interval: intervalSubscribe });
-		this.bindCloseAh(profileAccount);
 	}
 
 	private async proccesBuyCycle(bot: Bot, profile: abProfile, profileAccount: IClientBot) {
@@ -139,7 +303,7 @@ export class AutoBuyService implements IAutoBuyService {
 			if (profile.name === 'holyworld' && profile.savingBalanceAccount) {
 				const balance = this.getBotBalance(bot, profile.name);
 				if (balance >= profile.targetBalance * 1.2) {
-					this.sendMoneyOnSaveAccount(balance - profile.targetBalance, bot, profile);
+					this.sendMoneyOnSaveAccount(Math.floor(balance - profile.targetBalance), bot, profile);
 				}
 			}
 
@@ -179,6 +343,7 @@ export class AutoBuyService implements IAutoBuyService {
 
 	private sendMoneyOnSaveAccount(money: number, bot: Bot, profile: abProfile) {
 		bot.chat(`/pay ${profile.savingBalanceAccount} ${money}`);
+		buyLogger.info(`Баланс ${profile.savingBalanceAccount} пополнен на ${money}`);
 	}
 
 	private getBotBalance(bot: Bot, name: string) {
@@ -226,10 +391,9 @@ export class AutoBuyService implements IAutoBuyService {
 		}
 	}
 
-
 	private initBuyLogger(profileAccount: IClientBot) {
 		return this.chatService.onChatMessage(profileAccount.accountModel.id, (msg) => {
-			if (!msg.includes('▶ Вы успешно купили')) return;
+			if (!msg.includes('▶ Вы успешно купили') && !msg.includes(' купил ')) return;
 			buyLogger.info(`${profileAccount.accountModel.nickname}: ${msg}`);
 		});
 	}
@@ -323,13 +487,16 @@ export class AutoBuyService implements IAutoBuyService {
 		return false;
 	}
 
-	private bindCloseAh(clientBot: IClientBot) {
+	private bindCloseAh(clientBot: IClientBot, mass?: boolean, massId?: string) {
 		clientBot.$window.once((eventData) => {
-			this.stopAutoBuy(clientBot.accountModel.id);
+			if (!this.massAbIds[massId].botsIds.includes(clientBot.accountModel.id)) return
+			if(!mass) this.stopAutoBuy(clientBot.accountModel.id);
+			else this.deleteMassAutoBuyBot(massId,clientBot.accountModel.id)
 		}, (eventData) => eventData.action === 'CLOSE');
 
 		clientBot.$disconnect.once((eventData) => {
-			this.stopAutoBuy(clientBot.accountModel.id);
+			if(!mass) this.stopAutoBuy(clientBot.accountModel.id);
+			else this.deleteMassAutoBuyBot(massId, clientBot.accountModel.id)
 		});
 	}
 

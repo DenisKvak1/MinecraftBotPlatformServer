@@ -26,6 +26,15 @@ export class WebSocketAccountServiceController {
 			const botID = message.botID;
 			const data = message.data;
 
+			const isExist = Boolean(await this.accountService.getByName(data.nickname))
+			if(isExist){
+				return this.wsClients.broadcast<OutgoingCreateBotReplayMessage>({
+					command: message.command,
+					botID,
+					status: STATUS.ERROR,
+					errorMessage: 'Бот уже существует'
+				});
+			}
 			const account = await this.accountService.create(data);
 
 			return this.wsClients.broadcast<OutgoingCreateBotReplayMessage>({
@@ -138,7 +147,6 @@ export class WebSocketAccountServiceController {
 		try {
 			const botID = message.botID;
 			const updateDTO = message.data;
-
 			await this.accountService.update(botID, updateDTO);
 
 			returnWSOk(message, this.wsClients);

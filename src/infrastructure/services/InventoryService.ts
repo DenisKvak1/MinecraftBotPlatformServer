@@ -42,16 +42,16 @@ export class InventoryService implements IInventoryService {
 		bot.setQuickBarSlot(slot);
 	}
 
-	dropAll(id: string): void {
+	async dropAll(id: string): Promise<void> {
 		const bot = this.repository.getById(id)._bot;
 		const inventory = bot.inventory.slots;
 		logger.info(`${id}: Выкинул все предметы из инвентаря`)
 
-		inventory.forEach(async (item) => {
-			if(!item) return
+		for (const item of inventory) {
+			if(!item) continue;
 			await syncTimeout(400)
 			await this.dropSlot(bot, item.slot)
-		});
+		}
 	}
 
 	getSlots(id: string) {
@@ -66,6 +66,11 @@ export class InventoryService implements IInventoryService {
 		return this.repository.getById(id)?.$inventoryUpdate.subscribe((dto) => {
 			callback(dto);
 		});
+	}
+
+	async activate(id: string): Promise<void> {
+		const bot = this.repository.getById(id)._bot
+		await bot.activateItem()
 	}
 
 	useSlot(id: string, slotID: number): void {

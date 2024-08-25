@@ -10,11 +10,9 @@ import { logger } from './infrastructure/logger/Logger';
 import { autoBuyService } from './infrastructure/services/AutoBuy/AutoBuyService';
 import { captchaService } from './infrastructure/services/CaptchaService/CaptchaService';
 import { ChatController } from './infrastructure/chatController/ChatController';
-import { clickerService } from './infrastructure/services/ClickerService';
-import { getRawAsset } from 'node:sea';
+import { botScriptsService } from './infrastructure/services/BotScriptService';
+import { BOT_SCRIPT_ACTIONS } from './core/service/BotScriptService/types';
 import { syncTimeout } from '../env/helpers/syncTimeout';
-import { inMemoryAccountRepository } from './infrastructure/database/repository/inMemoryAccountRepository';
-import { botInRAMRepository } from './infrastructure/database/repository/inRAMBotDateBase';
 import { getRandomInRange } from '../env/helpers/randomGenerator';
 
 try {
@@ -26,25 +24,71 @@ try {
 		chatService,
 		captchaService,
 		farmService,
-		autoBuyService
+		autoBuyService,
 	);
 	app.start(3000);
 
-	const chatController = new ChatController(clientManagerService, chatService, accountService)
-	chatController.start()
+	const chatController = new ChatController(clientManagerService, chatService, accountService);
+	chatController.start();
 } catch (e) {
-	logger.error(e.message)
+	logger.error(e.message);
 }
 
+// process.on('uncaughtException', (reason) => {
+// 	logger.error(reason.message);
+// });
+
+
+// botScriptsService.save('lite', [
+// 	{
+// 		command: BOT_SCRIPT_ACTIONS.CONNECT,
+// 	},
+// 	{
+// 		command: BOT_SCRIPT_ACTIONS.SLEEP,
+// 		value: {
+// 			sleepTimeout: 4000,
+// 		},
+// 	},
+// 	{
+// 		command: BOT_SCRIPT_ACTIONS.SEND_CHAT_ESSAGE,
+// 		value: {
+// 			message: '/lite',
+// 		},
+// 	},
+// 	{
+// 		command: BOT_SCRIPT_ACTIONS.SLEEP,
+// 		value: {
+// 			sleepTimeout: 1000,
+// 		},
+// 	},
+// 	{
+// 		command: BOT_SCRIPT_ACTIONS.CLICK_WINDOW,
+// 		value: {
+// 			slotIndex: 4,
+// 		},
+// 	},
+// 	{
+// 		command: BOT_SCRIPT_ACTIONS.SLEEP,
+// 		value: {
+// 			sleepTimeout: 1000,
+// 		},
+// 	},
+// 	{
+// 		command: BOT_SCRIPT_ACTIONS.CLICK_WINDOW,
+// 		value: {
+// 			slotIndex: 44,
+// 		},
+// 	},
+// ]).then(async (script) => {
+// 	await botScriptsService.run(script.id, (await accountService.getByName('Fles1hPop')).id);
+// });
 setTimeout(()=> {
 	(async function f(){
-		const id1 = (await accountService.getByName('Zancerio65')).id
-		const id2 = (await accountService.getByName('Zancerio66')).id
-		const id3 = (await accountService.getByName('Zancerio67')).id
-		const id4 = (await accountService.getByName('Zancerio68')).id
-		const id5 = (await accountService.getByName('Zancerio75')).id
-
-		const bot = botInRAMRepository.getById(id1)._bot
+		const id1 = (await accountService.getByName('Fles1hPop')).id
+		const id2 = (await accountService.getByName('Flesh2Flop')).id
+		const id3 = (await accountService.getByName('Happy4Day')).id
+		const id4 = (await accountService.getByName('FlashSas3')).id
+		const id5 = (await accountService.getByName('Kokri5ken')).id
 
 		// console.log(bot.scoreboard['1']['itemsMap']['§2'].displayName.extra[2].text.replace(',', ''))
 		// bot.on('scoreUpdated', (scoreboard, item:any)=>{
@@ -52,10 +96,10 @@ setTimeout(()=> {
 		// })
 
 
-		const bots = [id1, id2, id3, id4, id5]
+		const bots = [id1, id2, id3,id4,id5]
 		bots.forEach(async (id)=>{
 			clientManagerService.connect(id)
-			await syncTimeout(3000)
+			await syncTimeout(5000)
 			chatService.sendMessage(id, '/lite')
 			await syncTimeout(1000)
 			await windowsService.click(id, 4)
@@ -65,10 +109,11 @@ setTimeout(()=> {
 		})
 
 		await syncTimeout(8000)
-		try {
-			await autoBuyService.startAutoBuySystem(bots)
-		} catch (e){
 
+		try {
+			const massId = await autoBuyService.startAutoBuySystem(bots)
+		} catch (e){
+			console.log(e.message)
 		}
 	})()
 

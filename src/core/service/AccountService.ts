@@ -52,6 +52,7 @@ export class AccountService {
 
     async update(id: string, dto:AccountUpdateDTO) {
         this.accountRepository.update(id, dto)
+        this.botRepository.getById(id).accountModel = await this.getByID(id)
     }
 
     async getAll(): Promise<ClientAccountModel[]>{

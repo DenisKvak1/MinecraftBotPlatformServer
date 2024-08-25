@@ -13,6 +13,7 @@ export const winstonLogger = winston.createLogger({
 		winston.format.printf(info => `${info.timestamp} [${info.level.toUpperCase()}]: ${info.message}`)
 	),
 	transports: [
+		new winston.transports.Console(),
 		new winston.transports.File({ filename: 'app.log' })
 	]
 });
@@ -26,7 +27,7 @@ if(config.telegramBotAPIKey) {
 	autoBuyTransports.push(new TelegramTransport(config.telegramBotAPIKey, config.telegramBotIdWhiteList))
 }
 
-export const winstonLoggerBuyInBot = winston.createLogger({
+export const minecraftBotInfoLogger = winston.createLogger({
 	levels: winston.config.npm.levels,
 	level: 'debug',
 	format: winston.format.combine(

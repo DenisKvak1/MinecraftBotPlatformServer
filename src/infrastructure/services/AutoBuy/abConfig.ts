@@ -20,6 +20,7 @@ export function getProfileAutobuy(server: string) {
 
 
 export type abProfile = {
+	percentMode?: string
 	savingBalanceAccount?: string,
 	name: string
 	targetBalance?: number
@@ -28,11 +29,17 @@ export type abProfile = {
 	updateIndex: number,
 	shift: boolean
 	interval: number,
+	autoSellPrice?: number,
+	defaultProcentDown?: number
+	reloadPriceInterval: number
+
 	info: {
 		[key: string]: {
 			price: number
 			sellprice?: number | any,
-			seellcount?: number
+			searchName?: string
+			seellcount?: number,
+			procentDown?: number
 		}
 	}
 }

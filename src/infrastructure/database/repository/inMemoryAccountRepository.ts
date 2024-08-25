@@ -3,8 +3,7 @@ import { IJSONController, JSONControllerAccountImpl } from '../../module/JSONCon
 import { AccountUpdateDTO, CreateAccountDTO } from '../../../core/repository/AccountRepository/dto/AccountDTO';
 import { AccountModel } from '../../../core/model/AccountModel';
 import { v4 as uuidv4 } from 'uuid';
-import { ClientBotRepository } from '../../../core/repository/ClientBotRepository/clientBotRepository';
-import { botInRAMRepository } from './inRAMBotDateBase';
+import { addColors } from 'winston';
 
 class InMemoryAccountRepository implements AccountRepository{
     constructor(
@@ -19,6 +18,7 @@ class InMemoryAccountRepository implements AccountRepository{
             ...dto
         } as AccountModel;
         if(!createAccount.whiteList) createAccount.whiteList = [];
+        if(!createAccount.autoReconnect) createAccount.autoReconnect = {enable: false, timeout: 5000, script: ''};
 
         account.push(createAccount);
         this.JSONController.saveJSON(account);
@@ -65,6 +65,12 @@ class InMemoryAccountRepository implements AccountRepository{
         const index = accounts.findIndex((account) => account.id === id);
         if (index !== -1) {
             const account = accounts[index];
+            for (const dtoKey in dto){
+                if(dto[dtoKey]) account[dtoKey] = dto[dtoKey]
+            }
+            if (dto.nickname !== undefined) {
+                account.nickname = dto.nickname;
+            }
             if (dto.server !== undefined) {
                 account.server = dto.server;
             }
@@ -80,6 +86,13 @@ class InMemoryAccountRepository implements AccountRepository{
             if (dto.whiteList !== undefined) {
                 account.whiteList = dto.whiteList;
             }
+            if (dto.autoReconnectTimeout !== undefined) {
+                account.autoReconnect.timeout = dto.autoReconnectTimeout
+            }
+            if (dto.autoReconnectScript !== undefined) {
+                account.autoReconnect.script = dto.autoReconnectScript
+            }
+            if(!account.autoReconnect.script) account.autoReconnect.enable = false
 
             this.JSONController.saveJSON(accounts);
         }

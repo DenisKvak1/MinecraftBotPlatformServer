@@ -4,7 +4,6 @@ import { Bot, createBot, StorageEvents } from 'mineflayer';
 import { Observable } from '../../../env/helpers/observable';
 import { Movements, pathfinder } from 'mineflayer-pathfinder';
 import { mapDownloader } from 'mineflayer-item-map-downloader';
-import { GeneralizedItem } from '../../../env/types';
 import { ToGeneralizedItem, ToGeneralizedItems } from '../../../env/helpers/ToGeneralizedItem';
 import { logger } from '../logger/Logger';
 import { Window } from 'prismarine-windows';
@@ -22,6 +21,7 @@ export class ClientBot implements IClientBot {
 	$inventoryUpdate = new Observable<InventoryUpdateDTO>();
 	$health = new Observable<void>()
 	$death = new Observable<void>()
+	$reconnect = new Observable<void>()
 
 	constructor(
 		public accountModel: AccountModel,
@@ -90,9 +90,10 @@ export class ClientBot implements IClientBot {
 
 	disconnect() {
 		if (!this._bot) return;
+		this.$disconnect.next('Польазватель выключил бота')
+		this.$status.next(BotStatus.DISCONNECT);
 		this._bot.end();
 		this._bot = null
-		this.$status.next(BotStatus.DISCONNECT);
 		logger.info(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
 	}
 
@@ -115,14 +116,15 @@ export class ClientBot implements IClientBot {
 			logger.warn(`${this.accountModel.id}: Был кикнут с сервера ${this.accountModel.server}, с причиной: ${reason.toString()}`)
 		})
 		this._bot.on('end', (reason) => {
-			this.onDisconnectHandler(reason)
+			const clean = this.$status.getValue() === BotStatus.DISCONNECT
+			this.onCleanDisconnectHandler(reason, clean)
 			logger.warn(`${this.accountModel.id}: Вышел с сервера ${this.accountModel.server}`)
 		});
 		this._bot.on('error', (error)=> {
 			logger.error(`${this.accountModel.id}: ${error.message}`);
 		})
 		this._bot.on('spawn', () => {
-			this.$spawn.next()
+			this.onSpawnHandler()
 			logger.info(`${this.accountModel.id}: Заспавнился на сервере ${this.accountModel.server}`)
 		});
 	}
@@ -161,10 +163,13 @@ export class ClientBot implements IClientBot {
 		})
 	}
 
-	private onDisconnectHandler(reason: string) {
+	private onCleanDisconnectHandler(reason: string, clean: boolean) {
 		this._bot = null;
 		this.$status.next(BotStatus.DISCONNECT);
 		this.$disconnect.next(reason);
+
+		if(clean) return;
+		this.$reconnect.next()
 	}
 
 	private onSpawnHandler() {

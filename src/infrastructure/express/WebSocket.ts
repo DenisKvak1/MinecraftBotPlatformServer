@@ -25,6 +25,7 @@ import { IFarmService } from '../../core/service/FarmService';
 import { IAutoBuyService } from '../../core/service/AutoBuy';
 import { websocketAutoBuyController } from '../controller/ws/WebSocketAutoBuyController';
 import { webSocketFunctionsBotController } from '../controller/ws/webSocketFunctionsBotController';
+import { websocketBotScripts } from '../controller/ws/WebSocketBotScriptsController';
 
 export class App {
 	private express = express()
@@ -70,6 +71,9 @@ export class App {
 
 	private initRoutes(){
 		this.routes = {
+			[UNIVERSAL_COMMAND_LIST.GET_SCRIPTS]: (message: IncomingMessage)=> websocketBotScripts.getAllScripts(message as any),
+			[UNIVERSAL_COMMAND_LIST.SAVE_SCRIPT]: (message: IncomingMessage)=> websocketBotScripts.saveScript(message as any),
+			[UNIVERSAL_COMMAND_LIST.DELETE_SCRIPT]: (message: IncomingMessage)=> websocketBotScripts.deleteScript(message as any),
 			[UNIVERSAL_COMMAND_LIST.GET_BOT_FUNCTIONS_STATUS]: (message: IncomingMessage)=> webSocketFunctionsBotController.getFunctionsStatus(message as any),
 			[UNIVERSAL_COMMAND_LIST.TOGGLE_AB]: (message: IncomingMessage)=> websocketAutoBuyController.toggleAutoBuy(message as any),
 			[UNIVERSAL_COMMAND_LIST.CREATE_BOT]: (message: IncomingMessage) => websocketAccountController.createBot(message as any),

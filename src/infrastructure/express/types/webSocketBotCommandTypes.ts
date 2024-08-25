@@ -3,10 +3,12 @@ import { MovementDirection } from '../../services/WalkService';
 import { GeneralizedItem, toggle, toggleInfo } from '../../../../env/types';
 import { ClientAccountModel } from '../../../core/model/AccountModel';
 import { WindowEvent } from '../../../core/service/ClientBot';
+import { BotActions, BotScript } from '../../../core/service/BotScriptService/types';
+import { AccountUpdateDTO } from '../../../core/repository/AccountRepository/dto/AccountDTO';
 
 export enum BotFunctions {
-	AUTO_FARM = "AUTO_FARM",
-	AUTO_BUY = "AUTO_BUY",
+	AUTO_FARM = 'AUTO_FARM',
+	AUTO_BUY = 'AUTO_BUY',
 	AUTO_CLICKER_ATTACK = 'AUTO_CLICKER_ATTACK',
 	AUTO_CLICKER_USE = 'AUTO_CLICKER_USE',
 	AUTO_FOOD = 'AUTO_FOOD',
@@ -38,11 +40,7 @@ export type IncomingCreateBotMessage = IncomingMessage<{
 	version: string,
 }>
 export type IncomingDeleteBotMessage = IncomingMessage
-export type IncomingUpdateBotOptionsMessage = IncomingMessage<{
-	server?: string,
-	port?: number,
-	version?: string,
-}>
+export type IncomingUpdateBotOptionsMessage = IncomingMessage<AccountUpdateDTO>
 export type IncomingConnectBotMessage = IncomingMessage<{
 	action: 'CONNECT' | 'DISCONNECT'
 }>
@@ -93,7 +91,14 @@ export type IncomingClickWindowMessage = IncomingMessage<{
 	mode: number
 }>
 export type IncomingGetCurrentWindow = IncomingMessage
-
+export type IncomingSaveScriptMessage = IncomingMessage<{
+	actions: BotActions,
+	name: string
+}>
+export type IncomingDeleteScriptMessage = IncomingMessage<{
+	scriptId: string
+}>
+export type IncomingGetScriptsMessage = IncomingMessage
 export type IncomingGetBotsMessage = IncomingMessage
 export type IncomingJumpBotMessage = IncomingMessage
 export type IncomingGetBotInfoIDMessage = IncomingMessage<{
@@ -103,9 +108,16 @@ export type IncomingGetBotInfoNameMessage = IncomingMessage<{
 	name: string
 }>
 export type OutgoingGetBotInfoMessage = OutgoingReplayMessage<{
-	account: ClientAccountModel 
+	account: ClientAccountModel
 }>
 
+export type OutgoingGetScripts = OutgoingReplayMessage<{
+	scripts: BotScript[]
+}>
+export type OutgoingDeleteScript = OutgoingReplayMessage
+export type OutgoingSaveScript = OutgoingReplayMessage<{
+	script: BotScript
+}>
 export type IncomingGetBotFunctionsStateMessage = IncomingMessage
 
 export type OutgoingGetBotsInfoMessage = OutgoingReplayMessage<{
@@ -177,7 +189,6 @@ export type OutgoingBotDeathMessage = {
 }
 
 
-
 export enum UNIVERSAL_COMMAND_LIST {
 	CREATE_BOT = 'CREATE_BOT',
 	DELETE_BOT = 'DELETE_BOT',
@@ -203,7 +214,10 @@ export enum UNIVERSAL_COMMAND_LIST {
 	CLICK_WINDOW = 'CLICK_WINDOW',
 	GET_INVENTORY_SLOTS = 'GET_INVENTORY_SLOTS',
 	GET_CURRENT_WINDOW = 'GET_CURRENT_WINDOW',
-	ACTIVATE_SLOT = 'ACTIVATE_SLOT'
+	ACTIVATE_SLOT = 'ACTIVATE_SLOT',
+	GET_SCRIPTS = 'GET_SCRIPTS',
+	SAVE_SCRIPT = 'SAVE_SCRIPT',
+	DELETE_SCRIPT = 'DELETE_SCRIPT'
 }
 
 export enum OUTGHOING_COMMAND_LIST {
