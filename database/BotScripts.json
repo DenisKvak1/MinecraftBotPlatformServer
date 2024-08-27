@@ -1,7 +1,7 @@
 [
   {
     "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a30a",
-    "name": "lite",
+    "name": "lite 1",
     "botActions": [
       {
         "command": "CONNECT"
@@ -9,7 +9,7 @@
       {
         "command": "SLEEP",
         "value": {
-          "sleepTimeout": 4000
+          "sleepTimeout": 15000
         }
       },
       {
@@ -39,84 +39,472 @@
       {
         "command": "CLICK_WINDOW",
         "value": {
-          "slotIndex": 44
+          "slotIndex": 29
         }
       }
     ]
   },
   {
-    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a31d",
-    "name": "test",
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a31a",
+    "name": "lite 2",
     "botActions": [
       {
-        "command": "SEND_CHAT_MESSAGE",
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
         "value": {
-          "message": "Реконнект ухты"
+          "sleepTimeout": 15000
         }
       },
       {
-        "command": "GOTO",
-        "value": {
-          "x": 100,
-          "y": 70,
-          "z": 100
-        }
-      }
-    ]
-  },
-  {
-    "id": "d3234c80-6c48-4964-afe3-887910b99364",
-    "name": "testol",
-    "botActions": [
-      {
-        "command": "TOGGLE_FARM",
-        "value": {
-          "message": "edd"
-        }
-      }
-    ]
-  },
-  {
-    "id": "ad9cf354-2edb-42e5-8515-1c5206a40cef",
-    "name": "s",
-    "botActions": []
-  },
-  {
-    "id": "b0e055b5-6567-4605-9fa9-d4fc16529e07",
-    "name": "x",
-    "botActions": [
-      {
         "command": "SEND_CHAT_MESSAGE",
         "value": {
-          "message": "Реконнект ухты"
+          "message": "/lite"
         }
       },
       {
-        "command": "GOTO",
+        "command": "SLEEP",
         "value": {
-          "x": 100,
-          "y": 70,
-          "z": 100
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 31
         }
       }
     ]
   },
   {
-    "id": "b3e372f5-1b44-42e5-90b4-b6c754ec804e",
-    "name": "Тестовый скрипт",
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a32a",
+    "name": "lite 3" ,
     "botActions": [
       {
-        "command": "SEND_CHAT_MESSAGE",
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
         "value": {
-          "message": "ухтыы"
+          "sleepTimeout": 15000
         }
       },
       {
-        "command": "GOTO",
+        "command": "SEND_CHAT_MESSAGE",
         "value": {
-          "x": "150",
-          "y": "70",
-          "z": "150"
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 32
+        }
+      }
+    ]
+  },
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a33a",
+    "name": "lite 4",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 15000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 33
+        }
+      }
+    ]
+  },
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e75a33a",
+    "name": "lite 5",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 15000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 34
+        }
+      }
+    ]
+  },
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a35a",
+    "name": "reconnect 1",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 15000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 29
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
+  },
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a36a",
+    "name": "reconnect 2",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 15000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 31
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
+  },
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a37a",
+    "name": "reconnect 3" ,
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 15000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 32
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
+  },
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a29a",
+    "name": "reconnect 4",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 15000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 33
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
+  },
+  {
+    "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a39a",
+    "name": "reconnect 5",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 15000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 4
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 1000
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": 34
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
         }
       }
     ]

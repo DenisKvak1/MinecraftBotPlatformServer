@@ -7,12 +7,13 @@
     "name": "holyworld",
     "priceRegex": "(\\d[\\d\\s]*)¤",
     "savingBalanceAccount": "Zancerio55",
-    "targetBalance": 30000000,
+    "targetBalance": 5000000,
     "updateIndex": 47,
     "interval": 780,
     "shift": false,
     "percentMode": true,
-    "reloadPriceInterval": 3600000,
+    "defaultProcentDown": 50,
+    "reloadPriceInterval": 1800000,
     "info": {
       "Gunpowder": {
         "price": 14000,
@@ -48,40 +49,58 @@
         "procentDown": 50
       },
       "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1700000,
-        "sellprice": 2400000
+        "price": 1,
+        "sellprice": 2400000,
+        "searchName": "шлем eternity",
+        "procentDown": 60
       },
       "- Нагрудник ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1500000,
-        "sellprice": 2300000
+        "price": 1,
+        "sellprice": 2300000,
+        "searchName": "нагрудник eternity",
+        "procentDown": 60
       },
       "- Штаны ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1500000,
-        "sellprice": 2300000
+        "price": 1,
+        "sellprice": 2300000,
+        "searchName": "штаны eternity",
+        "procentDown": 60
       },
       "- Ботинки ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1500000,
-        "sellprice": 2300000
+        "price": 1,
+        "sellprice": 2300000,
+        "searchName": "ботинки eternity",
+        "procentDown": 60
       },
       "Шлем Iɴғɪɴɪᴛʏ": {
-        "price": 2000000,
-        "sellprice": 2999999
+        "price": 1,
+        "sellprice": 2999999,
+        "searchName": "шлем infinity",
+        "procentDown": 60
       },
       "Нагрудник Iɴғɪɴɪᴛʏ": {
-        "price": 2800000,
-        "sellprice": 4599999
+        "price": 1,
+        "sellprice": 4599999,
+        "searchName": "нагрудник infinity",
+        "procentDown": 65
       },
       "Поножи Iɴғɪɴɪᴛʏ": {
-        "price": 2500000,
-        "sellprice": 3999999
+        "price": 1,
+        "sellprice": 3999999,
+        "searchName": " штаны infinity",
+        "procentDown": 65
       },
       "Ботинки Iɴғɪɴɪᴛʏ": {
-        "price": 2500000,
-        "sellprice": 3999999
+        "price": 1,
+        "sellprice": 3999999,
+        "searchName": "ботинки infinity",
+        "procentDown": 65
       },
       "Талисман Iɴғɪɴɪᴛʏ": {
-        "price": 2700000,
-        "sellprice": 4299999
+        "price": 1,
+        "sellprice": 4299999,
+        "searchName": "талисман infinity",
+        "procentDown": 60
       },
       "- Талисман Stinger -": {
         "price": 2000000,
@@ -133,7 +152,7 @@
       "Netherite Ingot": {
         "price": 30000,
         "sellprice": 69999,
-        "seellcount": 10,
+        "seellcount": 5,
         "searchName": "незеритовый слиток",
         "procentDown": 50
       },
@@ -152,7 +171,7 @@
       "Netherite Scrap": {
         "price": 7000,
         "sellprice": 14999,
-        "seellcount": 32,
+        "seellcount": 8,
         "searchName": "незеритовый лом",
         "procentDown": 50
       },
@@ -198,7 +217,6 @@
       "Динамит A": {
         "price": 3500,
         "sellprice": 8490,
-        "seellcount": 5,
         "searchName": "динамит а",
         "procentDown": 65
       },
@@ -231,7 +249,7 @@
         "procentDown": 65
       },
       "Меч《Выгодный фарм》": {
-        "price": 10000000,
+        "price": 1,
         "sellprice": 25000000
       },
       "Загадочный спавнер": {

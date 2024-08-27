@@ -92,7 +92,7 @@ class InMemoryAccountRepository implements AccountRepository{
             if (dto.autoReconnectScript !== undefined) {
                 account.autoReconnect.script = dto.autoReconnectScript
             }
-            if(!account.autoReconnect.script) account.autoReconnect.enable = false
+            // if(!account.autoReconnect.script) account.autoReconnect.enable = false
 
             this.JSONController.saveJSON(accounts);
         }

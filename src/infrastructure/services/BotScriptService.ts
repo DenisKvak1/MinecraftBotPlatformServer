@@ -9,16 +9,17 @@ import { IWindowService } from '../../core/service/WindowService';
 import { BotScriptRepository } from '../../core/repository/BotScriptsRepository/BotScriptsRepository';
 import { IBotScriptService } from '../../core/service/BotScriptService/BotScriptService';
 import {
+	AddToMassAutobuyBotAction,
 	BOT_SCRIPT_ACTIONS,
 	BotAction,
 	BotActions,
 	BotScript,
-	ClickWindowBotAction,
+	ClickWindowBotAction, DeleteToMassAutobuyBotAction,
 	DropSlotBotAction,
 	GotoBotAction,
 	SendChatMessageBotAction,
 	SetHotbarSlotBotAction,
-	SleepBotAction,
+	SleepBotAction, StartMassAutobuyBotAction, StopMassAutobuyBotAction,
 	ToggleAttackClickerBotAction,
 	ToggleAutobuyBotAction,
 	ToggleFarmBotAction,
@@ -37,12 +38,15 @@ import { inventoryService } from './InventoryService';
 import { walkService } from './WalkService';
 import { windowsService } from './WindowService';
 import { autoBuyService } from './AutoBuy/AutoBuyService';
+import { getRawAsset } from 'node:sea';
+import { accountService, AccountService } from '../../core/service/AccountService';
 
 class BotScriptService implements IBotScriptService {
 	private commandFunctions: Record<BOT_SCRIPT_ACTIONS, (botId: string, command: BotAction) => Promise<void>>
 
 	constructor(
 		private botScriptsRepository: BotScriptRepository,
+		private accountService: AccountService,
 		private clientManagerService: IClientManagerService,
 		private chatService: IChatService,
 		private clickerService: IClickerService,
@@ -58,6 +62,23 @@ class BotScriptService implements IBotScriptService {
 
 	private init() {
 		this.commandFunctions = {
+			START_MASS_AUTOBUY: async (botId, command: StartMassAutobuyBotAction)=>{
+				const ids = []
+				await Promise.all(command.value.botsNicknames.map(async (name)=>{
+					const id = (await this.accountService.getByID(name)).id
+					ids.push(id)
+				}))
+				await this.autoBuyService.startAutoBuySystem(ids)
+			},
+			STOP_MASS_AUTOBUY: async (botId, command: StopMassAutobuyBotAction)=>{
+				this.autoBuyService.stopAutoBuy(command.value.massId)
+			},
+			ADD_MASS_AUTOBUY_PLAYER: async (botId, command: AddToMassAutobuyBotAction)=>{
+				await this.autoBuyService.addToAutoBuySystem(command.value.massId, botId)
+			},
+			DELETE_MASS_AUTOBUY_PLAYER: async (botId, command: DeleteToMassAutobuyBotAction)=>{
+				await this.autoBuyService.deleteMassAutoBuyBot(command.value.massId, botId)
+			},
 			ACTIVATE_ITEM: async (botId) => {
 				await this.inventoryService.activate(botId);
 			},
@@ -180,6 +201,7 @@ class BotScriptService implements IBotScriptService {
 
 export const botScriptsService = new BotScriptService(
 	inMemoryBotScriptsRepository,
+	accountService,
 	clientManagerService,
 	chatService,
 	clickerService,
@@ -190,3 +212,4 @@ export const botScriptsService = new BotScriptService(
 	windowsService,
 	autoBuyService,
 )
+clientManagerService.loadBotScript(botScriptsService)

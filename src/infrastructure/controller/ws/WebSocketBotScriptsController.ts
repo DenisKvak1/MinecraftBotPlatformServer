@@ -10,11 +10,12 @@ import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import { webSocketClients, WebSocketClientsController } from '../../express/module/WebSocketClientsController';
 import { botScriptsService } from '../../services/BotScriptService';
 import { clientManagerService } from '../../services/ClientManagerService';
+import { IClientManagerService } from '../../../core/service/ClientManagerService';
 
 export class WebSocketBotScriptsController {
 	constructor(
 		private botScriptService: IBotScriptService,
-		private clientManagerService: IBotScriptService,
+		private clientManagerService: IClientManagerService,
 		private wsClients: WebSocketClientsController,
 	) {
 	}

@@ -8,18 +8,17 @@ import { Observable, Subscribe } from '../../../env/helpers/observable';
 import { captchaService } from './CaptchaService/CaptchaService';
 import { IBotScriptService } from '../../core/service/BotScriptService/BotScriptService';
 import { botScriptsService } from './BotScriptService';
-import { logger } from '../logger/Logger';
 
 export class ClientManagerService implements IClientManagerService {
 	$connect = new Observable<{ id: string }>();
 	$disconnect = new Observable<{ id: string }>();
 	private subscribes: Record<string, Subscribe[]> = {};
+	private botScriptService: IBotScriptService
 
 	constructor(
 		private botRepository: ClientBotRepository,
 		private accountService: AccountService,
 		private captchaService: ICaptchaService,
-		private botScriptService: IBotScriptService,
 	) {
 	}
 
@@ -29,10 +28,10 @@ export class ClientManagerService implements IClientManagerService {
 		if (profile._bot) return;
 		profile.connect();
 		const bot = this.botRepository.getById(id)._bot;
-
 		if (!this.subscribes[id]) this.subscribes[id] = [];
 
 		this.subscribes[id].push(profile.$reconnect.once(() => {
+			if(!profile.accountModel.autoReconnect.enable) return
 			setTimeout(() => {
 				this.connect(id);
 
@@ -106,6 +105,10 @@ export class ClientManagerService implements IClientManagerService {
 		const account = await this.accountService.getByID(id);
 		return Boolean(account);
 	}
+
+	loadBotScript(botScriptService: IBotScriptService): void {
+		this.botScriptService = botScriptService
+	}
 }
 
-export const clientManagerService = new ClientManagerService(botInRAMRepository, accountService, captchaService, botScriptsService);
+export const clientManagerService = new ClientManagerService(botInRAMRepository, accountService, captchaService);

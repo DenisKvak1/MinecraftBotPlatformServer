@@ -34,9 +34,9 @@ try {
 	logger.error(e.message);
 }
 
-// process.on('uncaughtException', (reason) => {
-// 	logger.error(reason.message);
-// });
+process.on('uncaughtException', (reason) => {
+	logger.error(reason.message);
+});
 
 
 // botScriptsService.save('lite', [
@@ -82,36 +82,24 @@ try {
 // ]).then(async (script) => {
 // 	await botScriptsService.run(script.id, (await accountService.getByName('Fles1hPop')).id);
 // });
+
+
 setTimeout(()=> {
 	(async function f(){
 		const id1 = (await accountService.getByName('Fles1hPop')).id
 		const id2 = (await accountService.getByName('Flesh2Flop')).id
-		const id3 = (await accountService.getByName('Happy4Day')).id
-		const id4 = (await accountService.getByName('FlashSas3')).id
+		const id3 = (await accountService.getByName('FlashSas3')).id
+		const id4 = (await accountService.getByName('Happy4Day')).id
 		const id5 = (await accountService.getByName('Kokri5ken')).id
 
-		// console.log(bot.scoreboard['1']['itemsMap']['§2'].displayName.extra[2].text.replace(',', ''))
-		// bot.on('scoreUpdated', (scoreboard, item:any)=>{
-		// 	console.log(`${item.name} ХП: ${item.value}`)
-		// })
-
-
 		const bots = [id1, id2, id3,id4,id5]
-		bots.forEach(async (id)=>{
-			clientManagerService.connect(id)
-			await syncTimeout(5000)
-			chatService.sendMessage(id, '/lite')
-			await syncTimeout(1000)
-			await windowsService.click(id, 4)
-			await syncTimeout(1500)
-			await windowsService.click(id, getRandomInRange(38, 45))
-			await syncTimeout(1500)
+		bots.forEach(async (id, index)=>{
+			botScriptsService.runByName(`lite ${index + 1}`, id)
 		})
-
-		await syncTimeout(8000)
+		await syncTimeout(28000)
 
 		try {
-			const massId = await autoBuyService.startAutoBuySystem(bots)
+			await autoBuyService.startAutoBuySystem(bots)
 		} catch (e){
 			console.log(e.message)
 		}

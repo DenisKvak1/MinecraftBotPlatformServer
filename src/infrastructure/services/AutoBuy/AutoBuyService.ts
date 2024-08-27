@@ -24,6 +24,7 @@ import { nodeIntervalToSubscribe } from '../../../../env/helpers/NodeTimeoutToSu
 
 export class AutoBuyService implements IAutoBuyService {
 	private abIntervals: Map<string, { interval: { id: NodeJS.Timeout, stop: () => void } }> = new Map();
+	private idCounter: number = 1;
 	private massAbIds: Record<string, {
 		botsIds: string[],
 		stopped: boolean,
@@ -43,7 +44,8 @@ export class AutoBuyService implements IAutoBuyService {
 	}
 
 	async startAutoBuySystem(botIds: string[]): Promise<string> {
-		const massAutoBuyId = uuidv4();
+		const massAutoBuyId = this.idCounter.toString()
+		this.idCounter++;
 
 		this.massAbIds[massAutoBuyId] = {
 			botsIds: [],
@@ -102,7 +104,7 @@ export class AutoBuyService implements IAutoBuyService {
 			await syncTimeout(600);
 			if (profile.name === 'holyworld') await windowsService.click(botId, 53, 1);
 			await syncTimeout(600);
-			this.massAbIds[massId].stopped
+			this.massAbIds[massId].stopped = false
 		});
 
 
@@ -116,7 +118,6 @@ export class AutoBuyService implements IAutoBuyService {
 	async deleteMassAutoBuyBot(massId: string, botId: string) {
 		this.clearSubscribes(this.massAbIds[massId].subscribes[botId])
 		this.massAbIds[massId].botsIds = this.massAbIds[massId].botsIds.filter((id)=> id !== botId)
-		console.log(this.massAbIds[massId].botsIds)
 		delete this.massAbIds[massId].profiles[botId]
 		delete this.massAbIds[massId].profilesAccounts[botId]
 		delete this.massAbIds[massId].subscribes[botId]
@@ -174,6 +175,7 @@ export class AutoBuyService implements IAutoBuyService {
 			newProfile.info[abKey].sellprice = Math.floor(priceData.minPrice * 0.99);
 			await syncTimeout(700);
 		}
+
 		return newProfile;
 	}
 
@@ -212,7 +214,7 @@ export class AutoBuyService implements IAutoBuyService {
 		return { averagePrice: Math.floor(averagePrice), minPrice: Math.floor(minPrice) };
 	}
 
-	private async massAutoBuyFirstInit(id: string, ){
+	private async massAutoBuyFirstInit(id: string){
 		const profileAccount = this.repository.getById(id);
 		let profile = getProfileAutobuy(profileAccount.accountModel.server);
 		if (profile.percentMode) profile = await this.setBuyPrice(profileAccount._bot, profile);

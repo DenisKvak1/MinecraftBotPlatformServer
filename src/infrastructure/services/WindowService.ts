@@ -26,6 +26,7 @@ export class WindowService implements IWindowService {
 
 	async click(id: string, slot: number, mouseMode: number = 0): Promise<void> {
 		const bot = this.repository.getById(id)._bot
+		console.log(id,  slot,  mouseMode, Boolean(bot))
 		await bot.clickWindow(slot, mouseMode, 0)
 		logger.info(`${id}: Кликнул в окне по слоту с индексом ${slot}`)
 	}

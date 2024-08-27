@@ -3,6 +3,10 @@ import { toggle } from '../../../../env/types';
 export enum BOT_SCRIPT_ACTIONS {
 	GOTO = 'GOTO',
 	SEND_CHAT_ESSAGE = 'SEND_CHAT_MESSAGE',
+	START_MASS_AUTOBUY = 'START_MASS_AUTOBUY',
+	STOP_MASS_AUTOBUY = 'STOP_MASS_AUTOBUY',
+	ADD_MASS_AUTOBUY_PLAYER = 'ADD_MASS_AUTOBUY_PLAYER',
+	DELETE_MASS_AUTOBUY_PLAYER = 'DELETE_MASS_AUTOBUY_PLAYER',
 	CLICK_WINDOW = 'CLICK_WINDOW',
 	SET_HOTBOR_SLOT = 'SET_HOTBOR_SLOT',
 	ACTIVATE_ITEM = 'ACTIVATE_ITEM',
@@ -44,6 +48,22 @@ export type ActivateItemBotAction = BotAction<{}>;
 export type ToggleAutobuyBotAction = BotAction<{
 	toggle: toggle;
 }>;
+
+export type StartMassAutobuyBotAction = BotAction<{
+	botsNicknames: string[]
+}>;
+
+export type StopMassAutobuyBotAction = BotAction<{
+	massId: string
+}>;
+
+export type AddToMassAutobuyBotAction = BotAction<{
+	massId: string
+}>
+
+export type DeleteToMassAutobuyBotAction = BotAction<{
+	massId: string
+}>
 
 export type ToggleFoodBotAction = BotAction<{
 	toggle: toggle;
