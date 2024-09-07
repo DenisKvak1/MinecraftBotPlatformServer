@@ -32,6 +32,7 @@ export type abProfile = {
 	autoSellPrice?: number,
 	defaultProcentDown?: number
 	reloadPriceInterval: number
+	restartActionInterval?: number
 
 	info: {
 		[key: string]: {

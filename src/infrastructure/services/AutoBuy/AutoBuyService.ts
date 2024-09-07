@@ -8,18 +8,13 @@ import { IClientBot } from '../../../core/service/ClientBot';
 import { botInRAMRepository } from '../../database/repository/inRAMBotDateBase';
 import { buyLogger, logger } from '../../logger/Logger';
 import { ToGeneralizedItem, ToGeneralizedItems } from '../../../../env/helpers/ToGeneralizedItem';
-import { getRandomInRange } from '../../../../env/helpers/randomGenerator';
 import { syncTimeout } from '../../../../env/helpers/syncTimeout';
 import { IChatService } from '../../../core/service/ChatService';
 import { IWindowService } from '../../../core/service/WindowService';
 import { windowsService } from '../WindowService';
 import { chatService } from '../ChatService';
-import { promises } from 'node:dns';
-import { forEachResolvedProjectReference } from 'ts-loader/dist/instances';
-import { availableParallelism, type } from 'node:os';
-import { minecraftBotInfoLogger } from '../../logger';
-import { v4 as uuidv4 } from 'uuid';
 import { nodeIntervalToSubscribe } from '../../../../env/helpers/NodeTimeoutToSubscribe';
+import { calculateAverage } from '../../../../env/helpers/СalculateAverage';
 
 
 export class AutoBuyService implements IAutoBuyService {
@@ -74,7 +69,7 @@ export class AutoBuyService implements IAutoBuyService {
 					this.proccesBuyCycle(profileAccount._bot, profile, profileAccount);
 				}, profile.interval);
 
-				await syncTimeout((profile.interval / bots.length) / 3 * 5);
+				await syncTimeout(profile.interval / bots.length * 3 / 5);
 			}
 		}, 0);
 
@@ -95,10 +90,10 @@ export class AutoBuyService implements IAutoBuyService {
 		const isOkInit = await this.autoBuyProccessInit(botId, profile, profileAccount);
 		if (!isOkInit) return;
 		const { sellSubscribe, buyLoggerSubscribe, updatePrice, $updatePrice, $stopSetPrice } = isOkInit;
-		$updatePrice.subscribe(() => {
+		const subscribe1 = $updatePrice.subscribe(() => {
 			this.massAbIds[massId].stopped = true;
 		});
-		$stopSetPrice.subscribe(async (newProfile) => {
+		const subscribe2 = $stopSetPrice.subscribe(async (newProfile) => {
 			this.massAbIds[massId].profiles[botId] = newProfile;
 			this.massAbIds[massId].profilesAccounts[botId]._bot.chat('/ah');
 			await syncTimeout(600);
@@ -107,8 +102,7 @@ export class AutoBuyService implements IAutoBuyService {
 			this.massAbIds[massId].stopped = false
 		});
 
-
-		this.massAbIds[massId].subscribes[botId] = [nodeIntervalToSubscribe(updatePrice), nodeIntervalToSubscribe(sellSubscribe), buyLoggerSubscribe]
+		this.massAbIds[massId].subscribes[botId] = [subscribe1, subscribe2, nodeIntervalToSubscribe(updatePrice), nodeIntervalToSubscribe(sellSubscribe), buyLoggerSubscribe]
 		this.massAbIds[massId].botsIds.push(botId)
 		this.massAbIds[massId].profiles[botId] = profile;
 		this.massAbIds[massId].profilesAccounts[botId] = profileAccount;
@@ -173,7 +167,7 @@ export class AutoBuyService implements IAutoBuyService {
 			if (!priceData) continue;
 			newProfile.info[abKey].price = (priceData.averagePrice / 100) * (100 - abInfo?.procentDown || profile.defaultProcentDown);
 			newProfile.info[abKey].sellprice = Math.floor(priceData.minPrice * 0.99);
-			await syncTimeout(700);
+			await syncTimeout(500);
 		}
 
 		return newProfile;
@@ -181,43 +175,32 @@ export class AutoBuyService implements IAutoBuyService {
 
 
 	private async checkMinprice(name: string, bot: Bot, profile: abProfile) {
-		let minPrice: number;
-		let averagePrice: number;
-
 		bot.chat(`/ah search ${name}`);
-		await syncTimeout(700);
+		await syncTimeout(1000);
 
 		let window = bot.currentWindow;
 		if (!window) return;
-
-		await bot.clickWindow(52, 1, 0);
-		await syncTimeout(1200);
-		await bot.clickWindow(52, 1, 0);
-		await syncTimeout(2500);
 
 		window = bot.currentWindow;
 		if (!window) return;
 
 		if (!window.slots[0]) return;
-		if (window.slots[1] && window.slots[2]) {
-			const items = [ToGeneralizedItem(window.slots[0]), ToGeneralizedItem(window.slots[1]), ToGeneralizedItem(window.slots[1])];
-			const prices = items.map((item) => this.extractPrice(item.customLoreHTML, profile.priceRegex) / item.count);
-			const sumPrice = prices.reduce((a, c) => a += c, 0);
+		const items = window.slots.slice(0, 44)
+		const filterItems = items.filter((item)=> item !==null)
+		const prices = filterItems.map((item)=> this.extractPrice(ToGeneralizedItem(item).customLoreHTML, profile.priceRegex) / item.count)
+		const minPrices = [...prices].sort((a, b)=> a - b).slice(0, 3)
 
-			minPrice = Math.min(...prices);
-			averagePrice = sumPrice / items.length;
-		} else {
-			const item = ToGeneralizedItem(window.slots[0]);
-			averagePrice = this.extractPrice(item.customLoreHTML, profile.priceRegex) / item.count;
-			minPrice = averagePrice;
-		}
-		return { averagePrice: Math.floor(averagePrice), minPrice: Math.floor(minPrice) };
+		const minPrice = Math.floor(minPrices[0])
+		const averagePrice = Math.floor(calculateAverage(minPrices))
+
+
+		return { averagePrice, minPrice };
 	}
 
 	private async massAutoBuyFirstInit(id: string){
 		const profileAccount = this.repository.getById(id);
 		let profile = getProfileAutobuy(profileAccount.accountModel.server);
-		if (profile.percentMode) profile = await this.setBuyPrice(profileAccount._bot, profile);
+		if (profile?.percentMode) profile = await this.setBuyPrice(profileAccount._bot, profile);
 
 		await syncTimeout(500);
 		profileAccount._bot.chat('/ah');
@@ -317,7 +300,7 @@ export class AutoBuyService implements IAutoBuyService {
 					bot.clickWindow(slotIndex, 0, 1);
 				} else {
 					await this.buyClick(bot, slotIndex);
-					await syncTimeout(250);
+					await syncTimeout(200);
 
 					this.saveBuy(bot, targetItem, profile);
 					this.sellOnUpdate(bot, profileAccount, profile);
@@ -386,10 +369,11 @@ export class AutoBuyService implements IAutoBuyService {
 		if (this.isItemCopies(selectItem, targetItem, profile)) {
 			bot.clickWindow(0, 0, 0);
 			logger.info(`Попытался купить предмет ${name} в количестве ${targetItem?.count}`);
-		} else {
-			if (bot.currentWindow.slots[0]?.name !== 'green_stained_glass_pane') return;
+		} else if(bot.currentWindow.slots[0]?.name === 'green_stained_glass_pane') {
 			logger.warn(`Отклонил неправильно выбранный предмет ${name} в количестве ${targetItem?.count}`);
 			bot.clickWindow(8, 0, 0);
+		} else {
+			logger.error(`Холик залагал ${name}`)
 		}
 	}
 
