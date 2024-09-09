@@ -6,10 +6,47 @@
     ],
     "name": "holyworld",
     "priceRegex": "(\\d[\\d\\s]*)¤",
-    "savingBalanceAccount": "Zancerio55",
-    "targetBalance": 5000000,
+    "savingBalanceAccount": "BossAnrchy331",
+    "targetBalance": 15000000,
     "updateIndex": 47,
-    "interval": 780,
+    "interval": 800,
+    "nicknameRegex": "Продавец<\\/span><span style=\"color:#AAAAAA\">: <\\/span><span style=\"color:rgb\\(0,235,255\\)\">(.*?)<\\/span>",
+    "blackList": [
+      "ToplecCHlKA",
+      "klemen",
+      "hellobaby",
+      "That0neBear",
+      "XiSh3n",
+      "hikomori",
+      "gromaforz",
+      "Deth_Angel",
+      "Derty_1001",
+      "CAMAPA",
+      "ApTa_He_UmBa",
+      "Fl1ckzzz",
+      "alanova",
+      "_SenpaiCrown_",
+      "Darkk_Knight",
+      "YarikPR02205",
+      "Asya_Masya",
+      "DumpCave",
+      "Cmeetane",
+      "HackerCat777",
+      "m0untain",
+      "BeMoRe_",
+      "1WantToHearth",
+      "HapyC0t",
+      "thepieboyz",
+      "xDedForTopch1ll",
+      "The_Destr0yer",
+      "zxcichert",
+      "_Bupsik_",
+      "MaxTheBest66",
+      "hqd_d",
+      "ChtoStop",
+      "Dellarba",
+      "danabek11"
+    ],
     "shift": false,
     "percentMode": true,
     "defaultProcentDown": 50,
@@ -49,52 +86,36 @@
         "procentDown": 50
       },
       "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1,
-        "sellprice": 2400000,
-        "searchName": "шлем eternity",
-        "procentDown": 60
+        "price": 759999,
+        "sellprice": 1499999
       },
       "- Нагрудник ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1,
-        "sellprice": 2300000,
-        "searchName": "нагрудник eternity",
-        "procentDown": 60
+        "price": 759999,
+        "sellprice": 1499999
       },
       "- Штаны ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1,
-        "sellprice": 2300000,
-        "searchName": "штаны eternity",
-        "procentDown": 60
+        "price": 759999,
+        "sellprice": 1499999
       },
       "- Ботинки ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 1,
-        "sellprice": 2300000,
-        "searchName": "ботинки eternity",
-        "procentDown": 60
+        "price": 759999,
+        "sellprice": 1499999
       },
       "Шлем Iɴғɪɴɪᴛʏ": {
-        "price": 1,
-        "sellprice": 2999999,
-        "searchName": "шлем infinity",
-        "procentDown": 60
+        "price": 1599999,
+        "sellprice": 2899999
       },
       "Нагрудник Iɴғɪɴɪᴛʏ": {
-        "price": 1,
-        "sellprice": 4599999,
-        "searchName": "нагрудник infinity",
-        "procentDown": 65
+        "price": 1699999,
+        "sellprice": 2999999
       },
       "Поножи Iɴғɪɴɪᴛʏ": {
-        "price": 1,
-        "sellprice": 3999999,
-        "searchName": " штаны infinity",
-        "procentDown": 65
+        "price": 1599999,
+        "sellprice": 2899999
       },
       "Ботинки Iɴғɪɴɪᴛʏ": {
-        "price": 1,
-        "sellprice": 3999999,
-        "searchName": "ботинки infinity",
-        "procentDown": 65
+        "price": 1599999,
+        "sellprice": 2899999
       },
       "Талисман Iɴғɪɴɪᴛʏ": {
         "price": 1,
@@ -171,7 +192,7 @@
       "Netherite Scrap": {
         "price": 7000,
         "sellprice": 14999,
-        "seellcount": 8,
+        "seellcount": 64,
         "searchName": "незеритовый лом",
         "procentDown": 50
       },
@@ -190,18 +211,14 @@
         "procentDown": 55
       },
       "Skeleton Spawn Egg": {
-        "price": 2500000,
-        "sellprice": 3199000,
-        "seellcount": 1,
-        "searchName": "яйцо призыва скелета",
-        "procentDown": 55
+        "price": 1000000,
+        "sellprice": 1999000,
+        "seellcount": 1
       },
       "Wither Skeleton Spawn Egg": {
-        "price": 2500000,
-        "sellprice": 3750000,
-        "seellcount": 1,
-        "searchName": "яйцо призыва визер-скелета",
-        "procentDown": 55
+        "price": 1000000,
+        "sellprice": 1450000,
+        "seellcount": 1
       },
       "Firework Rocket": {
         "price": 4500,
@@ -218,7 +235,7 @@
         "price": 3500,
         "sellprice": 8490,
         "searchName": "динамит а",
-        "procentDown": 65
+        "procentDown": 70
       },
       "Динамит B": {
         "price": 65000,
@@ -228,11 +245,9 @@
         "procentDown": 65
       },
       "Разрывная волна": {
-        "price": 220000,
-        "sellprice": 590000,
-        "seellcount": 1,
-        "searchName": "разрывная волна",
-        "procentDown": 65
+        "price": 420000,
+        "sellprice": 7390000,
+        "seellcount": 1
       },
       "C4 взрывчатка": {
         "price": 100000,
@@ -267,6 +282,7 @@
     "priceRegex": "/\\$\\s*(\\d[\\d\\s]*)/",
     "updateIndex": 49,
     "interval": 20,
+    "restartActionInterval": 5000,
     "shift": true,
     "info": []
   }

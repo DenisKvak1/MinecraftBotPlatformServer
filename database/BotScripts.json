@@ -9,7 +9,7 @@
       {
         "command": "SLEEP",
         "value": {
-          "sleepTimeout": 15000
+          "sleepTimeout": 8000
         }
       },
       {
@@ -39,7 +39,7 @@
       {
         "command": "CLICK_WINDOW",
         "value": {
-          "slotIndex": 29
+          "slotIndex": 30
         }
       }
     ]
@@ -54,7 +54,7 @@
       {
         "command": "SLEEP",
         "value": {
-          "sleepTimeout": 15000
+          "sleepTimeout": 8000
         }
       },
       {
@@ -99,7 +99,7 @@
       {
         "command": "SLEEP",
         "value": {
-          "sleepTimeout": 15000
+          "sleepTimeout": 8000
         }
       },
       {
@@ -144,7 +144,7 @@
       {
         "command": "SLEEP",
         "value": {
-          "sleepTimeout": 15000
+          "sleepTimeout": 8000
         }
       },
       {
@@ -189,7 +189,7 @@
       {
         "command": "SLEEP",
         "value": {
-          "sleepTimeout": 15000
+          "sleepTimeout": 8000
         }
       },
       {
@@ -264,7 +264,7 @@
       {
         "command": "CLICK_WINDOW",
         "value": {
-          "slotIndex": 29
+          "slotIndex": 30
         }
       },
       {

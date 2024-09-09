@@ -15,6 +15,7 @@ import { windowsService } from '../WindowService';
 import { chatService } from '../ChatService';
 import { nodeIntervalToSubscribe } from '../../../../env/helpers/NodeTimeoutToSubscribe';
 import { calculateAverage } from '../../../../env/helpers/СalculateAverage';
+import { reportTranspileErrors } from 'ts-loader/dist/instances';
 
 
 export class AutoBuyService implements IAutoBuyService {
@@ -68,8 +69,7 @@ export class AutoBuyService implements IAutoBuyService {
 					if(!this.massAbIds[massAutoBuyId].botsIds.includes(id)) return
 					this.proccesBuyCycle(profileAccount._bot, profile, profileAccount);
 				}, profile.interval);
-
-				await syncTimeout(profile.interval / bots.length * 3 / 5);
+				await syncTimeout(profile.interval / (bots.length * 4 / 5));
 			}
 		}, 0);
 
@@ -459,6 +459,8 @@ export class AutoBuyService implements IAutoBuyService {
 		if (item.renamed) return false;
 		if (!this.checkAutoBuy(item.customName || item.displayName, profile)) return false;
 		const price = this.extractPrice(item?.customLoreHTML, profile.priceRegex);
+		const nickname = this.extractNickname(item?.customLoreHTML, profile.nicknameRegex)
+		if(profile.blackList.includes(nickname)) return false
 		if ((price / item?.count) > profile.info[item?.customName || item?.displayName]?.price) return false;
 
 		const name = item?.customName || item?.displayName;
@@ -504,8 +506,18 @@ export class AutoBuyService implements IAutoBuyService {
 		return +price;
 	}
 
+	private extractNickname(text: string, nicknameRegex: string): string | null {
+		if(!text) return null
+
+		const regExp = new RegExp(nicknameRegex);
+		const match = text.match(regExp)
+		const nickname = match ? match[1].trim() : null;
+
+		return nickname
+	}
+
 	private async buyClick(bot: Bot, slotIndex: number) {
-		await bot.clickWindow(slotIndex, 0, 0);
+		// await bot.clickWindow(slotIndex, 0, 0);
 	}
 }
 

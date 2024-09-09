@@ -14,6 +14,8 @@ import { botScriptsService } from './infrastructure/services/BotScriptService';
 import { BOT_SCRIPT_ACTIONS } from './core/service/BotScriptService/types';
 import { syncTimeout } from '../env/helpers/syncTimeout';
 import { getRandomInRange } from '../env/helpers/randomGenerator';
+import { botInRAMRepository } from './infrastructure/database/repository/inRAMBotDateBase';
+import { ToGeneralizedItem } from '../env/helpers/ToGeneralizedItem';
 
 try {
 	const app = new App(
@@ -84,25 +86,24 @@ process.on('uncaughtException', (reason) => {
 // });
 
 
-setTimeout(()=> {
-	(async function f(){
-		const id1 = (await accountService.getByName('Fles1hPop')).id
-		const id2 = (await accountService.getByName('Flesh2Flop')).id
-		const id3 = (await accountService.getByName('FlashSas3')).id
-		const id4 = (await accountService.getByName('Happy4Day')).id
-		const id5 = (await accountService.getByName('Kokri5ken')).id
+setTimeout(() => {
+	(async function f() {
+		const id1 = (await accountService.getByName('Zancerio55')).id;
+		// const id2 = (await accountService.getByName('HaelSturm2')).id;
+		// const id3 = (await accountService.getByName('HaelSturm3')).id;
+		// const id4 = (await accountService.getByName('Explosssive4')).id;
+		// const id5 = (await accountService.getByName('AstroBoy5')).id;
 
-		const bots = [id1, id2, id3,id4,id5]
-		bots.forEach(async (id, index)=>{
-			botScriptsService.runByName(`lite ${index + 1}`, id)
-		})
-		await syncTimeout(28000)
+		const bots = [id1];
+		bots.forEach(async (id, index) => {
+			botScriptsService.runByName(`lite ${index + 1}`, id);
+		});
 
+		await syncTimeout(15000);
 		try {
-			await autoBuyService.startAutoBuySystem(bots)
-		} catch (e){
-			console.log(e.message)
+			await autoBuyService.startAutoBuySystem(bots);
+		} catch (e) {
+			console.log(e.message);
 		}
-	})()
-
-}, 0)
+	})();
+}, 0);

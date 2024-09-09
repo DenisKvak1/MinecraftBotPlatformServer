@@ -12,7 +12,7 @@
   },
   {
     "id": "9947a397-8b6b-48b2-bdf0-0d2d51b59221",
-    "nickname": "Fles1hPop",
+    "nickname": "Kerplunk1",
     "server": "mc.holyworld.io",
     "port": 25565,
     "version": "1.18.2",
@@ -24,7 +24,7 @@
   },
   {
     "id": "a046734f-55d3-49c1-b376-23c98a456618",
-    "nickname": "Flesh2Flop",
+    "nickname": "HaelSturm2",
     "server": "mc.holyworld.io",
     "port": 25565,
     "version": "1.18.2",
@@ -36,7 +36,19 @@
   },
   {
     "id": "05aaef61-4774-4753-bba8-634778f5913e",
-    "nickname": "Happy4Day",
+    "nickname": "HaelSturm3",
+    "server": "mc.holyworld.io",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "enable": true,
+      "script": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a29a",
+      "timeout": 60000
+    }
+  },
+  {
+    "id": "032e79b6-3fa9-465a-a1d5-593fa98a13bf",
+    "nickname": "Explosssive4",
     "server": "mc.holyworld.io",
     "port": 25565,
     "version": "1.18.2",
@@ -47,20 +59,8 @@
     }
   },
   {
-    "id": "032e79b6-3fa9-465a-a1d5-593fa98a13bf",
-    "nickname": "FlashSas3",
-    "server": "mc.holyworld.io",
-    "port": 25565,
-    "version": "1.18.2",
-    "autoReconnect": {
-      "enable": true,
-      "script": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a38a",
-      "timeout": 60000
-    }
-  },
-  {
     "id": "4bbce9ce-d93c-40bc-b192-2f96f368979e",
-    "nickname": "Kokri5ken",
+    "nickname": "AstroBoy5",
     "server": "mc.holyworld.io",
     "port": 25565,
     "version": "1.18.2",

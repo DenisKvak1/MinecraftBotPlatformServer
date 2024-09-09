@@ -26,6 +26,7 @@ export type abProfile = {
 	targetBalance?: number
 	serverIps: string | string[],
 	priceRegex: string,
+	nicknameRegex: string
 	updateIndex: number,
 	shift: boolean
 	interval: number,
@@ -33,6 +34,7 @@ export type abProfile = {
 	defaultProcentDown?: number
 	reloadPriceInterval: number
 	restartActionInterval?: number
+	blackList: string[]
 
 	info: {
 		[key: string]: {
