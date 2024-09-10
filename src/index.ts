@@ -9,7 +9,7 @@ import { farmService } from './infrastructure/services/FarmService';
 import { logger } from './infrastructure/logger/Logger';
 import { autoBuyService } from './infrastructure/services/AutoBuy/AutoBuyService';
 import { captchaService } from './infrastructure/services/CaptchaService/CaptchaService';
-import { ChatController } from './infrastructure/chatController/ChatController';
+import { ChatLSController } from './infrastructure/chatController/ChatLSController';
 import { botScriptsService } from './infrastructure/services/BotScriptService';
 import { BOT_SCRIPT_ACTIONS } from './core/service/BotScriptService/types';
 import { syncTimeout } from '../env/helpers/syncTimeout';
@@ -30,7 +30,7 @@ try {
 	);
 	app.start(3000);
 
-	const chatController = new ChatController(clientManagerService, chatService, accountService);
+	const chatController = new ChatLSController(clientManagerService, chatService, accountService);
 	chatController.start();
 } catch (e) {
 	logger.error(e.message);
@@ -88,13 +88,13 @@ process.on('uncaughtException', (reason) => {
 
 setTimeout(() => {
 	(async function f() {
-		const id1 = (await accountService.getByName('Zancerio55')).id;
-		// const id2 = (await accountService.getByName('HaelSturm2')).id;
-		// const id3 = (await accountService.getByName('HaelSturm3')).id;
-		// const id4 = (await accountService.getByName('Explosssive4')).id;
-		// const id5 = (await accountService.getByName('AstroBoy5')).id;
+		const id1 = (await accountService.getByName('ImpPlant11')).id;
+		const id2 = (await accountService.getByName('CaesarJ22')).id;
+		const id3 = (await accountService.getByName('Dreadlight33')).id;
+		const id4 = (await accountService.getByName('Chinaplate44')).id;
+		const id5 = (await accountService.getByName('Assaultive50')).id;
 
-		const bots = [id1];
+		const bots = [id1, id2, id3, id4, id5];
 		bots.forEach(async (id, index) => {
 			botScriptsService.runByName(`lite ${index + 1}`, id);
 		});

@@ -7,7 +7,7 @@ import { chatAutoBuyController } from '../controller/chat/ChatAutobuyController'
 import { chatInventoryController } from '../controller/chat/ChatInventoryController';
 import exp from 'node:constants';
 
-export class ChatController {
+export class ChatLSController {
 	constructor(
 		private clientManager: ClientManagerService,
 		private chatService: IChatService,

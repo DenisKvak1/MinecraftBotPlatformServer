@@ -65,11 +65,11 @@ export class AutoBuyService implements IAutoBuyService {
 				const profile = this.massAbIds[massAutoBuyId].profiles[id];
 				const profileAccount = this.massAbIds[massAutoBuyId].profilesAccounts[id]
 				await this.updateAuction(profileAccount._bot, profile);
-				setTimeout(() => {
+				this.onAuctionWindowUpdate(profileAccount).then(async ()=>{
 					if(!this.massAbIds[massAutoBuyId].botsIds.includes(id)) return
-					this.proccesBuyCycle(profileAccount._bot, profile, profileAccount);
-				}, profile.interval);
-				await syncTimeout(profile.interval / (bots.length * 4 / 5));
+					await this.proccesBuyCycle(profileAccount._bot, profile, profileAccount);
+				})
+				await syncTimeout((profile.interval / (bots.length * 4 / 5)));
 			}
 		}, 0);
 
@@ -384,6 +384,20 @@ export class AutoBuyService implements IAutoBuyService {
 		});
 	}
 
+	private onAuctionWindowUpdate(profileAccount: IClientBot) {
+		return new Promise<void>((resolve, reject) => {
+			const timeout = setTimeout(() => {
+				reject(new Error("Timeout: событие не произошло за 3 секунды"));
+			}, 3000);
+
+			profileAccount.$window.once(() => {
+				clearTimeout(timeout);
+				resolve();
+			}, (event) => event.action === "UPDATE" && event.slotIndex === 44 && event.newItem !== null);
+		});
+	}
+
+
 	private searchItemToBuy(bot: Bot, profile: abProfile) {
 		let slotIndex: number;
 		let targetItem: GeneralizedItem;
@@ -517,7 +531,7 @@ export class AutoBuyService implements IAutoBuyService {
 	}
 
 	private async buyClick(bot: Bot, slotIndex: number) {
-		// await bot.clickWindow(slotIndex, 0, 0);
+		await bot.clickWindow(slotIndex, 0, 0);
 	}
 }
 

@@ -6,46 +6,26 @@
     ],
     "name": "holyworld",
     "priceRegex": "(\\d[\\d\\s]*)¤",
-    "savingBalanceAccount": "BossAnrchy331",
+    "savingBalanceAccount": "WrittenWord3000",
     "targetBalance": 15000000,
     "updateIndex": 47,
     "interval": 800,
     "nicknameRegex": "Продавец<\\/span><span style=\"color:#AAAAAA\">: <\\/span><span style=\"color:rgb\\(0,235,255\\)\">(.*?)<\\/span>",
     "blackList": [
-      "ToplecCHlKA",
-      "klemen",
-      "hellobaby",
-      "That0neBear",
-      "XiSh3n",
-      "hikomori",
-      "gromaforz",
-      "Deth_Angel",
-      "Derty_1001",
-      "CAMAPA",
-      "ApTa_He_UmBa",
-      "Fl1ckzzz",
-      "alanova",
-      "_SenpaiCrown_",
-      "Darkk_Knight",
-      "YarikPR02205",
-      "Asya_Masya",
-      "DumpCave",
-      "Cmeetane",
-      "HackerCat777",
-      "m0untain",
-      "BeMoRe_",
-      "1WantToHearth",
-      "HapyC0t",
-      "thepieboyz",
-      "xDedForTopch1ll",
-      "The_Destr0yer",
-      "zxcichert",
-      "_Bupsik_",
-      "MaxTheBest66",
-      "hqd_d",
-      "ChtoStop",
-      "Dellarba",
-      "danabek11"
+      "ToplecCHlKA", "klemen", "hellobaby", "That0neBear", "XiSh3n",
+      "hikomori", "gromaforz", "Deth_Angel", "Derty_1001", "CAMAPA",
+      "ApTa_He_UmBa", "Fl1ckzzz", "alanova", "_SenpaiCrown_", "Darkk_Knight",
+      "YarikPR02205", "Asya_Masya", "DumpCave", "Cmeetane", "HackerCat777",
+      "m0untain", "BeMoRe_", "1WantToHearth", "HapyC0t", "thepieboyz",
+      "xDedForTopch1ll", "The_Destr0yer", "zxcichert", "_Bupsik_", "MaxTheBest66",
+      "hqd_d", "ChtoStop", "Dellarba", "danabek11", "MisterKapybara",
+      "ninetydyygres", "Botik_884", "farfadet", "maggasty", "3uMa_MaN",
+      "Tr1ggered", "Ksenon4ik_", "KillMe_plz", "petya_external", "HarukaKasugano_",
+      "_Darkdeath_", "skyvolik", "KoTiK_C_XVX_", "nor1x", "uFerz",
+      "uliana_pim", "Soul_Stealer", "Pupsik_BB", "pr3k0l", "minkyy1337",
+      "a11ways", "Akaza3", "egorhack9", "MaxCrafterV", "Maksimtopgg3491",
+      "arxl0_", "6OPLLLEB_HA_UC7", "nHEDNI", "Furion1", "halflite",
+      "_reve_2045_", "LetMeStay", "Koza_Dereza", "Milashka_Grechin"
     ],
     "shift": false,
     "percentMode": true,
@@ -68,6 +48,10 @@
         "price": 1,
         "sellprice": 100000
       },
+      "- Лопата ᴇᴛᴇʀɴɪᴛʏ -": {
+        "price": 300000,
+        "sellprice": 800000
+      },
       "- Талисман ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 4000000,
         "searchName": "талисман eternity",
@@ -86,20 +70,20 @@
         "procentDown": 50
       },
       "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 759999,
-        "sellprice": 1499999
+        "price": 859999,
+        "sellprice": 1799999
       },
       "- Нагрудник ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 759999,
-        "sellprice": 1499999
+        "price": 959999,
+        "sellprice": 1799999
       },
       "- Штаны ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 759999,
-        "sellprice": 1499999
+        "price": 859999,
+        "sellprice": 1799999
       },
       "- Ботинки ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 759999,
-        "sellprice": 1499999
+        "price": 859999,
+        "sellprice": 1799999
       },
       "Шлем Iɴғɪɴɪᴛʏ": {
         "price": 1599999,
@@ -177,11 +161,47 @@
         "searchName": "незеритовый слиток",
         "procentDown": 50
       },
-      "Experience Bottle": {
-        "price": 200,
-        "sellprice": 399,
-        "searchName": "бутылочка с опытом",
-        "procentDown": 65
+      "Зелье победителя": {
+        "price": 500000,
+        "sellprice": 999999,
+        "seellcount": 1,
+        "searchName": "зелье победителя",
+        "procentDown": 50
+      },
+      "Взрывчатое вещество": {
+        "price": 100000,
+        "sellprice": 279999,
+        "seellcount": 5,
+        "searchName": "взрывчатое вещество",
+        "procentDown": 50
+      },
+      "Взрывная трапка": {
+        "price": 200000,
+        "sellprice": 419999,
+        "seellcount": 1,
+        "searchName": "взрывная трапка",
+        "procentDown": 50
+      },
+      "Древние обломки": {
+        "price": 5000,
+        "sellprice": 9999,
+        "seellcount": 10,
+        "searchName": "древние обломки",
+        "procentDown": 50
+      },
+      "Уникальный приват": {
+        "price": 700000,
+        "sellprice": 1499999,
+        "seellcount": 1,
+        "searchName": "уникальный приват",
+        "procentDown": 50
+      },
+      "Бутылек с 50ур. опыта (5345)": {
+        "price": 59999,
+        "sellprice": 109999,
+        "seellcount": 10,
+        "searchName": "опыт 50",
+        "procentDown": 50
       },
       "Elytra": {
         "price": 1700000,
@@ -246,10 +266,10 @@
       },
       "Разрывная волна": {
         "price": 420000,
-        "sellprice": 7390000,
+        "sellprice": 739000,
         "seellcount": 1
       },
-      "C4 взрывчатка": {
+      "C4 ВзРыВчАтКа": {
         "price": 100000,
         "sellprice": 290000,
         "seellcount": 1,

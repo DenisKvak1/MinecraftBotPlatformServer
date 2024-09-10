@@ -2,7 +2,7 @@ import { IChatService } from '../../../core/service/ChatService';
 import { IAutoBuyService } from '../../../core/service/AutoBuy';
 import { IWindowService } from '../../../core/service/WindowService';
 import { windowsService } from '../../services/WindowService';
-import { ChatController } from '../../chatController/ChatController';
+import { ChatLSController } from '../../chatController/ChatLSController';
 import { clientManagerService } from '../../services/ClientManagerService';
 import { chatService } from '../../services/ChatService';
 import { accountService } from '../../../core/service/AccountService';
