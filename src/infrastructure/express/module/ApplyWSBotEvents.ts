@@ -88,6 +88,9 @@ export async function ApplyWSBotEvents(
 
 		const onWindowEventSubscribe = windowService.onWindowEvent(connectData.id, (windowEvent)=>{
 			if(windowEvent.action === 'UPDATE') return updateWindowBatch.push(windowEvent.newItem)
+			if(windowEvent.action === "OPEN") updateWindowBatch.undo()
+			if(windowEvent.action === "CLOSE") updateWindowBatch.undo()
+
 			webSocketController.broadcast<OutgoingActionWindowBotMessage>({
 				id: connectData.id,
 				command: OUTGHOING_COMMAND_LIST.WINDOW,
