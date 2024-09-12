@@ -89,7 +89,7 @@ export class AutoBuyService implements IAutoBuyService {
 		const { profile, profileAccount } = await this.massAutoBuyFirstInit(botId)
 		const isOkInit = await this.autoBuyProccessInit(botId, profile, profileAccount);
 		if (!isOkInit) return;
-		const { sellSubscribe, buyLoggerSubscribe, updatePrice, $updatePrice, $stopSetPrice } = isOkInit;
+		const { sellSubscribe, buyLoggerSubscribe, updatePrice, paySubscribe, $updatePrice, $stopSetPrice } = isOkInit;
 		const subscribe1 = $updatePrice.subscribe(() => {
 			this.massAbIds[massId].stopped = true;
 		});
@@ -102,7 +102,10 @@ export class AutoBuyService implements IAutoBuyService {
 			this.massAbIds[massId].stopped = false
 		});
 
-		this.massAbIds[massId].subscribes[botId] = [subscribe1, subscribe2, nodeIntervalToSubscribe(updatePrice), nodeIntervalToSubscribe(sellSubscribe), buyLoggerSubscribe]
+		this.massAbIds[massId].subscribes[botId] = [
+			subscribe1, subscribe2, nodeIntervalToSubscribe(updatePrice),
+			nodeIntervalToSubscribe(sellSubscribe), buyLoggerSubscribe,
+			nodeIntervalToSubscribe(paySubscribe)]
 		this.massAbIds[massId].botsIds.push(botId)
 		this.massAbIds[massId].profiles[botId] = profile;
 		this.massAbIds[massId].profilesAccounts[botId] = profileAccount;
@@ -126,7 +129,7 @@ export class AutoBuyService implements IAutoBuyService {
 
 		const isOkInit = await this.autoBuyProccessInit(id, profile, profileAccount);
 		if (!isOkInit) return;
-		const { sellSubscribe, buyLoggerSubscribe, updatePrice, $updatePrice, $stopSetPrice } = isOkInit;
+		const { sellSubscribe, buyLoggerSubscribe, updatePrice, paySubscribe, $updatePrice, $stopSetPrice } = isOkInit;
 		const bot = profileAccount._bot;
 
 		profile =  await this.setBuyPrice(bot, profile)
@@ -149,7 +152,7 @@ export class AutoBuyService implements IAutoBuyService {
 		}, 0);
 
 		this.bindCloseAh(profileAccount);
-		this.setOnCloseSubscribe(id, interval, sellSubscribe, buyLoggerSubscribe, updatePrice);
+		this.setOnCloseSubscribe(id, interval, [nodeIntervalToSubscribe(sellSubscribe), buyLoggerSubscribe, nodeIntervalToSubscribe(updatePrice), nodeIntervalToSubscribe(paySubscribe)]);
 	}
 
 	private clearSubscribes(subscribes: Subscribe[]){
@@ -157,6 +160,7 @@ export class AutoBuyService implements IAutoBuyService {
 	}
 
 	private async setBuyPrice(bot: Bot, profile: abProfile): Promise<abProfile> {
+		buyLogger.info('Калибровка запущенна')
 		const newProfile = { ...profile };
 
 		for (const abKey in profile.info) {
@@ -165,11 +169,16 @@ export class AutoBuyService implements IAutoBuyService {
 			if (!abInfo.searchName) continue;
 			const priceData = await this.checkMinprice(abInfo?.searchName, bot, profile);
 			if (!priceData) continue;
-			newProfile.info[abKey].price = (priceData.averagePrice / 100) * (100 - abInfo?.procentDown || profile.defaultProcentDown);
+			const newPrice = (priceData.averagePrice / 100) * (100 - abInfo?.procentDown || profile.defaultProcentDown)
+			const oldPrice = newProfile.info[abKey].price;
+
+			newProfile.info[abKey].price = newPrice
 			newProfile.info[abKey].sellprice = Math.floor(priceData.minPrice * 0.99);
+
 			await syncTimeout(500);
 		}
 
+		buyLogger.info('Калибровка законченна')
 		return newProfile;
 	}
 
@@ -216,8 +225,9 @@ export class AutoBuyService implements IAutoBuyService {
 		sellSubscribe: NodeJS.Timeout,
 		updatePrice: NodeJS.Timeout,
 		buyLoggerSubscribe: Subscribe,
+		paySubscribe: NodeJS.Timeout
 		$updatePrice: Observable<undefined>,
-		$stopSetPrice: Observable<abProfile>
+		$stopSetPrice: Observable<abProfile>,
 	} | undefined> {
 		if (this.getAutoBuyState(id) === 'ON') return;
 
@@ -231,6 +241,10 @@ export class AutoBuyService implements IAutoBuyService {
 		const sellSubscribe = setInterval(() => {
 			this.inventorySell(bot, profile);
 		}, 9000);
+
+		const paySubscribe = setInterval(() => {
+			this.pay(profile, bot)
+		}, 5000);
 
 		if (profile.percentMode) {
 			updatePrice = setInterval(async () => {
@@ -247,7 +261,7 @@ export class AutoBuyService implements IAutoBuyService {
 		await syncTimeout(1000);
 		if (!bot.currentWindow) return;
 
-		return { sellSubscribe, buyLoggerSubscribe, updatePrice, $updatePrice, $stopSetPrice };
+		return { sellSubscribe, buyLoggerSubscribe, updatePrice, $updatePrice, $stopSetPrice, paySubscribe};
 	}
 
 	private async updateAuction(bot: Bot, profile: abProfile) {
@@ -259,9 +273,9 @@ export class AutoBuyService implements IAutoBuyService {
 		interval: {
 			id: NodeJS.Timeout,
 			stop: () => void
-		}, sellSubscribe: NodeJS.Timeout, buyLoggerSubscribe: Subscribe, updatePriceSubscribe: NodeJS.Timeout) {
+		}, subscribes: Subscribe[]) {
 
-		const intervalSubscribe = this.getOnCloseSubscribe(interval, sellSubscribe, buyLoggerSubscribe, updatePriceSubscribe);
+		const intervalSubscribe = this.getOnCloseSubscribe(interval, subscribes);
 		this.abIntervals.set(id, { interval: intervalSubscribe });
 	}
 
@@ -270,14 +284,12 @@ export class AutoBuyService implements IAutoBuyService {
 		interval: {
 			id: NodeJS.Timeout,
 			stop: () => void
-		}, sellSubscribe: NodeJS.Timeout, buyLoggerSubscribe: Subscribe, updatePriceSubscribe: NodeJS.Timeout,
+		}, subscribes: Subscribe[]
 	) {
 		return {
 			stop: () => {
 				interval?.stop();
-				clearInterval(sellSubscribe);
-				clearInterval(updatePriceSubscribe);
-				buyLoggerSubscribe?.unsubscribe();
+				this.clearSubscribes(subscribes)
 			},
 			id: interval.id,
 		};
@@ -285,12 +297,7 @@ export class AutoBuyService implements IAutoBuyService {
 
 	private async proccesBuyCycle(bot: Bot, profile: abProfile, profileAccount: IClientBot) {
 		try {
-			if (profile.name === 'holyworld' && profile.savingBalanceAccount) {
-				const balance = this.getBotBalance(bot, profile.name);
-				if (balance >= profile.targetBalance * 1.2) {
-					this.sendMoneyOnSaveAccount(Math.floor(balance - profile.targetBalance), bot, profile);
-				}
-			}
+
 
 			const searchInfo = this.searchItemToBuy(bot, profile);
 			if (searchInfo) {
@@ -308,7 +315,7 @@ export class AutoBuyService implements IAutoBuyService {
 				}
 			}
 		} catch (e) {
-
+			logger.error(e.message)
 		}
 	}
 
@@ -338,6 +345,15 @@ export class AutoBuyService implements IAutoBuyService {
 			}
 		}
 		return undefined;
+	}
+
+	private async pay(profile: abProfile, bot: Bot){
+		if (profile.name === 'holyworld' && profile.savingBalanceAccount) {
+			const balance = this.getBotBalance(bot, profile.name);
+			if (balance >= profile.targetBalance * 1.2) {
+				this.sendMoneyOnSaveAccount(Math.floor(balance - profile.targetBalance), bot, profile);
+			}
+		}
 	}
 
 	private async inventorySell(bot: Bot, profile: abProfile) {
@@ -373,7 +389,7 @@ export class AutoBuyService implements IAutoBuyService {
 			logger.warn(`Отклонил неправильно выбранный предмет ${name} в количестве ${targetItem?.count}`);
 			bot.clickWindow(8, 0, 0);
 		} else {
-			logger.error(`Холик залагал ${name}`)
+			logger.warn(`Холик залагал ${name}`)
 		}
 	}
 
@@ -440,7 +456,7 @@ export class AutoBuyService implements IAutoBuyService {
 		const name = item?.customName || item?.displayName;
 		bot.setQuickBarSlot(slotIndex - 36);
 		bot.chat(`/ah sell ${price}`);
-		logger.info(`Попытался выставить предмет ${name} на продаже в количестве ${item.count} по цене за штуку ${price}`);
+		logger.info(`Попытался выставить предмет ${name} на продаже в количестве ${item.count} по цене за штуку ${price/item.count}`);
 	}
 
 	private startAsyncInterval(callback: () => Promise<void>, interval: number): {
@@ -474,10 +490,18 @@ export class AutoBuyService implements IAutoBuyService {
 		if (!this.checkAutoBuy(item.customName || item.displayName, profile)) return false;
 		const price = this.extractPrice(item?.customLoreHTML, profile.priceRegex);
 		const nickname = this.extractNickname(item?.customLoreHTML, profile.nicknameRegex)
-		if(profile.blackList.includes(nickname)) return false
-		if ((price / item?.count) > profile.info[item?.customName || item?.displayName]?.price) return false;
-
 		const name = item?.customName || item?.displayName;
+
+		if ((price / item?.count) > profile.info[name]?.price) return false;
+		if(profile.blackList.includes(nickname)) {
+			buyLogger.info(`АДМИН:${nickname} попытался продать ${name}, за ${price}`)
+			return false
+		}
+		if(
+			item?.count <= 3 && price <= 1000
+			&& profile.exception?.includes(name)
+		) return false
+
 		logger.info(`Нашел предмет для покупки с именем ${name} в количестве ${item?.count} при цене за штуку: ${price}`);
 		return true;
 	}

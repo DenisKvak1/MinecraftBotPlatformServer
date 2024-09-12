@@ -21,7 +21,8 @@ export const ToGeneralizedItem = (item: Item | null): GeneralizedItem | null => 
 		customName: convertCustomNameToString(item.customName),
 		customNameHTML: convertCustomNameToString(item.customName, true),
 		customLoreHTML: convertCustomLoreToString(item.customLore),
-		renamed: isRenamed(item.customName)
+		renamed: isRenamed(item.customName),
+		slot: item.slot
 	};
 
 

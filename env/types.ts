@@ -7,6 +7,7 @@ export type GeneralizedItem = {
 	stackSize: number
 	displayName: string,
 
+	slot: number
 	renamed: boolean
 	customName?: string
 	customNameHTML?: string,

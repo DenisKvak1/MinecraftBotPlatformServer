@@ -19,6 +19,8 @@ import {
 } from '../types/webSocketBotCommandTypes';
 import { IFarmService } from '../../../core/service/FarmService';
 import { IAutoBuyService } from '../../../core/service/AutoBuy';
+import { BatchProccess } from '../../../../env/helpers/BatchProccess';
+import { GeneralizedItem } from '../../../../env/types';
 
 
 export async function ApplyWSBotEvents(
@@ -33,7 +35,17 @@ export async function ApplyWSBotEvents(
 ) {
 	const subscribeMap = new Map<string, Subscribe[]>();
 
+
 	const connectSubscribe=  clientManagerService.$connect.subscribe((connectData) => {
+		const updateWindowBatch = new BatchProccess<GeneralizedItem>((items)=>{
+			webSocketController.broadcast<OutgoingActionWindowBotMessage>({
+				id: connectData.id,
+				command: OUTGHOING_COMMAND_LIST.WINDOW,
+				action: 'UPDATE',
+				items: items,
+			})
+		}, 100)
+
 		webSocketController.broadcast<OutgoingConnectingBotMessage>({
 			command: OUTGHOING_COMMAND_LIST.CONNECTING_BOT,
 			id: connectData.id,
@@ -75,6 +87,7 @@ export async function ApplyWSBotEvents(
 		})
 
 		const onWindowEventSubscribe = windowService.onWindowEvent(connectData.id, (windowEvent)=>{
+			if(windowEvent.action === 'UPDATE') return updateWindowBatch.push(windowEvent.newItem)
 			webSocketController.broadcast<OutgoingActionWindowBotMessage>({
 				id: connectData.id,
 				command: OUTGHOING_COMMAND_LIST.WINDOW,

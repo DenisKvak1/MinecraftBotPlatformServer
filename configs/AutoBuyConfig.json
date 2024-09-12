@@ -7,11 +7,15 @@
     "name": "holyworld",
     "priceRegex": "(\\d[\\d\\s]*)¤",
     "savingBalanceAccount": "WrittenWord3000",
-    "targetBalance": 15000000,
+    "targetBalance": 20000000,
     "updateIndex": 47,
     "interval": 800,
+    "exception": [
+      "Gunpowder", "Enchanted Golden Apple", "Firework Rocket"
+    ],
     "nicknameRegex": "Продавец<\\/span><span style=\"color:#AAAAAA\">: <\\/span><span style=\"color:rgb\\(0,235,255\\)\">(.*?)<\\/span>",
     "blackList": [
+      "zxcghoul",
       "ToplecCHlKA", "klemen", "hellobaby", "That0neBear", "XiSh3n",
       "hikomori", "gromaforz", "Deth_Angel", "Derty_1001", "CAMAPA",
       "ApTa_He_UmBa", "Fl1ckzzz", "alanova", "_SenpaiCrown_", "Darkk_Knight",
@@ -70,20 +74,20 @@
         "procentDown": 50
       },
       "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 859999,
-        "sellprice": 1799999
+        "price": 559999,
+        "sellprice": 999999
       },
       "- Нагрудник ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 959999,
-        "sellprice": 1799999
+        "price": 559999,
+        "sellprice": 999999
       },
       "- Штаны ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 859999,
-        "sellprice": 1799999
+        "price": 559999,
+        "sellprice": 999999
       },
       "- Ботинки ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 859999,
-        "sellprice": 1799999
+        "price": 559999,
+        "sellprice": 999999
       },
       "Шлем Iɴғɪɴɪᴛʏ": {
         "price": 1599999,
@@ -147,6 +151,13 @@
         "searchName": "универсальный ключ",
         "procentDown": 35
       },
+      "[☠] Отмычка": {
+        "price": 700000,
+        "sellprice": 1799990,
+        "seellcount": 1,
+        "searchName": "обычная отмычка",
+        "procentDown": 60
+      },
       "Enchanted Golden Apple": {
         "price": 50000,
         "sellprice": 89900,
@@ -196,7 +207,7 @@
         "searchName": "уникальный приват",
         "procentDown": 50
       },
-      "Бутылек с 50ур. опыта (5345)": {
+      "Бутылек с 50 ур. опыта (5345)": {
         "price": 59999,
         "sellprice": 109999,
         "seellcount": 10,
@@ -266,7 +277,7 @@
       },
       "Разрывная волна": {
         "price": 420000,
-        "sellprice": 739000,
+        "sellprice": 679000,
         "seellcount": 1
       },
       "C4 ВзРыВчАтКа": {
