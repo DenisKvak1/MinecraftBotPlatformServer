@@ -6,7 +6,7 @@
     ],
     "name": "holyworld",
     "priceRegex": "(\\d[\\d\\s]*)¤",
-    "savingBalanceAccount": "WrittenWord3000",
+    "savingBalanceAccount": "NedoBoss34",
     "targetBalance": 20000000,
     "updateIndex": 47,
     "interval": 800,
@@ -15,7 +15,9 @@
     ],
     "nicknameRegex": "Продавец<\\/span><span style=\"color:#AAAAAA\">: <\\/span><span style=\"color:rgb\\(0,235,255\\)\">(.*?)<\\/span>",
     "blackList": [
+      "Qwaxs",
       "zxcghoul",
+      "lovertoper228",
       "ToplecCHlKA", "klemen", "hellobaby", "That0neBear", "XiSh3n",
       "hikomori", "gromaforz", "Deth_Angel", "Derty_1001", "CAMAPA",
       "ApTa_He_UmBa", "Fl1ckzzz", "alanova", "_SenpaiCrown_", "Darkk_Knight",
@@ -29,7 +31,12 @@
       "uliana_pim", "Soul_Stealer", "Pupsik_BB", "pr3k0l", "minkyy1337",
       "a11ways", "Akaza3", "egorhack9", "MaxCrafterV", "Maksimtopgg3491",
       "arxl0_", "6OPLLLEB_HA_UC7", "nHEDNI", "Furion1", "halflite",
-      "_reve_2045_", "LetMeStay", "Koza_Dereza", "Milashka_Grechin"
+      "_reve_2045_", "LetMeStay", "Koza_Dereza", "Milashka_Grechin",
+      "Makson1gg", "Insendia", "Kaneki_Toka", "Ukufa", "LevaTonkov",
+      "yeare", "GetBan", "TitanVV", "pjk_k", "MiLa707", "GCV",
+      "popiplaytime", "NAITSDF", "XARLI_", "Hekir", "NeoNyashka",
+      "IwishyourHeart", "Jason  0_0", "trastlark", "K1ona", "123qwegg",
+      "kiriache34", "Nuestery", "Jugde", "ZenFix", "NeNekitor"
     ],
     "shift": false,
     "percentMode": true,
@@ -75,7 +82,7 @@
       },
       "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 559999,
-        "sellprice": 999999
+        "sellprice": 1999999
       },
       "- Нагрудник ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 559999,
@@ -118,17 +125,15 @@
         "procentDown": 50
       },
       "Мифическая сфера": {
-        "price": 3000000,
-        "sellprice": 3999999,
+        "price": 4000000,
+        "sellprice": 7999999,
         "seellcount": 1,
         "searchName": "мифическая сфера",
         "procentDown": 60
       },
       "Мифический талисман": {
-        "price": 3500000,
-        "sellprice": 4499999,
-        "searchName": "мифический талисман",
-        "procentDown": 60
+        "price": 4000000,
+        "sellprice": 7999999
       },
       "Сфера Цербера": {
         "price": 12000000,
@@ -138,11 +143,9 @@
         "procentDown": 45
       },
       "Сфера Флеша": {
-        "price": 4000000,
-        "sellprice": 5899999,
-        "seellcount": 1,
-        "searchName": "сфера флеша",
-        "procentDown": 60
+        "price": 3000000,
+        "sellprice": 4999999,
+        "seellcount": 1
       },
       "Универсальный ключ": {
         "price": 13000000,
@@ -173,11 +176,9 @@
         "procentDown": 50
       },
       "Зелье победителя": {
-        "price": 500000,
-        "sellprice": 999999,
-        "seellcount": 1,
-        "searchName": "зелье победителя",
-        "procentDown": 50
+        "price": 1000000,
+        "sellprice": 1999999,
+        "seellcount": 1
       },
       "Взрывчатое вещество": {
         "price": 100000,
@@ -257,17 +258,6 @@
         "searchName": "фейерверк",
         "procentDown": 65
       },
-      "TNT": {
-        "price": 1,
-        "sellprice": 6500,
-        "seellcount": 10
-      },
-      "Динамит A": {
-        "price": 3500,
-        "sellprice": 8490,
-        "searchName": "динамит а",
-        "procentDown": 80
-      },
       "Динамит B": {
         "price": 65000,
         "sellprice": 129000,
@@ -276,8 +266,8 @@
         "procentDown": 65
       },
       "Разрывная волна": {
-        "price": 420000,
-        "sellprice": 679000,
+        "price": 400000,
+        "sellprice": 609000,
         "seellcount": 1
       },
       "C4 ВзРыВчАтКа": {
@@ -294,9 +284,10 @@
         "searchName": "стиллер",
         "procentDown": 65
       },
-      "Меч《Выгодный фарм》": {
-        "price": 1,
-        "sellprice": 25000000
+      "Меч 《Выгодный фарм》": {
+        "price": 20000000,
+        "sellprice": 30000000,
+        "searchName": "меч выгодный фарм"
       },
       "Загадочный спавнер": {
         "price": 5000000,
@@ -304,6 +295,11 @@
         "seellcount": 1,
         "searchName": "загадочный спавнер",
         "procentDown": 60
+      },
+      "Надёжный стиллер": {
+        "price": 1000000,
+        "sellprice": 2000000,
+        "seellcount": 1
       }
     }
   },

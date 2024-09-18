@@ -3,11 +3,9 @@ import { toggle, toggleInfo } from '../../../env/types';
 
 export interface IAutoBuyService {
 	$ab: IObservable<{id: string, action: toggle}>
-	startAutoBuySystem(botIds: string[]): Promise<string>
-	stopAutoBuySystem(massId: string): Promise<void>
-	addToAutoBuySystem(massId: string, botId: string): Promise<void>
-	deleteMassAutoBuyBot(massId: string, botId: string): Promise<void>
-	startAutoBuy(id: string): void
-	stopAutoBuy(id: string): void
+	startAutoBuySystem(botIds: string[]): Promise<number>
+	stopAutoBuySystem(massId: number): Promise<void>
+	addToAutoBuySystem(massId: number, botId: string): Promise<void>
+	deleteMassAutoBuyBot(massId: number, botId: string): Promise<void>
 	getAutoBuyState(id: string): toggleInfo
 }

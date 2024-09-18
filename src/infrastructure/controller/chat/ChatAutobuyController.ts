@@ -17,7 +17,7 @@ export class WebSocketAutoBuyController {
 
 	async turnOffAutoBuy(botID: string){
 		try {
-			this.abService.stopAutoBuy(botID)
+			this.abService.deleteMassAutoBuyBot(1, botID)
 			windowsService.closeWindow(botID)
 		} catch (e){
 
@@ -30,7 +30,7 @@ export class WebSocketAutoBuyController {
 			await new Promise<void>((r)=> setTimeout(()=> r(), 200))
 			await this.windowService.click(botID, 53, 1)
 			await new Promise<void>((r)=> setTimeout(()=> r(), 200))
-			this.abService.startAutoBuy(botID)
+			this.abService.deleteMassAutoBuyBot(1, botID)
 		} catch (e) {
 
 		}

@@ -23,10 +23,11 @@ export class WebSocketAutoBuyController {
 			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline);
 
 			if (action === 'START') {
-				this.abService.startAutoBuy(botID);
+				this.abService.addToAutoBuySystem(1, botID)
 			}
+			
 			if (action === 'STOP') {
-				this.abService.stopAutoBuy(botID);
+				this.abService.deleteMassAutoBuyBot(1, botID);
 			}
 
 			returnWSOk(message, this.wsClients);

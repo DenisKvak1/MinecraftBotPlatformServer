@@ -40,59 +40,13 @@ process.on('uncaughtException', (reason) => {
 	logger.error(reason.message);
 });
 
-
-// botScriptsService.save('lite', [
-// 	{
-// 		command: BOT_SCRIPT_ACTIONS.CONNECT,
-// 	},
-// 	{
-// 		command: BOT_SCRIPT_ACTIONS.SLEEP,
-// 		value: {
-// 			sleepTimeout: 4000,
-// 		},
-// 	},
-// 	{
-// 		command: BOT_SCRIPT_ACTIONS.SEND_CHAT_ESSAGE,
-// 		value: {
-// 			message: '/lite',
-// 		},
-// 	},
-// 	{
-// 		command: BOT_SCRIPT_ACTIONS.SLEEP,
-// 		value: {
-// 			sleepTimeout: 1000,
-// 		},
-// 	},
-// 	{
-// 		command: BOT_SCRIPT_ACTIONS.CLICK_WINDOW,
-// 		value: {
-// 			slotIndex: 4,
-// 		},
-// 	},
-// 	{
-// 		command: BOT_SCRIPT_ACTIONS.SLEEP,
-// 		value: {
-// 			sleepTimeout: 1000,
-// 		},
-// 	},
-// 	{
-// 		command: BOT_SCRIPT_ACTIONS.CLICK_WINDOW,
-// 		value: {
-// 			slotIndex: 44,
-// 		},
-// 	},
-// ]).then(async (script) => {
-// 	await botScriptsService.run(script.id, (await accountService.getByName('Fles1hPop')).id);
-// });
-
-
 setTimeout(() => {
 	(async function f() {
-		const id1 = (await accountService.getByName('ImpPlant11')).id;
-		const id2 = (await accountService.getByName('CaesarJ22')).id;
-		const id3 = (await accountService.getByName('Dreadlight33')).id;
-		const id4 = (await accountService.getByName('Chinaplate44')).id;
-		const id5 = (await accountService.getByName('Assaultive50')).id;
+		const id1 = '9947a397-8b6b-48b2-bdf0-0d2d51b59221'
+		const id2 = 'a046734f-55d3-49c1-b376-23c98a456618'
+		const id3 = '05aaef61-4774-4753-bba8-634778f5913e'
+		const id4 = '032e79b6-3fa9-465a-a1d5-593fa98a13bf'
+		const id5 = "4bbce9ce-d93c-40bc-b192-2f96f368979e"
 
 		const bots = [id1, id2, id3, id4, id5];
 		bots.forEach(async (id, index) => {

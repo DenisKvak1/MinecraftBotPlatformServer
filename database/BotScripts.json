@@ -41,6 +41,24 @@
         "value": {
           "slotIndex": 30
         }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
+        }
       }
     ]
   },
@@ -86,12 +104,30 @@
         "value": {
           "slotIndex": 31
         }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
+        }
       }
     ]
   },
   {
     "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a32a",
-    "name": "lite 3" ,
+    "name": "lite 3",
     "botActions": [
       {
         "command": "CONNECT"
@@ -130,6 +166,24 @@
         "command": "CLICK_WINDOW",
         "value": {
           "slotIndex": 32
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
         }
       }
     ]
@@ -176,6 +230,24 @@
         "value": {
           "slotIndex": 33
         }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
+        }
       }
     ]
   },
@@ -220,6 +292,24 @@
         "command": "CLICK_WINDOW",
         "value": {
           "slotIndex": 34
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
         }
       }
     ]
@@ -271,6 +361,18 @@
         "command": "SLEEP",
         "value": {
           "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
         }
       },
       {
@@ -331,6 +433,24 @@
         }
       },
       {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
+        }
+      },
+      {
         "command": "ADD_MASS_AUTOBUY_PLAYER",
         "value": {
           "massId": "1"
@@ -340,7 +460,7 @@
   },
   {
     "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a37a",
-    "name": "reconnect 3" ,
+    "name": "reconnect 3",
     "botActions": [
       {
         "command": "CONNECT"
@@ -385,6 +505,24 @@
         "command": "SLEEP",
         "value": {
           "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
         }
       },
       {
@@ -445,6 +583,24 @@
         }
       },
       {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
+        }
+      },
+      {
         "command": "ADD_MASS_AUTOBUY_PLAYER",
         "value": {
           "massId": "1"
@@ -499,6 +655,24 @@
         "command": "SLEEP",
         "value": {
           "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 3000
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/afk"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": 200
         }
       },
       {
