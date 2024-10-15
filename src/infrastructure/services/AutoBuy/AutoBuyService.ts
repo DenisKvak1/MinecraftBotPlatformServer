@@ -319,7 +319,7 @@ export class AutoBuyService implements IAutoBuyService {
             const price = this.checkSellItem(profile, item, index);
             if (!price) continue;
 
-            this.sellItem(bot, item, price, index);
+            await this.sellItem(bot, item, price, index);
             await new Promise(resolve => setTimeout(resolve, 800));
         }
     }
@@ -385,11 +385,11 @@ export class AutoBuyService implements IAutoBuyService {
     }
 
     private sellOnUpdate(bot: Bot, profileAccount: IClientBot, profile: abProfile) {
-        profileAccount.$inventoryUpdate.once((inventory) => {
+        profileAccount.$inventoryUpdate.once(async (inventory) => {
             if (!inventory.newItem) return;
             const price = this.checkSellItem(profile, inventory.newItem, inventory.itemSlot);
             if (!price) return;
-            this.sellItem(bot, inventory.newItem, price, inventory.itemSlot);
+            await this.sellItem(bot, inventory.newItem, price, inventory.itemSlot);
         });
     }
 
