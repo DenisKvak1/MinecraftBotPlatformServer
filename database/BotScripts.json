@@ -682,5 +682,63 @@
         }
       }
     ]
+  },
+  {
+    "id": "518c32f3-54f1-4739-9e22-a336c0a68803",
+    "name": "фарм",
+    "botActions": [
+      {
+        "command": "CONNECT",
+        "value": {}
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "1000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/lite"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "1000"
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": "4"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "1000"
+        }
+      },
+      {
+        "command": "CLICK_WINDOW",
+        "value": {
+          "slotIndex": "25"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "1000"
+        }
+      },
+      {
+        "command": "TOGGLE_FARM",
+        "value": {
+          "toggle": "START"
+        }
+      }
+    ]
   }
 ]

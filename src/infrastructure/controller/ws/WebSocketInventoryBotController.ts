@@ -8,8 +8,8 @@ import { clientManagerService } from '../../services/ClientManagerService';
 import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import {
 	IncomingActivateSlotMessage,
-	IncomingDropAllSlotMessage, IncomingDropSlotMessage,
-	IncomingGetSlotsMessage, IncomingSetHotBarSlotMessage,
+	IncomingDropAllSlotMessage, IncomingDropSlotMessage, IncomingGetExp,
+	IncomingGetSlotsMessage, IncomingSetHotBarSlotMessage, OutgoingGetExp,
 	OutgoingGetSlotsReplayMessage, OutgoingReplayMessage, STATUS,
 	UNIVERSAL_COMMAND_LIST,
 } from '../../express/types/webSocketBotCommandTypes';
@@ -125,6 +125,24 @@ export class WebSocketInventoryBotController {
 
 			this.inventoryService.useSlot(botID, slotIndex)
 			returnWSOk(message, this.wsClients)
+		} catch (e){
+			returnWSError(message, e.message, this.wsClients)
+		}
+	}
+
+	async getExp(message: IncomingGetExp){
+		try {
+			const botID = message.botID
+			const noneOnline = await checkNotOnlineBot(botID, message, this.clientManager)
+			if (noneOnline) return this.wsClients.broadcast<OutgoingReplayMessage>(noneOnline)
+
+			const exp = await this.inventoryService.getExp(botID)
+			return this.wsClients.broadcast<OutgoingGetExp>({
+				command: message.command,
+				status: STATUS.SUCCESS,
+				botID,
+				data: exp
+			})
 		} catch (e){
 			returnWSError(message, e.message, this.wsClients)
 		}

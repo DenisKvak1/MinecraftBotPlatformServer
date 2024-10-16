@@ -19,7 +19,7 @@ import { websocketHeadBotController } from '../controller/ws/WebSocketHeadBotCon
 import { websocketInventoryBotController } from '../controller/ws/WebSocketInventoryBotController';
 import { webSocketWalkBotController } from '../controller/ws/WebSocketWalkBotController';
 import { websocketWindowController } from '../controller/ws/WebSocketWindowBotController';
-import { UNIVERSAL_COMMAND_LIST } from './types/webSocketBotCommandTypes';
+import {IncomingGetExp, UNIVERSAL_COMMAND_LIST} from './types/webSocketBotCommandTypes';
 import path from 'path';
 import { IFarmService } from '../../core/service/FarmService';
 import { IAutoBuyService } from '../../core/service/AutoBuy';
@@ -71,6 +71,7 @@ export class App {
 
 	private initRoutes(){
 		this.routes = {
+			[UNIVERSAL_COMMAND_LIST.GET_EXP]: (message: IncomingMessage)=> websocketInventoryBotController.getExp(message as any),
 			[UNIVERSAL_COMMAND_LIST.GET_SCRIPTS]: (message: IncomingMessage)=> websocketBotScripts.getAllScripts(message as any),
 			[UNIVERSAL_COMMAND_LIST.SAVE_SCRIPT]: (message: IncomingMessage)=> websocketBotScripts.saveScript(message as any),
 			[UNIVERSAL_COMMAND_LIST.DELETE_SCRIPT]: (message: IncomingMessage)=> websocketBotScripts.deleteScript(message as any),

@@ -14,7 +14,7 @@ import {
 	OutgoingBotFunctionsStatusMessage,
 	OutgoingCaptchaMessage,
 	OutgoingChatBotMessage,
-	OutgoingConnectingBotMessage,
+	OutgoingConnectingBotMessage, OutgoingExperienceEvent,
 	OutgoingInventoryUpdateBotMessage,
 } from '../types/webSocketBotCommandTypes';
 import { IFarmService } from '../../../core/service/FarmService';
@@ -103,6 +103,13 @@ export async function ApplyWSBotEvents(
 			})
 		})
 
+		const onExperienceSubscribe = inventoryService.onExperienceUpdate(connectData.id, (message)=>{
+			webSocketController.broadcast<OutgoingExperienceEvent>({
+				command: OUTGHOING_COMMAND_LIST.EXPERIENCE,
+				botID: connectData.id,
+				data: message
+			})
+		})
 
 		const onChatMessageSubscribe = chatService.onChatMessage(connectData.id, (message)=>{
 			webSocketController.broadcast<OutgoingChatBotMessage>({
@@ -135,6 +142,7 @@ export async function ApplyWSBotEvents(
 		})
 
 		subscribeMap.set(connectData.id, [
+			onExperienceSubscribe,
 			onSpawnSubscribe, onDisconnectSubscribe,
 			onUpdateSlotInventorySubscribe, onWindowEventSubscribe,
 			onChatMessageSubscribe, onCaptchaSubscribe,

@@ -5,6 +5,8 @@ import { ClientAccountModel } from '../../../core/model/AccountModel';
 import { WindowEvent } from '../../../core/service/ClientBot';
 import { BotActions, BotScript } from '../../../core/service/BotScriptService/types';
 import { AccountUpdateDTO } from '../../../core/repository/AccountRepository/dto/AccountDTO';
+import {Experience} from "mineflayer";
+import {OutgoingMessage} from "node:http";
 
 export enum BotFunctions {
 	AUTO_FARM = 'AUTO_FARM',
@@ -24,6 +26,11 @@ export type OutgoingReplayMessage<T = any> = {
 	botID: string
 	status: STATUS
 	errorMessage?: errorMessage
+	data?: T
+}
+export type OutgoingEventMessage<T = any> = {
+	command: OUTGHOING_COMMAND_LIST
+	botID: string
 	data?: T
 }
 export type errorMessage = string
@@ -114,6 +121,8 @@ export type OutgoingGetBotInfoMessage = OutgoingReplayMessage<{
 export type OutgoingGetScripts = OutgoingReplayMessage<{
 	scripts: BotScript[]
 }>
+export type OutgoingGetExp = OutgoingReplayMessage<Experience>
+export type OutgoingExperienceEvent = OutgoingEventMessage<Experience>
 export type OutgoingDeleteScript = OutgoingReplayMessage
 export type OutgoingSaveScript = OutgoingReplayMessage<{
 	script: BotScript
@@ -217,7 +226,8 @@ export enum UNIVERSAL_COMMAND_LIST {
 	ACTIVATE_SLOT = 'ACTIVATE_SLOT',
 	GET_SCRIPTS = 'GET_SCRIPTS',
 	SAVE_SCRIPT = 'SAVE_SCRIPT',
-	DELETE_SCRIPT = 'DELETE_SCRIPT'
+	DELETE_SCRIPT = 'DELETE_SCRIPT',
+	GET_EXP = 'GET_EXP'
 }
 
 export enum OUTGHOING_COMMAND_LIST {
@@ -229,5 +239,6 @@ export enum OUTGHOING_COMMAND_LIST {
 	INVENTORY_UPDATE = 'INVENTORY_UPDATE',
 	BOT_FUNCTIONS_ACTION = 'BOT_FUNCTIONS_ACTION',
 	DAMAGE = 'DAMAGE',
-	DEATH = 'DEATH'
+	DEATH = 'DEATH',
+	EXPERIENCE = 'EXPERIENCE'
 }

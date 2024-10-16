@@ -5,6 +5,7 @@ const edibleItems = [
 	'cooked_chicken',
 	'cooked_porkchop',
 	'golden_apple',
+	'golden_carrot',
 	'melon',
 	'porkchop',
 	'potato',
