@@ -46,6 +46,7 @@ export type IncomingCreateBotMessage = IncomingMessage<{
 	port: number,
 	version: string,
 }>
+export type IncomingGetExp = IncomingMessage
 export type IncomingDeleteBotMessage = IncomingMessage
 export type IncomingUpdateBotOptionsMessage = IncomingMessage<AccountUpdateDTO>
 export type IncomingConnectBotMessage = IncomingMessage<{

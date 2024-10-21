@@ -29,9 +29,94 @@ rl.on('line', (log) => {
 });
 
 rl.on('close', () => {
-    analyzeTopItemsByProfit(buyData, sellData, '2024-09-14T00:00:00Z', '2024-09-14T23:59:59Z')
+    // const topBuyers = findTopBuyers(buyData);
+    // console.log('Топ 10 игроков по количеству покупок:');
+    // topBuyers.forEach((buyer, index) => {
+    //     console.log(`${index + 1}. ${buyer.playerName} - ${buyer.count} покупок`);
+    // });
+    calculateAveragePrices(buyData, sellData); // Вызов функции для подсчета средних цен
+
+    // console.log(calculateHourlyProfitForDay(buyData, sellData, '2024-07-01'))
+    // analyzeTopItemsByProfit(buyData, sellData, '2024-09-14T00:00:00Z', '2024-09-14T23:59:59Z')
 });
 
+function calculateHourlyProfitForDay(buyData, sellData, day) {
+    const profitByHour = {};
+
+    // Инициализируем объект с ключами от 0 до 23
+    for (let hour = 0; hour < 24; hour++) {
+        profitByHour[hour] = 0;
+    }
+
+    // Приводим день к началу UTC формата 'YYYY-MM-DD'
+    const dayStart = new Date(day + 'T00:00:00Z');
+    const dayEnd = new Date(day + 'T23:59:59Z'); // Конец указанного дня
+
+    // Функция для добавления прибыли к определённому часу
+    function addProfit(hour, amount) {
+        profitByHour[hour+3] += amount;
+    }
+
+    // Обрабатываем покупки (расходы)
+    buyData.forEach(buy => {
+        const date = new Date(buy.timestamp);
+
+        // Проверяем, принадлежит ли дата указанному дню
+        if (date >= dayStart && date <= dayEnd) {
+            const hour = date.getUTCHours(); // Получаем час от 0 до 23
+
+            // Общая стоимость покупки (цена за единицу * количество)
+            const totalCost = buy.price * buy.quantity;
+
+            // Учитываем это как отрицательная прибыль (затраты)
+            addProfit(hour, -totalCost);
+        }
+    });
+
+    // Обрабатываем продажи (доходы)
+    sellData.forEach(sell => {
+        const date = new Date(sell.timestamp);
+
+        // Проверяем, принадлежит ли дата указанному дню
+        if (date >= dayStart && date <= dayEnd) {
+            const hour = date.getUTCHours(); // Получаем час от 0 до 23
+
+            // Общая стоимость продажи (цена за единицу * количество)
+            const totalRevenue = sell.price * sell.quantity;
+
+            // Учитываем это как положительная прибыль (доход)
+            addProfit(hour, totalRevenue);
+        }
+    });
+
+    return profitByHour;
+}
+function findTopBuyers(data) {
+    // Создаем объект для подсчета количества покупок каждого игрока
+    const playerPurchaseCount = {};
+
+    // Подсчитываем количество покупок для каждого игрока
+    data.forEach(entry => {
+        if (playerPurchaseCount[entry.playerName]) {
+            playerPurchaseCount[entry.playerName]++;
+        } else {
+            playerPurchaseCount[entry.playerName] = 1;
+        }
+    });
+
+    // Преобразуем объект в массив и сортируем по количеству покупок
+    const sortedPlayers = Object.entries(playerPurchaseCount)
+        .sort((a, b) => b[1] - a[1]) // Сортируем по убыванию количества покупок
+        .slice(0, 20); // Берем топ 10
+
+    // Преобразуем массив обратно в объект для удобства
+    const topBuyers = sortedPlayers.map(([playerName, count]) => ({
+        playerName,
+        count
+    }));
+
+    return topBuyers;
+}
 function analyzeTopItemsByProfit(buyData, sellData, startDate, endDate) {
     const start = new Date(startDate).getTime();
     const end = new Date(endDate).getTime();
@@ -90,4 +175,42 @@ function analyzeTopItemsByProfit(buyData, sellData, startDate, endDate) {
     console.log(`Общая стоимость покупки: ${totalBuy}`);
     console.log(`Общий доход от продажи: ${totalSell}`);
     console.log(`Общая прибыль: ${totalProfit}`);
+}
+function calculateAveragePrices(buyData, sellData) {
+    const buyMap = new Map();
+    const sellMap = new Map();
+
+    // Обработка данных покупок
+    buyData.forEach(({ itemName, quantity, price }) => {
+        if (!buyMap.has(itemName)) {
+            buyMap.set(itemName, { totalQuantity: 0, totalPrice: 0 });
+        }
+        const item = buyMap.get(itemName);
+        item.totalQuantity += quantity;
+        item.totalPrice += price * quantity;
+    });
+
+    // Обработка данных продаж
+    sellData.forEach(({ itemName, quantity, price }) => {
+        if (!sellMap.has(itemName)) {
+            sellMap.set(itemName, { totalQuantity: 0, totalPrice: 0 });
+        }
+        const item = sellMap.get(itemName);
+        item.totalQuantity += quantity;
+        item.totalPrice += price * quantity;
+    });
+
+    // Вывод средней цены для покупок
+    console.log('Средняя цена покупки для каждого предмета:');
+    buyMap.forEach((value, itemName) => {
+        const avgPrice = value.totalPrice / value.totalQuantity;
+        console.log(`${itemName}: Средняя цена покупки - ${avgPrice.toFixed(2)}`);
+    });
+
+    // Вывод средней цены для продаж
+    console.log('Средняя цена продажи для каждого предмета:');
+    sellMap.forEach((value, itemName) => {
+        const avgPrice = value.totalPrice / value.totalQuantity;
+        console.log(`${itemName}: Средняя цена продажи - ${avgPrice.toFixed(2)}`);
+    });
 }

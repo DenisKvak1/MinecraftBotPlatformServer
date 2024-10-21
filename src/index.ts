@@ -5,7 +5,7 @@ import { webSocketClients } from './infrastructure/express/module/WebSocketClien
 import { inventoryService } from './infrastructure/services/InventoryService';
 import { windowsService } from './infrastructure/services/WindowService';
 import { chatService } from './infrastructure/services/ChatService';
-import { farmService } from './infrastructure/services/FarmService';
+import { farmService } from './infrastructure/services/FarmService/FarmService';
 import { logger } from './infrastructure/logger/Logger';
 import { autoBuyService } from './infrastructure/services/AutoBuy/AutoBuyService';
 import { captchaService } from './infrastructure/services/CaptchaService/CaptchaService';
@@ -40,24 +40,24 @@ process.on('uncaughtException', (reason) => {
 	logger.error(reason.message);
 });
 
-setTimeout(() => {
-	(async function f() {
-		const id1 = '9947a397-8b6b-48b2-bdf0-0d2d51b59221'
-		const id2 = 'a046734f-55d3-49c1-b376-23c98a456618'
-		const id3 = '05aaef61-4774-4753-bba8-634778f5913e'
-		const id4 = '032e79b6-3fa9-465a-a1d5-593fa98a13bf'
-		const id5 = "4bbce9ce-d93c-40bc-b192-2f96f368979e"
-
-		const bots = [id1, id2, id3, id4, id5];
-		bots.forEach(async (id, index) => {
-			botScriptsService.runByName(`lite ${index + 1}`, id);
-		});
-
-		await syncTimeout(15000);
-		try {
-			await autoBuyService.startAutoBuySystem(bots);
-		} catch (e) {
-			console.log(e.message);
-		}
-	})();
-}, 0);
+// setTimeout(() => {
+// 	(async function f() {
+// 	const id1 = '9947a397-8b6b-48b2-bdf0-0d2d51b59221'
+// 	const id2 = 'a046734f-55d3-49c1-b376-23c98a456618'
+// 	const id3 = '05aaef61-4774-4753-bba8-634778f5913e'
+// 	// const id4 = '032e79b6-3fa9-465a-a1d5-593fa98a13bf'
+// 	// const id5 = "4bbce9ce-d93c-40bc-b192-2f96f368979e"
+//
+// 	const bots = [id1, id2, id3];
+// 	bots.forEach(async (id, index) => {
+// 		botScriptsService.runByName(`lite ${index + 1}`, id);
+// 	});
+//
+// 	await syncTimeout(15000);
+// 	try {
+// 		await autoBuyService.startAutoBuySystem(bots);
+// 	} catch (e) {
+// 		console.log(e.message);
+// 	}
+// })();
+// }, 0);

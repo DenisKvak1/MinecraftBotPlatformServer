@@ -4,7 +4,7 @@ import { webSocketClients, WebSocketClientsController } from '../../express/modu
 import { checkNotOnlineBot } from '../../express/helper/checkOnline';
 import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import { IClickerService } from '../../../core/service/ClickerService';
-import { clickerService } from '../../services/ClickerService';
+import { clickerService } from '../../services/FarmService/ClickerService';
 import { clientManagerService } from '../../services/ClientManagerService';
 import {
 	IncomingAttackMessage,

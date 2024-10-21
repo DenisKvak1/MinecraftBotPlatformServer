@@ -13,9 +13,9 @@ import { returnWSError } from '../../express/helper/returnWSOk';
 import { IClickerService } from '../../../core/service/ClickerService';
 import { aborted } from 'node:util';
 import { autoBuyService } from '../../services/AutoBuy/AutoBuyService';
-import { farmService } from '../../services/FarmService';
-import { foodService } from '../../services/FoodService';
-import { clickerService } from '../../services/ClickerService';
+import { farmService } from '../../services/FarmService/FarmService';
+import { foodService } from '../../services/FarmService/FoodService';
+import { clickerService } from '../../services/FarmService/ClickerService';
 
 export class WebSocketFunctionsBotController {
 	constructor(

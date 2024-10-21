@@ -3,7 +3,7 @@ import { webSocketClients, WebSocketClientsController } from '../../express/modu
 import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import { checkNotOnlineBot } from '../../express/helper/checkOnline';
 import { IFarmService } from '../../../core/service/FarmService';
-import { farmService } from '../../services/FarmService';
+import { farmService } from '../../services/FarmService/FarmService';
 import { clientManagerService } from '../../services/ClientManagerService';
 import { IncomingToggleFarmMessage, OutgoingReplayMessage } from '../../express/types/webSocketBotCommandTypes';
 

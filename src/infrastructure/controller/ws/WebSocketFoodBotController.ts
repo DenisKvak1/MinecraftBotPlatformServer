@@ -4,7 +4,7 @@ import { IFoodService } from '../../../core/service/FoodService';
 import { returnWSError, returnWSOk } from '../../express/helper/returnWSOk';
 import { checkNotOnlineBot } from '../../express/helper/checkOnline';
 import { websocketHeadBotController } from './WebSocketHeadBotController';
-import { foodService } from '../../services/FoodService';
+import { foodService } from '../../services/FarmService/FoodService';
 import { clientManagerService } from '../../services/ClientManagerService';
 import { IncomingToggleFoodMessage, OutgoingReplayMessage } from '../../express/types/webSocketBotCommandTypes';
 
