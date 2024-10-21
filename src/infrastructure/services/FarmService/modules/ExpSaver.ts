@@ -40,6 +40,7 @@ export class ExpEcSaver {
     }
 
     private async saveExp() {
+        const oldHotBarSlot = this.bot.quickBarSlot
         if ((this.bot.experience.points / this.config.bottlePrice) > this.calculateGlassBottle()) {
             throw new Error('Не хватает пузырьков')
         }
@@ -53,6 +54,7 @@ export class ExpEcSaver {
         await this.saveAllExpBottle(indexes)
 
         this.bot.closeWindow(this.bot.currentWindow)
+        this.bot.setQuickBarSlot(oldHotBarSlot)
     }
 
     private async saveAllExpBottle(indexes: number[]) {

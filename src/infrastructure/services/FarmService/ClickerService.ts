@@ -31,7 +31,6 @@ export class ClickerService implements IClickerService {
 						entity.type !== "mob" &&
 						(entity.type as any) !== 'animal' &&
 						entity.type !== "hostile"
-						|| entity.kind === "Immobile"
 						|| entity.kind === "Drops"
 						|| entity.kind === 'Vehicles'
 					) return false;
@@ -61,7 +60,6 @@ export class ClickerService implements IClickerService {
 					currentMob.type !== "mob" &&
 					(currentMob.type as any) !== 'animal'
 					&& currentMob.type !== "hostile"
-					|| currentMob.kind === "Immobile"
 					|| currentMob.kind === "Drops"
 					|| currentMob.kind === 'Vehicles'
 				) return

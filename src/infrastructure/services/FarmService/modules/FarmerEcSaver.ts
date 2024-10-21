@@ -121,8 +121,10 @@ export class FarmerEcSaver {
     }
 
     private findFakeSword(ecSlots: (Item | null)[]): Item {
-        // const fakeSword = ecSlots.find((item) => item?.displayName === '- Меч ᴇᴛᴇʀɴɪᴛʏ -')
-        const fakeSword = ecSlots.find((item) => item?.name === 'blackstone')
+        const targetItemName = '- Меч ᴇᴛᴇʀɴɪᴛʏ -'
+        const fakeSword = ecSlots.find((item) => {
+            return ToGeneralizedItem(item)?.customName === targetItemName || item?.displayName === targetItemName
+        })
 
         return fakeSword
     }
@@ -135,7 +137,7 @@ export class FarmerEcSaver {
 
     private isFarmer(item: Item): boolean {
         const lore = ToGeneralizedItem(item)?.customLoreHTML
-        return lore?.includes('Богач')
-        // return lore?.includes('Фармер')
+        // return lore?.includes('Богач')
+        return lore?.includes('Фармер')
     }
 }
