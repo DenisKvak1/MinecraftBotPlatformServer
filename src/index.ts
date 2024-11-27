@@ -47,12 +47,12 @@ process.on('uncaughtException', (reason) => {
 // 	const id3 = '05aaef61-4774-4753-bba8-634778f5913e'
 // 	// const id4 = '032e79b6-3fa9-465a-a1d5-593fa98a13bf'
 // 	// const id5 = "4bbce9ce-d93c-40bc-b192-2f96f368979e"
-//
+
 // 	const bots = [id1, id2, id3];
 // 	bots.forEach(async (id, index) => {
 // 		botScriptsService.runByName(`lite ${index + 1}`, id);
 // 	});
-//
+
 // 	await syncTimeout(15000);
 // 	try {
 // 		await autoBuyService.startAutoBuySystem(bots);

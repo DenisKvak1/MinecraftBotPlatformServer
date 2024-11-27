@@ -9,6 +9,7 @@ import {logger} from '../logger/Logger';
 import {Window} from 'prismarine-windows';
 import {Item} from 'prismarine-item';
 import path from 'node:path';
+import {syncTimeout} from "../../../env/helpers/syncTimeout";
 
 
 const socks = require('socks').SocksClient
@@ -81,6 +82,7 @@ export class ClientBot implements IClientBot {
     }
 
     private setupInventoryUpdateEvent() {
+
         // @ts-ignore // Incorrect real argument and library types
         this._bot.inventory.on('updateSlot', (slot: number, oldItem: Item | null, newItem: Item | null) => {
             if (this.itemsAreEqual(oldItem, newItem)) return;
@@ -126,7 +128,8 @@ export class ClientBot implements IClientBot {
         this._bot.on('error', (error) => {
             logger.error(`${this.accountModel.id}: ${error.message}`);
         });
-        this._bot.on('spawn', () => {
+        this._bot.on('login',async () => {
+            await syncTimeout(2000)
             this.onSpawnHandler();
             logger.info(`${this.accountModel.id}: Заспавнился на сервере ${this.accountModel.server}`);
         });

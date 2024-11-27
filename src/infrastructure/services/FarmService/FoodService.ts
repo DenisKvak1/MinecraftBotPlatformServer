@@ -42,7 +42,7 @@ export class FoodService implements IFoodService {
 
 	private checkHunger(bot: Bot) {
 		const hunger = bot.food; // Получаем текущий уровень голода
-		if (hunger < 6) {
+		if (hunger < 12) {
 			return true
 		}
 		return false

@@ -6,19 +6,22 @@
     ],
     "name": "holyworld",
     "priceRegex": "(\\d[\\d\\s]*)¤",
-    "savingBalanceAccount": "BossAnrchy331",
-    "targetBalance": 20000000,
+    "savingBalanceAccount": "WrittenWord3000",
+    "targetBalance": 15000000,
     "updateIndex": 47,
     "interval": 800,
     "exception": [
       "Gunpowder",
       "Enchanted Golden Apple",
-      "Firework Rocket"
+      "Firework Rocket",
+      "Netherite Ingot"
     ],
     "nicknameRegex": "Продавец<\\/span><span style=\"color:#AAAAAA\">: <\\/span><span style=\"color:rgb\\(0,235,255\\)\">(.*?)<\\/span>",
     "blackList": [
+      "QUAZ1M0DO",
       "Qwaxs",
       "zxcghoul",
+      "KillMe_pls",
       "lovertoper228",
       "alsome",
       "ToplecCHlKA",
@@ -32,47 +35,40 @@
       "CAMAPA",
       "ApTa_He_UmBa",
       "alanova",
+      "YarikPR02205",
       "Fl1ckzzz",
       "_SenpaiCrown_",
       "Darkk_Knight",
-      "YarikPR02205",
       "Asya_Masya",
       "hqd_d",
       "HapyC0t",
+      "_Artyfan4ik_",
+      "m0untain",
       "DumpCave",
       "Cmeetane",
       "_Bupsik_",
       "HackerCat777",
-      "m0untain",
-      "BeMoRe_",
-      "1WantToHearth",
-      "KillMe_plz",
       "HarukaKasugano_",
-      "MisterKapybara",
+      "KillMe_plz",
+      "BeMoRe_",
       "Pupsik_BB",
       "BanCheat",
+      "skyvolik",
+      "nor1x",
+      "_Darkdeath_",
       "xDedForTopch1ll",
       "The_Destr0yer",
       "zxcichert",
-      "ChtoStop",
       "Dellarba",
-      "Tr1ggered",
-      "_Darkdeath_",
-      "skyvolik",
-      "nor1x",
       "uliana_pim",
-      "Soul_Stealer",
       "pr3k0l",
       "minkyy1337",
       "a11ways",
       "ProcessHacker",
       "egorhack9",
       "Makson1gg",
-      "halflite",
       "_reve_2045_",
-      "masha_",
       "Akaza3",
-      "K1ona",
       "Jimenez",
       "pjk_k",
       "GetBan",
@@ -83,93 +79,75 @@
       "tr1ple",
       "yokushka",
       "3uMa_MaN",
+      "DarkFunny",
+      "akasha1",
+      "delphinch1kk",
+      "mass1no",
+      "ImSoLegit_",
+      "Ftorchik",
+      "Voobs",
+      "HiliGHo09",
+      "OneSummerDay",
       "MaxCrafterV",
-      "LevaTonkov",
-      "XARLI_",
+      "Plushkina",
+      "Vasteroide",
+      "JakeTop4ek",
+      "Jehai",
       "MiLa707",
       "Jugde",
-      "DarkFunny",
-      "FunnyPig",
-      "ZenFix",
-      "NAITSDF",
-      "Microchel1k",
-      "mass1no",
       "stasyan_325",
       "WeryLatte1",
-      "CPEDCTBO",
-      "Jehai",
-      "Fa11ens",
-      "sword_kirito",
       "_qOp_",
       "_Krevetka_BAN_",
-      "Voobs",
       "tb2tgg",
       "PixelBotinok",
-      "OneSummerDay",
       "oxonomy1x5",
-      "akasha1",
-      "HuhDOt",
-      "neskywhywolker",
-      "brulik1",
-      "vanek_pe4enka55",
-      "Plushkina",
-      "Dizov_V2",
-      "Nouzen",
-      "exsteam_007",
       "V9rus",
       "SkyAkroinSs",
-      "Fatanane",
-      "delphinch1kk",
-      "Sytener",
-      "HiliGHo09",
-      "VASILIYTRE",
       "_MerticksX_",
-      "Jenny_Kitty",
       "__cherry__",
-      "win_3",
-      "LiceIK2288",
-      "Teroms",
-      "coco_cola4",
-      "Droix",
-      "matveyka74",
-      "Flazin122",
-      "SkyArt288",
-      "danqutraze",
-      "Arsenii4873",
-      "SelfScanning",
-      "iuseReach",
-      "M1st1k_qii",
-      "XPOHHIK",
-      "dryyreer",
-      "IwantToCheburek",
-      "Azein",
-      "triang668",
-      "DeliteL0ver",
-      "ExtrVolkYT",
       "darc91",
-      "Vasteroide",
-      "KLauncher_pyybut",
-      "JakeTop4ek",
-      "DizzZyes",
-      "zxcursed_moment",
-      "Andweek",
-      "holar0008872",
-      "FAN_TB",
+      "Exsiz1",
+      "coco_cola4",
+      "Fanticx",
       "Arves",
-      "DAUNi228",
-      "Venesss",
       "AnDrEkA256",
-      "ImSoLegit_",
-      "mamkademona",
-      "zxczqwer190",
-      "zxc_Gpe4ka",
-      "Barito_",
-      "Ftorchik",
-      "kizsaku",
-      "CarleoneYZT",
+      "anhedonie",
+      "Arsenii4873",
+      "Vad1mkaPro228",
+      "Bezik",
+      "Heracles",
+      "Podzemochka",
+      "disput",
+      "DidIGotReizoo",
       "NightDriver",
-      "_LeoYTPro_",
-      "_kdk__3"
+      "shadowx",
+      "sashazjj",
+      "PavStand",
+      "fanatkresti07",
+      "lissC",
+      "Andweek",
+      "undetes",
+      "friendixgg1337",
+      "mentallyunstable",
+      "Police0",
+      "KoTiK_C_XVX_",
+      "Realganster",
+      "MNIIIka",
+      "Miss_Tranquility",
+      "egor3top13",
+      "NeRomcokek",
+      "Afno",
+      "Mystik53",
+      "gghyper390091",
+      "ttt2000",
+      "love_krolik",
+      "IwishyourHeart",
+      "cool23",
+      "Ivanpve2010",
+      "TanyProblematic",
+      "havethepa14n",
+      "Evil_Demon_YT"
     ],
     "shift": false,
     "percentMode": true,
@@ -180,19 +158,21 @@
         "price": 14000,
         "sellprice": 24999,
         "searchName": "порох",
-        "procentDown": 40
+        "procentDown": 45
       },
       "Totem of Undying": {
         "price": 100000,
-        "sellprice": 399999
+        "sellprice": 399999,
+        "procentDown": 50,
+        "searchName": "тотем бессмертия"
       },
       "- Топор ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 1,
         "sellprice": 100000
       },
       "- Лопата ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 400000,
-        "sellprice": 800000
+        "price": 80000,
+        "sellprice": 120000
       },
       "- Талисман ᴇᴛᴇʀɴɪᴛʏ -": {
         "price": 4000000,
@@ -212,36 +192,36 @@
         "procentDown": 50
       },
       "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 449999,
-        "sellprice": 8099999
+        "price": 149999,
+        "sellprice": 2799999
       },
       "- Нагрудник ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 449999,
-        "sellprice": 8099999
+        "price": 149999,
+        "sellprice": 279999
       },
       "- Штаны ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 449999,
-        "sellprice": 8099999
+        "price": 149999,
+        "sellprice": 279999
       },
       "- Ботинки ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 449999,
-        "sellprice": 8099999
+        "price": 149999,
+        "sellprice": 279999
       },
       "Шлем Iɴғɪɴɪᴛʏ": {
-        "price": 1499999,
-        "sellprice": 2099999
+        "price": 199999,
+        "sellprice": 399999
       },
       "Нагрудник Iɴғɪɴɪᴛʏ": {
-        "price": 1499999,
-        "sellprice": 2099999
+        "price": 199999,
+        "sellprice": 399999
       },
       "Поножи Iɴғɪɴɪᴛʏ": {
-        "price": 1499999,
-        "sellprice": 2099999
+        "price": 199999,
+        "sellprice": 399999
       },
       "Ботинки Iɴғɪɴɪᴛʏ": {
-        "price": 1499999,
-        "sellprice": 2099999
+        "price": 199999,
+        "sellprice": 399999
       },
       "Талисман Iɴғɪɴɪᴛʏ": {
         "price": 1,
@@ -263,10 +243,8 @@
         "procentDown": 60
       },
       "Мифический талисман": {
-        "price": 1500000,
-        "sellprice": 2399999,
-        "searchName": "мифический талисман",
-        "procentDown": 30
+        "price": 500000,
+        "sellprice": 759999
       },
       "Сфера Цербера": {
         "price": 12000000,
@@ -276,8 +254,8 @@
         "procentDown": 45
       },
       "Сфера Флеша": {
-        "price": 1300000,
-        "sellprice": 2999999,
+        "price": 1000000,
+        "sellprice": 2499999,
         "seellcount": 1
       },
       "Универсальный ключ": {
@@ -288,11 +266,9 @@
         "procentDown": 35
       },
       "[☠] Отмычка": {
-        "price": 700000,
-        "sellprice": 1799990,
-        "seellcount": 1,
-        "searchName": "обычная отмычка",
-        "procentDown": 60
+        "price": 300000,
+        "sellprice": 709990,
+        "seellcount": 1
       },
       "Enchanted Golden Apple": {
         "price": 50000,
@@ -309,8 +285,8 @@
         "procentDown": 50
       },
       "Зелье победителя": {
-        "price": 400000,
-        "sellprice": 799999,
+        "price": 200000,
+        "sellprice": 409999,
         "seellcount": 1
       },
       "Взрывчатое вещество": {
@@ -335,8 +311,8 @@
         "procentDown": 50
       },
       "Уникальный приват": {
-        "price": 1000000,
-        "sellprice": 1999999,
+        "price": 700000,
+        "sellprice": 1099999,
         "seellcount": 1
       },
       "Бутылек с 50 ур. опыта (5345)": {
@@ -367,18 +343,18 @@
         "procentDown": 55
       },
       "Blaze Spawn Egg": {
-        "price": 3000000,
-        "sellprice": 5000000,
+        "price": 500000,
+        "sellprice": 1000000,
         "seellcount": 1
       },
       "Skeleton Spawn Egg": {
-        "price": 1500000,
-        "sellprice": 2409000,
+        "price": 450000,
+        "sellprice": 649000,
         "seellcount": 1
       },
       "Wither Skeleton Spawn Egg": {
-        "price": 1000000,
-        "sellprice": 1750000,
+        "price": 550000,
+        "sellprice": 750000,
         "seellcount": 1
       },
       "Firework Rocket": {
@@ -395,8 +371,8 @@
         "procentDown": 65
       },
       "Разрывная волна": {
-        "price": 500000,
-        "sellprice": 1009000,
+        "price": 350000,
+        "sellprice": 499000,
         "seellcount": 1
       },
       "C4 ВзРыВчАтКа": {
@@ -414,9 +390,9 @@
         "procentDown": 65
       },
       "Меч 《Выгодный фарм》": {
-        "price": 20000000,
+        "price": 3000000,
         "sellprice": 30000000,
-        "searchName": "меч выгодный фарм"
+        "seellcount": 64
       },
       "Загадочный спавнер": {
         "price": 5000000,
@@ -424,11 +400,6 @@
         "seellcount": 1,
         "searchName": "загадочный спавнер",
         "procentDown": 60
-      },
-      "Надёжный стиллер": {
-        "price": 300000,
-        "sellprice": 800000,
-        "seellcount": 1
       },
       "《Бессмертие》": {
         "price": 500000,
