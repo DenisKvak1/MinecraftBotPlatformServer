@@ -50,10 +50,10 @@ export class ClickerService implements IClickerService {
 						await bot.lookAt(pos)
 						currentMob = nearestMob
 					} else {
-						return  bot.swingArm('left')
+						return  bot.swingArm('right')
 					}
 				} else {
-					return  bot.swingArm('left')
+					return  bot.swingArm('right')
 				}
 			} else {
 				if (
@@ -62,7 +62,7 @@ export class ClickerService implements IClickerService {
 					&& currentMob.type !== "hostile"
 					|| currentMob.kind === "Drops"
 					|| currentMob.kind === 'Vehicles'
-				) return bot.swingArm('left')
+				) return bot.swingArm('right')
 			}
 
 			bot.attack(currentMob)
