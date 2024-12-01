@@ -5,11 +5,11 @@
       "mc.holyworld.io"
     ],
     "name": "holyworld",
-    "priceRegex": "(\\d[\\d\\s]*)¤",
+    "priceRegex": "Цена:<\\/span><span[^>]*>[^<]*<span[^>]*>([\\d\\s]+)<\\/span><span>¤<\\/span>",
     "savingBalanceAccount": "WrittenWord3000",
-    "targetBalance": 15000000,
+    "targetBalance": 10000000,
     "updateIndex": 47,
-    "interval": 800,
+    "interval": 150,
     "exception": [
       "Gunpowder",
       "Enchanted Golden Apple",
@@ -24,130 +24,29 @@
       "KillMe_pls",
       "lovertoper228",
       "alsome",
-      "ToplecCHlKA",
-      "klemen",
-      "That0neBear",
-      "XiSh3n",
-      "hikomori",
-      "gromaforz",
-      "Deth_Angel",
-      "Derty_1001",
-      "CAMAPA",
-      "ApTa_He_UmBa",
-      "alanova",
-      "YarikPR02205",
-      "Fl1ckzzz",
-      "_SenpaiCrown_",
-      "Darkk_Knight",
-      "Asya_Masya",
-      "hqd_d",
-      "HapyC0t",
-      "_Artyfan4ik_",
-      "m0untain",
-      "DumpCave",
-      "Cmeetane",
-      "_Bupsik_",
-      "HackerCat777",
-      "HarukaKasugano_",
-      "KillMe_plz",
-      "BeMoRe_",
-      "Pupsik_BB",
-      "BanCheat",
-      "skyvolik",
-      "nor1x",
-      "_Darkdeath_",
-      "xDedForTopch1ll",
-      "The_Destr0yer",
-      "zxcichert",
-      "Dellarba",
-      "uliana_pim",
-      "pr3k0l",
-      "minkyy1337",
-      "a11ways",
-      "ProcessHacker",
-      "egorhack9",
-      "Makson1gg",
-      "_reve_2045_",
-      "Akaza3",
-      "Jimenez",
-      "pjk_k",
-      "GetBan",
-      "Frost1ks",
-      "123qwegg",
-      "vem225",
-      "DINAJONE",
-      "tr1ple",
-      "yokushka",
-      "3uMa_MaN",
-      "DarkFunny",
-      "akasha1",
-      "delphinch1kk",
-      "mass1no",
-      "ImSoLegit_",
-      "Ftorchik",
-      "Voobs",
-      "HiliGHo09",
-      "OneSummerDay",
-      "MaxCrafterV",
-      "Plushkina",
-      "Vasteroide",
-      "JakeTop4ek",
-      "Jehai",
-      "MiLa707",
-      "Jugde",
-      "stasyan_325",
-      "WeryLatte1",
-      "_qOp_",
-      "_Krevetka_BAN_",
-      "tb2tgg",
-      "PixelBotinok",
-      "oxonomy1x5",
-      "V9rus",
-      "SkyAkroinSs",
-      "_MerticksX_",
-      "__cherry__",
-      "darc91",
-      "Exsiz1",
-      "coco_cola4",
-      "Fanticx",
-      "Arves",
-      "AnDrEkA256",
-      "anhedonie",
-      "Arsenii4873",
-      "Vad1mkaPro228",
-      "Bezik",
-      "Heracles",
-      "Podzemochka",
-      "disput",
-      "DidIGotReizoo",
-      "NightDriver",
-      "shadowx",
-      "sashazjj",
-      "PavStand",
-      "fanatkresti07",
-      "lissC",
-      "Andweek",
-      "undetes",
-      "friendixgg1337",
-      "mentallyunstable",
-      "Police0",
-      "KoTiK_C_XVX_",
-      "Realganster",
-      "MNIIIka",
-      "Miss_Tranquility",
-      "egor3top13",
-      "NeRomcokek",
-      "Afno",
-      "Mystik53",
-      "gghyper390091",
-      "ttt2000",
-      "love_krolik",
-      "IwishyourHeart",
-      "cool23",
-      "Ivanpve2010",
-      "TanyProblematic",
-      "havethepa14n",
-      "Evil_Demon_YT"
+      "HupeLLL",
+      "ho4r", "korovavirus", "5ivkola", "xxalzicch", "Ho9lIIuk", "AnDrEkA256",
+      "Raxnud1ks", "m1gom", "netripl3x", "zxzgaston", "Koffe1n", "_812_thewhy_",
+      "fizonbizon", "tochnonechit", "WhyYouMadBroo", "SoulG00dman", "dang3r",
+      "qwery112", "fleshrespi", "SLPM", "MrGvardion", "Suicidn3k", "Froyzu",
+      "Zloy_Patrek", "har1zmaa", "letitorechnik", "SENCIKK", "MiLa707",
+      "_Krevetka_BAN_", "IwishyourHeart", "Afno", "0_am", "MNIIIka", "kellshek",
+      "love_krolik", "ashvirochka", "PavStand", "fanatkresti07", "lissC",
+      "undetes", "NeRomcokek", "z9melka", "1_am", "Swifty_", "k_kjp", "Jorabober",
+      "prosto_roman", "III_IIAHEHOK", "Apelsin4ikpvk", "CheatMANS", "_Stager_",
+      "Sanya_Perforator", "Maks23232254", "neskywhywolker", "xDeadForMaEsTr0",
+      "Ch1ken_banb0ne", "L1st_of_W4rns", "PA3BUL_OKHO", "k1rzzz", "GeForceGT",
+      "mnyrewq", "VaryshaMommy", "egorhack9", "The_Destr0yer", "zxcichert",
+      "Dellarba", "uliana_pim", "ProcessHacker", "Makson1gg", "Jimenez", "pjk_k",
+      "BanVHub", "123qwegg", "vem225", "tr1ple", "yokushka", "3uMa_MaN",
+      "DarkFunny", "delphinch1kk", "Voobs", "HiliGHo09", "OneSummerDay",
+      "JakeTop4ek", "Jehai", "Arves", "Vad1mkaPro228", "SelfScanning",
+      "coco_cola4", "anhedonie", "shadowx", "oxonomy1x5", "Jugde", "Realganster",
+      "stasyan_325", "WeryLatte1", "Arsenii4873", "Fanticx", "manipulatings",
+      "ToplecCHlKA", "klemen", "That0neBear", "XiSh3n", "hikomori", "_Bupsik_",
+      "ApTa_He_UmBa", "gromaforz", "Deth_Angel", "Derty_1001", "CAMAPA",
+      "alanova", "YarikPR02205", "_Artyfan4ik_", "Cmeetane", "BanCheat",
+      "HapyC0t"
     ],
     "shift": false,
     "percentMode": true,
@@ -192,39 +91,39 @@
         "procentDown": 50
       },
       "- Шлем ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 149999,
-        "sellprice": 2799999
+        "price": 109999,
+        "sellprice": 1499999
       },
       "- Нагрудник ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 149999,
-        "sellprice": 279999
+        "price": 109999,
+        "sellprice": 1499999
       },
       "- Штаны ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 149999,
-        "sellprice": 279999
+        "price": 109999,
+        "sellprice": 1499999
       },
       "- Ботинки ᴇᴛᴇʀɴɪᴛʏ -": {
-        "price": 149999,
-        "sellprice": 279999
+        "price": 109999,
+        "sellprice": 1499999
       },
       "Шлем Iɴғɪɴɪᴛʏ": {
-        "price": 199999,
-        "sellprice": 399999
+        "price": 399999,
+        "sellprice": 699999
       },
       "Нагрудник Iɴғɪɴɪᴛʏ": {
-        "price": 199999,
-        "sellprice": 399999
+        "price": 399999,
+        "sellprice": 699999
       },
       "Поножи Iɴғɪɴɪᴛʏ": {
-        "price": 199999,
-        "sellprice": 399999
+        "price": 399999,
+        "sellprice": 699999
       },
       "Ботинки Iɴғɪɴɪᴛʏ": {
-        "price": 199999,
-        "sellprice": 399999
+        "price": 399999,
+        "sellprice": 699999
       },
       "Талисман Iɴғɪɴɪᴛʏ": {
-        "price": 1,
+        "price": 2000000,
         "sellprice": 4299999,
         "searchName": "талисман infinity",
         "procentDown": 60
@@ -244,7 +143,7 @@
       },
       "Мифический талисман": {
         "price": 500000,
-        "sellprice": 759999
+        "sellprice": 859999
       },
       "Сфера Цербера": {
         "price": 12000000,
@@ -255,7 +154,7 @@
       },
       "Сфера Флеша": {
         "price": 1000000,
-        "sellprice": 2499999,
+        "sellprice": 2199999,
         "seellcount": 1
       },
       "Универсальный ключ": {
@@ -266,8 +165,8 @@
         "procentDown": 35
       },
       "[☠] Отмычка": {
-        "price": 300000,
-        "sellprice": 709990,
+        "price": 150000,
+        "sellprice": 309990,
         "seellcount": 1
       },
       "Enchanted Golden Apple": {
@@ -285,8 +184,8 @@
         "procentDown": 50
       },
       "Зелье победителя": {
-        "price": 200000,
-        "sellprice": 409999,
+        "price": 80000,
+        "sellprice": 129999,
         "seellcount": 1
       },
       "Взрывчатое вещество": {
@@ -312,7 +211,7 @@
       },
       "Уникальный приват": {
         "price": 700000,
-        "sellprice": 1099999,
+        "sellprice": 1599999,
         "seellcount": 1
       },
       "Бутылек с 50 ур. опыта (5345)": {
@@ -344,7 +243,7 @@
       },
       "Blaze Spawn Egg": {
         "price": 500000,
-        "sellprice": 1000000,
+        "sellprice": 1300000,
         "seellcount": 1
       },
       "Skeleton Spawn Egg": {
@@ -372,7 +271,7 @@
       },
       "Разрывная волна": {
         "price": 350000,
-        "sellprice": 499000,
+        "sellprice": 549000,
         "seellcount": 1
       },
       "C4 ВзРыВчАтКа": {
@@ -415,7 +314,7 @@
     "serverIps": "mc.funtime.su",
     "priceRegex": "/\\$\\s*(\\d[\\d\\s]*)/",
     "updateIndex": 49,
-    "interval": 20,
+    "interval": 100,
     "restartActionInterval": 5000,
     "shift": true,
     "info": []

@@ -191,9 +191,6 @@ export class AutoBuyService implements IAutoBuyService {
         profileAccount._bot.chat('/ah');
         await syncTimeout(500);
 
-        if (profile.name === 'holyworld') {
-            await windowsService.click(id, 53, 1);
-        }
         return {profile, profileAccount}
     }
 
@@ -257,8 +254,6 @@ export class AutoBuyService implements IAutoBuyService {
 
     private async proccesBuyCycle(bot: Bot, profile: abProfile, profileAccount: IClientBot) {
         try {
-
-
             const searchInfo = this.searchItemToBuy(bot, profile);
             if (searchInfo) {
                 const {slotIndex, targetItem} = searchInfo;
@@ -286,6 +281,10 @@ export class AutoBuyService implements IAutoBuyService {
         return 'OFF'
     }
 
+    getAutoBuySystemState(id: number): toggleInfo {
+        if (this.massAbIds[id]) return "ON"
+        return 'OFF'
+    }
 
     private sendMoneyOnSaveAccount(money: number, bot: Bot, profile: abProfile) {
         bot.chat(`/pay ${profile.savingBalanceAccount} ${money}`);
@@ -326,7 +325,7 @@ export class AutoBuyService implements IAutoBuyService {
 
     private bindReserveUndo(bot: Bot) {
         setTimeout(() => {
-            if (bot.currentWindow.slots[0]?.name === 'green_stained_glass_pane') {
+            if (bot.currentWindow.slots[0]?.name === 'lime_stained_glass_pane') {
                 bot.clickWindow(8, 0, 0);
             }
         }, 2000);
@@ -339,7 +338,7 @@ export class AutoBuyService implements IAutoBuyService {
         if (this.isItemCopies(selectItem, targetItem, profile)) {
             bot.clickWindow(0, 0, 0);
             logger.info(`Попытался купить предмет ${name} в количестве ${targetItem?.count}`);
-        } else if (bot.currentWindow.slots[0]?.name === 'green_stained_glass_pane') {
+        } else if (bot.currentWindow.slots[0]?.name === 'lime_stained_glass_pane') {
             logger.warn(`Отклонил неправильно выбранный предмет ${name} в количестве ${targetItem?.count}`);
             bot.clickWindow(8, 0, 0);
         } else {
@@ -349,7 +348,7 @@ export class AutoBuyService implements IAutoBuyService {
 
     private initBuyLogger(profileAccount: IClientBot) {
         return this.chatService.onChatMessage(profileAccount.accountModel.id, (msg) => {
-            if (!msg.includes('▶ Вы успешно купили') && !msg.includes(' купил ')) return;
+            if (!msg.includes('Вы купили ') && !msg.includes(' купил ')) return;
             buyLogger.info(`${profileAccount.accountModel.nickname}: ${msg}`);
         });
     }
@@ -387,6 +386,7 @@ export class AutoBuyService implements IAutoBuyService {
     private sellOnUpdate(bot: Bot, profileAccount: IClientBot, profile: abProfile) {
         profileAccount.$inventoryUpdate.once(async (inventory) => {
             if (!inventory.newItem) return;
+            await this.collectItems(bot, inventory.itemSlot)
             const price = this.checkSellItem(profile, inventory.newItem, inventory.itemSlot);
             if (!price) return;
             await this.sellItem(bot, inventory.newItem, price, inventory.itemSlot);
@@ -472,6 +472,12 @@ export class AutoBuyService implements IAutoBuyService {
         clientBot.$disconnect.once(() => {
             this.deleteMassAutoBuyBot(massId, clientBot.accountModel.id)
         });
+    }
+
+    private async collectItems(bot: Bot, index: number) {
+        console.log('collect')
+        await bot.clickWindow(index, 0, 6)
+        await bot.clickWindow(index, 0, 0)
     }
 
     private isItemCopies(selectItem: GeneralizedItem, targetItem: GeneralizedItem, profile: abProfile) {

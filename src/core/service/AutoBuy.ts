@@ -8,4 +8,5 @@ export interface IAutoBuyService {
 	addToAutoBuySystem(massId: number, botId: string): Promise<void>
 	deleteMassAutoBuyBot(massId: number, botId: string): Promise<void>
 	getAutoBuyState(id: string): toggleInfo
+	getAutoBuySystemState(id: number): toggleInfo
 }
