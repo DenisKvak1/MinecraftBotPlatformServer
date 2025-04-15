@@ -1,7 +1,7 @@
 [
   {
     "id": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a30a",
-    "name": "lite 1",
+    "name": "reconnectSp",
     "botActions": [
       {
         "command": "CONNECT"
@@ -9,55 +9,25 @@
       {
         "command": "SLEEP",
         "value": {
-          "sleepTimeout": 8000
+          "sleepTimeout": "12000"
         }
       },
       {
         "command": "SEND_CHAT_MESSAGE",
         "value": {
-          "message": "/lite"
+          "message": "/an205"
         }
       },
       {
         "command": "SLEEP",
         "value": {
-          "sleepTimeout": 1000
+          "sleepTimeout": "3000"
         }
       },
       {
-        "command": "CLICK_WINDOW",
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
         "value": {
-          "slotIndex": 4
-        }
-      },
-      {
-        "command": "SLEEP",
-        "value": {
-          "sleepTimeout": 1000
-        }
-      },
-      {
-        "command": "CLICK_WINDOW",
-        "value": {
-          "slotIndex": 30
-        }
-      },
-      {
-        "command": "SLEEP",
-        "value": {
-          "sleepTimeout": 3000
-        }
-      },
-      {
-        "command": "SEND_CHAT_MESSAGE",
-        "value": {
-          "message": "/afk"
-        }
-      },
-      {
-        "command": "SLEEP",
-        "value": {
-          "sleepTimeout": 200
+          "massId": "1"
         }
       }
     ]

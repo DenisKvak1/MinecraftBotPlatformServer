@@ -16,6 +16,7 @@ import { syncTimeout } from '../env/helpers/syncTimeout';
 import { getRandomInRange } from '../env/helpers/randomGenerator';
 import { botInRAMRepository } from './infrastructure/database/repository/inRAMBotDateBase';
 import { ToGeneralizedItem } from '../env/helpers/ToGeneralizedItem';
+import { error } from 'winston';
 
 try {
 	const app = new App(
@@ -33,11 +34,12 @@ try {
 	const chatController = new ChatLSController(clientManagerService, chatService, accountService);
 	chatController.start();
 } catch (e) {
+	console.log(e)
 	logger.error(e.message);
 }
 
 process.on('uncaughtException', (reason) => {
-	logger.error(reason.message);
+	console.log(reason)
 });
 
 // setTimeout(() => {

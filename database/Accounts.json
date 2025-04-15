@@ -121,5 +121,32 @@
       "timeout": 5000
     },
     "whiteList": []
+  },
+  {
+    "id": "b6c4c220-6ff7-4762-8ea6-94baf08d6ae3",
+    "nickname": "MonoLiquid",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "script": "",
+      "timeout": 5000
+    },
+    "whiteList": []
+  },
+  {
+    "id": "a9902b65-0be2-4d80-896c-f2214c854def",
+    "nickname": "MultiHope",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "enable": true,
+      "script": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a30a",
+      "timeout": 30648
+    },
+    "whiteList": [],
+    "autoReconnectScript": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a30a",
+    "autoReconnectTimeout": 30648
   }
 ]
