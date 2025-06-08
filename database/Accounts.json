@@ -148,5 +148,44 @@
     "whiteList": [],
     "autoReconnectScript": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a30a",
     "autoReconnectTimeout": 30648
+  },
+  {
+    "id": "44e08bdc-95f3-47be-89dc-31cfa5b56009",
+    "nickname": "Bylagan",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "enable": true,
+      "script": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a30a",
+      "timeout": 5000
+    },
+    "whiteList": []
+  },
+  {
+    "id": "68df27ab-db2b-49ad-9c13-34f1e219ce88",
+    "nickname": "FlashSas1",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "enable": true,
+      "script": "f1eece5d-c4f7-4c01-a4f0-8f0a8e74a30a",
+      "timeout": 30648
+    },
+    "whiteList": []
+  },
+  {
+    "id": "e557b8ab-e039-4691-bb19-28d9845359d5",
+    "nickname": "xdeadForReika",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "script": "",
+      "timeout": 5000
+    },
+    "whiteList": [],
+    "autoReconnectTimeout": 5000
   }
 ]

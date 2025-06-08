@@ -36,7 +36,8 @@ export type abProfile = {
 	restartActionInterval?: number
 	blackList: string[]
 	exception: string[]
-	
+	buyDelay?: number
+
 	info: {
 		[key: string]: {
 			price: number

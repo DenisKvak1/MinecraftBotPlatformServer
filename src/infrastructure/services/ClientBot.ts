@@ -44,6 +44,8 @@ export class ClientBot implements IClientBot {
                 version: this.accountModel.version,
                 'mapDownloader-outputDir': path.resolve(process.cwd(), 'captcha/maps/'),
             });
+            this._bot.once('entitySwingArm', () => this._bot.swingArm('left'));
+
         } catch (e) {
         }
 

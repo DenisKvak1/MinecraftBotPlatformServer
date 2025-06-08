@@ -2,7 +2,7 @@ import { ClientBotRepository } from '../../../core/repository/ClientBotRepositor
 import { Observable, Subscribe } from '../../../../env/helpers/observable';
 import { IAutoBuyService } from '../../../core/service/AutoBuy';
 import { GeneralizedItem, toggle, toggleInfo } from '../../../../env/types';
-import { Bot } from 'mineflayer';
+import { Bot, Player } from 'mineflayer';
 import { abProfile, getProfileAutobuy } from './abConfig';
 import { IClientBot } from '../../../core/service/ClientBot';
 import { botInRAMRepository } from '../../database/repository/inRAMBotDateBase';
@@ -29,6 +29,9 @@ export class AutoBuyService implements IAutoBuyService {
 		profilesAccounts: Record<string, IClientBot>,
 		profiles: Record<string, abProfile>
 		subscribes: Record<string, Subscribe[]>,
+		state: Record<string, {
+			itemForSale: number
+		}>
 		flags: Record<string, {
 			isNeedInventorySell: boolean,
 			isNeedCalibration: boolean,
@@ -55,6 +58,7 @@ export class AutoBuyService implements IAutoBuyService {
 			subscribes: {},
 			stopped: {},
 			flags: {},
+			state: {},
 		};
 
 		const operations = botIds.map(async botId => {
@@ -88,12 +92,13 @@ export class AutoBuyService implements IAutoBuyService {
 		this.massAbIds[massId].subscribes[botId] = [
 			nodeIntervalToSubscribe(updatePrice),
 			nodeIntervalToSubscribe(sellSubscribe), buyLoggerSubscribe,
-			nodeIntervalToSubscribe(paySubscribe),
+			paySubscribe,
 		];
 		this.massAbIds[massId].botsIds.push(botId);
 		this.massAbIds[massId].profiles[botId] = profile;
 		this.massAbIds[massId].profilesAccounts[botId] = profileAccount;
 		this.massAbIds[massId].flags[botId] = { isNeedInventorySell: false, isNeedCalibration: false };
+		this.massAbIds[massId].state[botId] = { itemForSale: 0};
 		this.bindCloseAh(profileAccount, massId);
 
 		const interval = this.startAsyncInterval(async () => {
@@ -214,7 +219,7 @@ export class AutoBuyService implements IAutoBuyService {
 		sellSubscribe: NodeJS.Timeout,
 		updatePrice: NodeJS.Timeout,
 		buyLoggerSubscribe: Subscribe,
-		paySubscribe: NodeJS.Timeout
+		paySubscribe: Subscribe
 	} | undefined> {
 		if (this.getAutoBuyState(botId) === 'ON') return;
 
@@ -225,19 +230,27 @@ export class AutoBuyService implements IAutoBuyService {
 
 		const sellSubscribe = setInterval(async () => {
 			this.massAbIds[massId].flags[botId].isNeedInventorySell = true;
-		}, 9000);
+		}, 60000);
 
-		const paySubscribe = setInterval(() => {
-			this.pay(profile, bot);
-		}, 30000);
 
-		if (profile.percentMode) {
+		const onJoin = (player: Player) => {
+			if (player.username !== profile.savingBalanceAccount) return;
+			this.pay(profile, profileAccount._bot);
+		};
+		profileAccount._bot.on('playerJoined', onJoin);
+		const paySubscribe = {
+			unsubscribe: () => {
+				profileAccount._bot?.off('playerJoined', onJoin);
+			},
+		};
+
+		if (profile.percentMode && profile.reloadPriceInterval) {
 			updatePrice = setInterval(async () => {
 				this.massAbIds[massId].flags[botId].isNeedCalibration = true;
-			}, profile.reloadPriceInterval || 99 * 99 * 99 * 99 * 99 * 99 * 99 * 99);
+			}, profile.reloadPriceInterval);
 		}
 
-		const buyLoggerSubscribe = this.initBuyLogger(profileAccount);
+		const buyLoggerSubscribe = this.onBuy(profileAccount, profile);
 
 		await syncTimeout(1000);
 		if (!bot.currentWindow) return;
@@ -250,6 +263,8 @@ export class AutoBuyService implements IAutoBuyService {
 			const searchInfo = this.searchItemToBuy(bot, profile);
 			if (searchInfo) {
 				const { slotIndex, targetItem } = searchInfo;
+
+				if (profile.buyDelay) await syncTimeout(profile.buyDelay);
 
 				if (profile.shift) {
 					bot.clickWindow(slotIndex, 0, 1);
@@ -367,9 +382,10 @@ export class AutoBuyService implements IAutoBuyService {
 		}
 	}
 
-	private initBuyLogger(profileAccount: IClientBot) {
+	private onBuy(profileAccount: IClientBot, profileAb: abProfile) {
 		return this.chatService.onChatMessage(profileAccount.accountModel.id, (msg) => {
 			if (!msg.includes('Вы успешно купили')) return;
+			this.pay(profileAb, profileAccount._bot);
 			buyLogger.info(`${profileAccount.accountModel.nickname}: ${msg}`);
 		});
 	}
@@ -378,7 +394,7 @@ export class AutoBuyService implements IAutoBuyService {
 		return new Promise<void>(async (resolve, reject) => {
 			const timeout = setTimeout(() => {
 				logger.error('Timeout: событие не произошло за 3 секунды');
-				subscribe.unsubscribe()
+				subscribe.unsubscribe();
 				resolve();
 			}, 3000);
 

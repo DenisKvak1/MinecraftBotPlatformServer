@@ -418,7 +418,7 @@
     "blackList": [
       "gamemax", "SpookyCat", "Vladyaso",
       "xDedForSkise", "Zipi", "Black_Dragons",
-      "crisnuto1499", "LightVova", "kaneki_vnuchik",
+      "crisnuto1499", "LightVova",  "kaneki_vnuchik",
       "Chiplenok_TV", "Lagmeiter228", "dsnado",
       "Tofree_Nub", "lolapopa222", "kiwixxwq",
       "VadimFarmila", "Hamyak_dias", "hnazar1990",
@@ -467,6 +467,7 @@
     "percentMode": true,
     "defaultProcentDown": 50,
     "reloadPriceInterval": 1800000,
+    "buyDelay": 100,
     "info": {
       "Gunpowder": {
         "price": 32500,
