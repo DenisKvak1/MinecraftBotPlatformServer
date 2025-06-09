@@ -6,11 +6,12 @@
     "port": 25565,
     "version": "1.18.2",
     "autoReconnect": {
-      "script": "",
-      "timeout": 5000
+      "script": "4d49ed52-bd01-45d0-a7b0-f010afbb630a",
+      "timeout": 120000
     },
     "whiteList": [],
-    "autoReconnectTimeout": 5000
+    "autoReconnectTimeout": 120000,
+    "autoReconnectScript": "4d49ed52-bd01-45d0-a7b0-f010afbb630a"
   },
   {
     "id": "ed223076-682b-40c4-be65-1b5abb4868d2",
@@ -19,10 +20,12 @@
     "port": 25565,
     "version": "1.18.2",
     "autoReconnect": {
-      "script": "",
-      "timeout": 5000
+      "script": "4d49ed52-bd01-45d0-a7b0-f010afbb631a",
+      "timeout": 120000
     },
-    "whiteList": []
+    "whiteList": [],
+    "autoReconnectScript": "4d49ed52-bd01-45d0-a7b0-f010afbb631a",
+    "autoReconnectTimeout": 120000
   },
   {
     "id": "5a50a87e-6422-482f-880f-d68d5c2b93af",
@@ -31,10 +34,12 @@
     "port": 25565,
     "version": "1.18.2",
     "autoReconnect": {
-      "script": "",
-      "timeout": 5000
+      "script": "4d49ed52-bd01-45d0-a7b0-f010afbb633a",
+      "timeout": 120000
     },
-    "whiteList": []
+    "whiteList": [],
+    "autoReconnectScript": "4d49ed52-bd01-45d0-a7b0-f010afbb633a",
+    "autoReconnectTimeout": 120000
   },
   {
     "id": "3917181e-8e5b-445b-b411-efededb88ca6",
@@ -43,10 +48,12 @@
     "port": 25565,
     "version": "1.18.2",
     "autoReconnect": {
-      "script": "",
-      "timeout": 5000
+      "script": "4d49ed52-bd01-45d0-a7b0-f010afdb630a",
+      "timeout": 120000
     },
-    "whiteList": []
+    "whiteList": [],
+    "autoReconnectScript": "4d49ed52-bd01-45d0-a7b0-f010afdb630a",
+    "autoReconnectTimeout": 120000
   },
   {
     "id": "83d51642-dedc-4e3b-b215-153260963841",
@@ -55,9 +62,11 @@
     "port": 25565,
     "version": "1.18.2",
     "autoReconnect": {
-      "script": "",
-      "timeout": 5000
+      "script": "4d49ed52-bd01-45d0-f7b0-f010afbb630a",
+      "timeout": 120000
     },
-    "whiteList": []
+    "whiteList": [],
+    "autoReconnectScript": "4d49ed52-bd01-45d0-f7b0-f010afbb630a",
+    "autoReconnectTimeout": 120000
   }
 ]

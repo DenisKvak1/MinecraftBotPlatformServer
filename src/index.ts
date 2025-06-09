@@ -42,24 +42,17 @@ process.on('uncaughtException', (reason) => {
 	console.log(reason)
 });
 
-// setTimeout(() => {
-// 	(async function f() {
-// 	const id1 = '9947a397-8b6b-48b2-bdf0-0d2d51b59221'
-// 	const id2 = 'a046734f-55d3-49c1-b376-23c98a456618'
-// 	const id3 = '05aaef61-4774-4753-bba8-634778f5913e'
-// 	// const id4 = '032e79b6-3fa9-465a-a1d5-593fa98a13bf'
-// 	// const id5 = "4bbce9ce-d93c-40bc-b192-2f96f368979e"
+setTimeout(() => {
+	(async function f() {
+	const id1 = 'e557b8ab-e039-4691-bb19-28d9845359d5'
+	const id2 = 'ed223076-682b-40c4-be65-1b5abb4868d2'
+	const id3 = '5a50a87e-6422-482f-880f-d68d5c2b93af'
+	const id4 = '3917181e-8e5b-445b-b411-efededb88ca6'
+	const id5 = "83d51642-dedc-4e3b-b215-153260963841"
 
-// 	const bots = [id1, id2, id3];
-// 	bots.forEach(async (id, index) => {
-// 		botScriptsService.runByName(`lite ${index + 1}`, id);
-// 	});
-
-// 	await syncTimeout(15000);
-// 	try {
-// 		await autoBuyService.startAutoBuySystem(bots);
-// 	} catch (e) {
-// 		console.log(e.message);
-// 	}
-// })();
-// }, 0);
+	const bots = [id1, id2, id3, id4, id5];
+	bots.forEach(async (id, index) => {
+		botScriptsService.runByName(`spookey ${index + 1}`, id);
+	});
+})();
+}, 0);
