@@ -19,6 +19,7 @@ import { reportTranspileErrors } from 'ts-loader/dist/instances';
 import { profile } from 'winston';
 import { unsubscribe } from 'node:diagnostics_channel';
 import { getRandomInRange } from '../../../../env/helpers/randomGenerator';
+import { Window } from 'prismarine-windows'
 
 
 export class AutoBuyService implements IAutoBuyService {
@@ -98,7 +99,7 @@ export class AutoBuyService implements IAutoBuyService {
 			isNeedResellItems: false,
 		};
 		this.massAbIds[massId].state[botId] = { itemForSale: await this.countItemForSale(profileAccount._bot, profile.name) };
-		this.massAbIds[massId].subscribes[botId] = initSubscribes;
+		this.massAbIds[massId].subscribes[botId] = [...initSubscribes];
 
 		await this.openAuction(profileAccount._bot);
 
@@ -131,7 +132,7 @@ export class AutoBuyService implements IAutoBuyService {
 				await syncTimeout(600);
 				this.massAbIds[massId].flags[botId].isNeedCalibration = false;
 			}
-			await syncTimeout(100);
+			await syncTimeout(110);
 		}, 0);
 		this.massAbIds[massId].subscribes[botId].push(interval);
 	}
@@ -233,7 +234,6 @@ export class AutoBuyService implements IAutoBuyService {
 
 	private async autoBuyProccessInit(massId: number, botId: string, profile: abProfile, profileAccount: IClientBot): Promise<Subscribe[]> {
 		const bot = profileAccount?._bot;
-		if (!bot) return;
 
 		let updatePrice;
 		let resellItemSub;
@@ -264,9 +264,6 @@ export class AutoBuyService implements IAutoBuyService {
 		const buyItemSubscribe = this.onBuyItem(profileAccount, profile);
 		const externalItemBuySubscribe = this.onExternalBuyItem(profileAccount, profile, massId, botId);
 		const sellItemSubscribe = this.onSellItem(profileAccount, profile, massId, botId);
-
-		await syncTimeout(1000);
-		if (!bot.currentWindow) return;
 
 		return [
 			buyItemSubscribe, nodeIntervalToSubscribe(updatePrice),
@@ -488,6 +485,7 @@ export class AutoBuyService implements IAutoBuyService {
 	private onExternalBuyItem(profileAccount: IClientBot, profileAb: abProfile, massId: number, botId: string) {
 		return this.chatService.onChatMessage(profileAccount.accountModel.id, (msg) => {
 			if (!msg.includes('У Вас купили')) return;
+			buyLogger.info(msg);
 			this.pay(profileAb, profileAccount._bot);
 			this.massAbIds[massId].state[botId].itemForSale--;
 		});
@@ -495,17 +493,18 @@ export class AutoBuyService implements IAutoBuyService {
 
 	private updateAuction(profileAccount: IClientBot, profile: abProfile) {
 		return new Promise<void>(async (resolve, reject) => {
+			const bot = profileAccount._bot;
 			const timeout = setTimeout(() => {
-				logger.error('Timeout: событие не произошло за 3 секунды');
+				logger.error('Timeout: событие не произошло за 1 секунды');
 				subscribe.unsubscribe();
 				resolve();
-			}, 3000);
+			}, 1000);
 
 			const subscribe = profileAccount.$window.once(() => {
 				clearTimeout(timeout);
 				resolve();
 			}, (event) => event.action === 'OPEN');
-			await profileAccount._bot.clickWindow(profile.updateIndex, 0, 1);
+			await bot.clickWindow(profile.updateIndex, 0, 1);
 		});
 	}
 
