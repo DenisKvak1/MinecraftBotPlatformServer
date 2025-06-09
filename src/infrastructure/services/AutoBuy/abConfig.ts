@@ -30,21 +30,30 @@ export type abProfile = {
 	updateIndex: number,
 	shift: boolean
 	interval: number,
-	autoSellPrice?: number,
-	defaultProcentDown?: number
+	autosellPrice?: number,
+	defaultpercentDown?: number
 	reloadPriceInterval: number
 	restartActionInterval?: number
+	serverKeyValueName?: string
 	blackList: string[]
 	exception: string[]
 	buyDelay?: number
+	itemForSaleLimit?: number
+	resell: {
+		"hasResellButton": boolean,
+		"resellButtonIndex": number,
+		"interval": number
+	},
 
-	info: {
-		[key: string]: {
-			price: number
-			sellprice?: number | any,
+	info: abItemCfg
+}
+export type abItemCfg = {
+	[key: string]: {
+		price: number
+		sellPrice?: number | any,
 			searchName?: string
-			seellcount?: number,
-			procentDown?: number
-		}
+		sellCount?: number,
+			percentDown?: number,
+			minCountToCalibrate?: number,
 	}
 }

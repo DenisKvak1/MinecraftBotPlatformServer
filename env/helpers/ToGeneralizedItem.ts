@@ -1,8 +1,10 @@
 import { Item } from 'prismarine-item';
 import { GeneralizedItem } from '../types';
 import { isRenamed } from './isRenamed';
-const registry = require('prismarine-registry')('1.20.4')
-const ChatMessage = require('prismarine-chat')(registry)
+import { simplifyNBT } from './simplifyNBT';
+
+const registry = require('prismarine-registry')('1.20.4');
+const ChatMessage = require('prismarine-chat')(registry);
 
 export const ToGeneralizedItems = (items: (Item | null)[]): (GeneralizedItem | null)[] => {
 	return items.map((item) => {
@@ -21,8 +23,9 @@ export const ToGeneralizedItem = (item: Item | null): GeneralizedItem | null => 
 		customName: convertCustomNameToString(item.customName),
 		customNameHTML: convertCustomNameToString(item.customName, true),
 		customLoreHTML: convertCustomLoreToString(item.customLore),
+		nbt: simplifyNBT(item?.nbt),
 		renamed: isRenamed(item.customName),
-		slot: item.slot
+		slot: item.slot,
 	};
 
 
@@ -34,7 +37,7 @@ function convertCustomNameToString(customName: CustomName, HTML: boolean = false
 	try {
 		if (typeof customName === 'string') {
 			const chatMessage = new ChatMessage(JSON.parse(customName));
-			return HTML ? chatMessage.toHTML() : chatMessage.toString()
+			return HTML ? chatMessage.toHTML() : chatMessage.toString();
 		}
 		return '';
 	} catch (e) {
@@ -42,6 +45,7 @@ function convertCustomNameToString(customName: CustomName, HTML: boolean = false
 		return '';
 	}
 }
+
 type CustomName = string | null;
 
 function convertCustomLoreToString(customLore: CustomLore): string {
