@@ -563,7 +563,7 @@
     "percentMode": true,
     "defaultpercentDown": 50,
     "reloadPriceInterval": 1800000,
-    "buyDelay": 50,
+    "buyDelay": 5,
     "itemForSaleLimit": 10,
     "info": {
       "Gunpowder": {
@@ -744,11 +744,11 @@
         "sellCount": 1
       },
       "Ancient Debris": {
-        "price": 40000,
-        "sellPrice": 90000,
+        "price": 20000,
+        "sellPrice": 60000,
         "searchName": "Дравние обломки",
-        "percentDown": 80,
-        "sellCount": 32
+        "percentDown": 90,
+          "sellCount": 1
       },
       "Enderman Spawn Egg": {
         "price": 10000000,

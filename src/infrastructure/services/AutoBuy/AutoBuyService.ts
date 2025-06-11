@@ -19,7 +19,7 @@ import { reportTranspileErrors } from 'ts-loader/dist/instances';
 import { profile } from 'winston';
 import { unsubscribe } from 'node:diagnostics_channel';
 import { getRandomInRange } from '../../../../env/helpers/randomGenerator';
-import { Window } from 'prismarine-windows'
+import { Window } from 'prismarine-windows';
 
 
 export class AutoBuyService implements IAutoBuyService {
@@ -109,10 +109,13 @@ export class AutoBuyService implements IAutoBuyService {
 			const bot = profileAccount._bot;
 			const itemForSale = this.massAbIds[massId].state[botId].itemForSale;
 			const isSellUnderLimit = itemForSale >= profile.itemForSaleLimit;
+			const deltaForSale = profile.itemForSaleLimit - itemForSale;
 
 			await this.updateAuction(profileAccount, profile);
 			await this.proccesBuyCycle(bot, profile, profileAccount);
-			if ((await this.isNeedInventorySell(bot, profile)) > 0 && !isSellUnderLimit) {
+
+			const countItemToSell = await this.isNeedInventorySell(bot, profile);
+			if ((countItemToSell > 3 || (countItemToSell > 0 && deltaForSale < 3)) && !isSellUnderLimit) {
 				await this.sellInventory(bot, profile, profile.itemForSaleLimit - itemForSale);
 				await this.openAuction(bot);
 				this.massAbIds[massId].flags[botId].isNeedInventorySell = false;
@@ -163,7 +166,7 @@ export class AutoBuyService implements IAutoBuyService {
 			if (!abInfo.searchName) continue;
 
 			bot.chat(`/ah search ${abInfo.searchName}`);
-			await syncTimeout(1000);
+			await syncTimeout(1100);
 
 			if (!this.checkRepresentativenessOfCalibrationSample(bot, abInfo.minCountToCalibrate)) continue;
 			const priceData = await this.checkMinprice(bot, profile);
@@ -174,7 +177,7 @@ export class AutoBuyService implements IAutoBuyService {
 			newProfile.info[abKey].price = Math.floor(newPrice);
 			newProfile.info[abKey].sellPrice = Math.floor(priceData.minPrice * 0.99);
 
-			await syncTimeout(500);
+			await syncTimeout(600);
 		}
 
 		buyLogger.info('Калибровка законченна');
@@ -631,6 +634,9 @@ export class AutoBuyService implements IAutoBuyService {
 		const targetName = targetItem?.customName || targetItem?.displayName;
 		const targetPrice = this.extractPrice(targetItem?.customLoreHTML, profile.priceRegex);
 
+		console.log(this.extractNickname(selectItem?.customLoreHTML, profile.nicknameRegex), selectItem.name);
+		console.log(this.extractNickname(targetItem?.customLoreHTML, profile.nicknameRegex), targetItem.name);
+
 		return selectitemName === targetName && selectitemPrice === targetPrice;
 	}
 
@@ -689,7 +695,9 @@ export class AutoBuyService implements IAutoBuyService {
 	}
 
 	private async resellItems(bot: Bot, profile: abProfile) {
+		await syncTimeout(800);
 		await this.openAuction(bot);
+		await syncTimeout(800);
 		await bot.clickWindow(46, 0, 0);
 		await syncTimeout(800);
 		if (bot.currentWindow.slots[0]) await bot.clickWindow(profile.resell.resellButtonIndex, 0, 0);
