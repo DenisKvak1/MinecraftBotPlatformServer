@@ -7,7 +7,8 @@
     "version": "1.18.2",
     "autoReconnect": {
       "script": "4d49ed52-bd01-45d0-a7b0-f010afbb630a",
-      "timeout": 120000
+      "timeout": 120000,
+      "enable": true
     },
     "whiteList": [],
     "autoReconnectTimeout": 120000,
@@ -21,7 +22,8 @@
     "version": "1.18.2",
     "autoReconnect": {
       "script": "4d49ed52-bd01-45d0-a7b0-f010afbb631a",
-      "timeout": 120000
+      "timeout": 120000,
+      "enable": true
     },
     "whiteList": [],
     "autoReconnectScript": "4d49ed52-bd01-45d0-a7b0-f010afbb631a",
@@ -34,12 +36,11 @@
     "port": 25565,
     "version": "1.18.2",
     "autoReconnect": {
+      "enable": true,
       "script": "4d49ed52-bd01-45d0-a7b0-f010afbb633a",
-      "timeout": 120000
+      "timeout": 120776
     },
-    "whiteList": [],
-    "autoReconnectScript": "4d49ed52-bd01-45d0-a7b0-f010afbb633a",
-    "autoReconnectTimeout": 120000
+    "whiteList": []
   },
   {
     "id": "3917181e-8e5b-445b-b411-efededb88ca6",
@@ -49,11 +50,10 @@
     "version": "1.18.2",
     "autoReconnect": {
       "script": "4d49ed52-bd01-45d0-a7b0-f010afdb630a",
-      "timeout": 120000
+      "timeout": 120000,
+      "enable": true
     },
-    "whiteList": [],
-    "autoReconnectScript": "4d49ed52-bd01-45d0-a7b0-f010afdb630a",
-    "autoReconnectTimeout": 120000
+    "whiteList": []
   },
   {
     "id": "83d51642-dedc-4e3b-b215-153260963841",
@@ -63,10 +63,9 @@
     "version": "1.18.2",
     "autoReconnect": {
       "script": "4d49ed52-bd01-45d0-f7b0-f010afbb630a",
-      "timeout": 120000
+      "timeout": 120000,
+      "enable": true
     },
-    "whiteList": [],
-    "autoReconnectScript": "4d49ed52-bd01-45d0-f7b0-f010afbb630a",
-    "autoReconnectTimeout": 120000
+    "whiteList": []
   }
 ]

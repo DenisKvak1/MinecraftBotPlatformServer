@@ -144,7 +144,7 @@
     "shift": false,
     "percentMode": true,
     "defaultpercentDown": 50,
-    "reloadPriceInterval": 1800000,
+    "callibrationPriceInterval": 1800000,
     "info": {
       "Gunpowder": {
         "price": 14000,
@@ -316,7 +316,7 @@
       },
       "Elytra": {
         "price": 1700000,
-        "sellPrice": 2999999,
+        "sellPrice": 1000000,
         "searchName": "элитры",
         "percentDown": 45
       },
@@ -407,6 +407,7 @@
       "mc.spookytime.net",
       "127.0.0.1"
     ],
+    "defaultMaxSellPrice": 10000000,
     "name": "spookytime",
     "priceRegex": "Цена:\\s*<\\/span><span[^>]*>\\$([\\d,]+)",
     "savingBalanceAccount": "geraklik112",
@@ -562,7 +563,7 @@
     "shift": true,
     "percentMode": true,
     "defaultpercentDown": 50,
-    "reloadPriceInterval": 1800000,
+    "callibrationPriceInterval": 1800000,
     "buyDelay": 5,
     "itemForSaleLimit": 10,
     "info": {
@@ -748,7 +749,7 @@
         "sellPrice": 60000,
         "searchName": "Дравние обломки",
         "percentDown": 90,
-          "sellCount": 1
+        "sellCount": 1
       },
       "Enderman Spawn Egg": {
         "price": 10000000,
@@ -853,6 +854,13 @@
         "searchName": "Таер вайт",
         "percentDown": 60,
         "sellCount": 4
+      },
+      "tnt-item-black": {
+        "price": 1000000,
+        "sellPrice": 1500000,
+        "searchName": "Таер блэк",
+        "percentDown": 60,
+        "sellCount": 1
       },
       "[★] Серебро": {
         "price": 10000,

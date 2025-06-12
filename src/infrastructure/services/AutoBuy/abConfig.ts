@@ -28,11 +28,12 @@ export type abProfile = {
 	priceRegex: string,
 	nicknameRegex: string
 	updateIndex: number,
+	defaultMaxSellPrice: number
 	shift: boolean
 	interval: number,
 	autosellPrice?: number,
 	defaultpercentDown?: number
-	reloadPriceInterval: number
+	callibrationPriceInterval: number
 	restartActionInterval?: number
 	serverKeyValueName?: string
 	blackList: string[]

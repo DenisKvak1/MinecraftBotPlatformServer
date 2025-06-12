@@ -51,10 +51,10 @@ setTimeout(() => {
 		const id5 = '83d51642-dedc-4e3b-b215-153260963841';
 
 		const bots = [id1, id2, id3, id4, id5];
-		for (let i = 0; i <bots.length; i++) {
+		for (let i = 0; i < bots.length; i++) {
 			const id = bots[i];
 			botScriptsService.runByName(`spookey ${i + 1}`, id);
-			await syncTimeout(80000)
+			await syncTimeout(800/5)
 		}
 	})();
 }, 0);

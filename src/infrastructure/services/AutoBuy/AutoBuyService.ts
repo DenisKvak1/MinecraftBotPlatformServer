@@ -1,5 +1,5 @@
 import { ClientBotRepository } from '../../../core/repository/ClientBotRepository/clientBotRepository';
-import { Observable, Subscribe } from '../../../../env/helpers/observable';
+import { IObservable, Observable, Subscribe } from '../../../../env/helpers/observable';
 import { IAutoBuyService } from '../../../core/service/AutoBuy';
 import { GeneralizedItem, toggle, toggleInfo } from '../../../../env/types';
 import { Bot, Player } from 'mineflayer';
@@ -20,6 +20,7 @@ import { profile } from 'winston';
 import { unsubscribe } from 'node:diagnostics_channel';
 import { getRandomInRange } from '../../../../env/helpers/randomGenerator';
 import { Window } from 'prismarine-windows';
+import { Item } from 'prismarine-item';
 
 
 export class AutoBuyService implements IAutoBuyService {
@@ -28,16 +29,19 @@ export class AutoBuyService implements IAutoBuyService {
 		botsIds: string[],
 		stopped: Record<string, boolean>,
 		profilesAccounts: Record<string, IClientBot>,
-		profiles: Record<string, abProfile>
-		subscribes: Record<string, Subscribe[]>,
+		profile: abProfile
+		subscribesBot: Record<string, Subscribe[]>,
 		state: Record<string, {
 			itemForSale: number
 		}>
-		flags: Record<string, {
+		botFlags: Record<string, {
 			isNeedInventorySell: boolean,
-			isNeedCalibration: boolean,
 			isNeedResellItems: boolean
 		}>,
+		flags: {
+			isNeedCalibration: boolean
+		},
+		subscribes: Subscribe[]
 	}> = {};
 
 	$ab = new Observable<{ id: string; action: toggle }>();
@@ -50,18 +54,32 @@ export class AutoBuyService implements IAutoBuyService {
 	}
 
 	async startAutoBuySystem(botIds: string[]): Promise<number> {
+		if (botIds.length < 0) throw new Error('BotsIds length is 0');
 		const massAutoBuyId = this.idCounter;
 		this.idCounter++;
 
 		this.massAbIds[massAutoBuyId] = {
 			botsIds: [],
-			profiles: {},
+			profile: null,
 			profilesAccounts: {},
-			subscribes: {},
+			subscribesBot: {},
 			stopped: {},
-			flags: {},
+			botFlags: {},
+			flags: {
+				isNeedCalibration: false,
+			},
 			state: {},
+			subscribes: [],
 		};
+
+		let updatePrice: NodeJS.Timeout;
+		const profile = getProfileAutobuy(this.repository.getById(botIds[0]).accountModel.server);
+		if (profile.percentMode && profile.callibrationPriceInterval) {
+			updatePrice = setInterval(async () => {
+				this.massAbIds[massAutoBuyId].flags.isNeedCalibration = true;
+			}, profile.callibrationPriceInterval);
+		}
+		this.massAbIds[massAutoBuyId].subscribes.push(nodeIntervalToSubscribe(updatePrice));
 
 		const operations = botIds.map(async botId => {
 			await this.addToAutoBuySystem(massAutoBuyId, botId);
@@ -73,8 +91,9 @@ export class AutoBuyService implements IAutoBuyService {
 
 	async stopAutoBuySystem(massId: number): Promise<void> {
 		this.massAbIds[massId].botsIds.forEach((id) => {
-			this.clearSubscribes(this.massAbIds[massId].subscribes[id]);
+			this.clearSubscribes(this.massAbIds[massId].subscribesBot[id]);
 		});
+		this.clearSubscribes(this.massAbIds[massId].subscribes);
 		delete this.massAbIds[massId];
 	}
 
@@ -86,25 +105,28 @@ export class AutoBuyService implements IAutoBuyService {
 			this.massAbIds[massId].botsIds.filter((id) => id !== botId);
 			return;
 		}
-		const { profile, profileAccount } = await this.massAutoBuyFirstInit(botId);
+		const profileAccount = this.repository.getById(botId);
+		let profile = this.massAbIds[massId].profile ?? await this.startCallibration(profileAccount);
+
 		this.bindCloseAh(profileAccount, massId);
 
 		const initSubscribes = await this.autoBuyProccessInit(massId, botId, profile, profileAccount);
 		this.massAbIds[massId].botsIds.push(botId);
-		this.massAbIds[massId].profiles[botId] = profile;
+		if (!this.massAbIds[massId].profile) {
+			this.massAbIds[massId].profile = profile;
+		}
 		this.massAbIds[massId].profilesAccounts[botId] = profileAccount;
-		this.massAbIds[massId].flags[botId] = {
+		this.massAbIds[massId].botFlags[botId] = {
 			isNeedInventorySell: false,
-			isNeedCalibration: false,
 			isNeedResellItems: false,
 		};
 		this.massAbIds[massId].state[botId] = { itemForSale: await this.countItemForSale(profileAccount._bot, profile.name) };
-		this.massAbIds[massId].subscribes[botId] = [...initSubscribes];
+		this.massAbIds[massId].subscribesBot[botId] = [...initSubscribes];
 
 		await this.openAuction(profileAccount._bot);
 
 		const interval = this.startAsyncInterval(async () => {
-			const profile = this.massAbIds[massId].profiles[botId];
+			const profile = this.massAbIds[massId].profile;
 			const profileAccount = this.massAbIds[massId].profilesAccounts[botId];
 			const bot = profileAccount._bot;
 			const itemForSale = this.massAbIds[massId].state[botId].itemForSale;
@@ -118,35 +140,34 @@ export class AutoBuyService implements IAutoBuyService {
 			if ((countItemToSell > 3 || (countItemToSell > 0 && deltaForSale < 3)) && !isSellUnderLimit) {
 				await this.sellInventory(bot, profile, profile.itemForSaleLimit - itemForSale);
 				await this.openAuction(bot);
-				this.massAbIds[massId].flags[botId].isNeedInventorySell = false;
+				this.massAbIds[massId].botFlags[botId].isNeedInventorySell = false;
 			}
-			if (this.massAbIds[massId].flags[botId].isNeedResellItems) {
+			if (this.massAbIds[massId].botFlags[botId].isNeedResellItems) {
 				await this.resellItems(bot, profile);
 				await this.openAuction(profileAccount._bot);
-				this.massAbIds[massId].flags[botId].isNeedResellItems = false;
+				this.massAbIds[massId].botFlags[botId].isNeedResellItems = false;
 			}
-			if (this.massAbIds[massId].flags[botId].isNeedCalibration) {
+			if (this.massAbIds[massId].flags.isNeedCalibration && this.massAbIds[massId].botsIds[0] === botId) {
 				const newProfile = await this.callicalibrationPriceProfile(bot, profile);
-				const oldProfile = this.massAbIds[massId].profiles[botId];
-				this.massAbIds[massId].profiles[botId] = this.smoothNewProfile(oldProfile, newProfile, { max: 1.55, min: 0.5 });
+				const oldProfile = this.massAbIds[massId].profile;
+				this.massAbIds[massId].profile = this.smoothNewProfile(oldProfile, newProfile, { max: 1.55, min: 0.5 });
 				await this.openAuction(this.massAbIds[massId].profilesAccounts[botId]._bot);
 				await syncTimeout(600);
 				if (profile.name === 'holyworld') await windowsService.click(botId, 53, 1);
 				await syncTimeout(600);
-				this.massAbIds[massId].flags[botId].isNeedCalibration = false;
+				this.massAbIds[massId].flags.isNeedCalibration = false;
 			}
-			await syncTimeout(110);
+			await syncTimeout(150);
 		}, 0);
-		this.massAbIds[massId].subscribes[botId].push(interval);
+		this.massAbIds[massId].subscribesBot[botId].push(interval);
 	}
 
 	async deleteMassAutoBuyBot(massId: number, botId: string) {
 		if (!this.massAbIds[massId]?.botsIds.includes(botId)) return;
-		this.clearSubscribes(this.massAbIds[massId].subscribes[botId]);
+		this.clearSubscribes(this.massAbIds[massId].subscribesBot[botId]);
 		this.massAbIds[massId].botsIds = this.massAbIds[massId].botsIds.filter((id) => id !== botId);
-		delete this.massAbIds[massId].profiles[botId];
 		delete this.massAbIds[massId].profilesAccounts[botId];
-		delete this.massAbIds[massId].subscribes[botId];
+		delete this.massAbIds[massId].subscribesBot[botId];
 		await syncTimeout(1000);
 		this.windowService.closeWindow(botId);
 		this.$ab.next({ id: botId, action: 'STOP' });
@@ -166,12 +187,12 @@ export class AutoBuyService implements IAutoBuyService {
 			if (!abInfo.searchName) continue;
 
 			bot.chat(`/ah search ${abInfo.searchName}`);
-			await syncTimeout(1100);
+			await syncTimeout(1000);
 
 			if (!this.checkRepresentativenessOfCalibrationSample(bot, abInfo.minCountToCalibrate)) continue;
 			const priceData = await this.checkMinprice(bot, profile);
 			if (!priceData) continue;
-			const newPrice = (priceData.averagePrice / 100) * (100 - abInfo?.percentDown || profile.defaultpercentDown);
+			const newPrice = (priceData.averagePrice / 100) * (100 - (abInfo?.percentDown || profile.defaultpercentDown));
 			const oldPrice = newProfile.info[abKey].price;
 
 			newProfile.info[abKey].price = Math.floor(newPrice);
@@ -211,8 +232,7 @@ export class AutoBuyService implements IAutoBuyService {
 		return { averagePrice, minPrice };
 	}
 
-	private async massAutoBuyFirstInit(id: string) {
-		const profileAccount = this.repository.getById(id);
+	private async startCallibration(profileAccount: IClientBot) {
 		let oldProfile = getProfileAutobuy(profileAccount.accountModel.server);
 		let resultProfile = oldProfile;
 		if (oldProfile?.percentMode) {
@@ -220,7 +240,8 @@ export class AutoBuyService implements IAutoBuyService {
 			resultProfile = this.smoothNewProfile(oldProfile, newProfile, { max: 3, min: 0.1 });
 		}
 
-		return { profile: resultProfile, profileAccount };
+		console.log(resultProfile.info);
+		return resultProfile;
 	}
 
 
@@ -238,7 +259,6 @@ export class AutoBuyService implements IAutoBuyService {
 	private async autoBuyProccessInit(massId: number, botId: string, profile: abProfile, profileAccount: IClientBot): Promise<Subscribe[]> {
 		const bot = profileAccount?._bot;
 
-		let updatePrice;
 		let resellItemSub;
 
 		const onJoin = (player: Player) => {
@@ -254,14 +274,8 @@ export class AutoBuyService implements IAutoBuyService {
 
 		if (profile.resell.hasResellButton) {
 			resellItemSub = setInterval(async () => {
-				this.massAbIds[massId].flags[botId].isNeedResellItems = true;
+				this.massAbIds[massId].botFlags[botId].isNeedResellItems = true;
 			}, profile.resell.interval);
-		}
-
-		if (profile.percentMode && profile.reloadPriceInterval) {
-			updatePrice = setInterval(async () => {
-				this.massAbIds[massId].flags[botId].isNeedCalibration = true;
-			}, profile.reloadPriceInterval);
 		}
 
 		const buyItemSubscribe = this.onBuyItem(profileAccount, profile);
@@ -269,7 +283,7 @@ export class AutoBuyService implements IAutoBuyService {
 		const sellItemSubscribe = this.onSellItem(profileAccount, profile, massId, botId);
 
 		return [
-			buyItemSubscribe, nodeIntervalToSubscribe(updatePrice),
+			buyItemSubscribe,
 			paySubscribe, sellItemSubscribe, externalItemBuySubscribe,
 			nodeIntervalToSubscribe(resellItemSub),
 		];
@@ -401,6 +415,7 @@ export class AutoBuyService implements IAutoBuyService {
 		let salled = 0;
 		if (bot?.currentWindow) bot.closeWindow(bot?.currentWindow);
 
+		await this.restackItems(bot, profile);
 		for (let index = 0; index < slots.length; index++) {
 			if (salled >= limit) break;
 			const sItem = slots[index];
@@ -416,14 +431,17 @@ export class AutoBuyService implements IAutoBuyService {
 					.map((x, i) => !x ? i : null)
 					.filter(x => x !== null && x >= 36 && x <= 44);
 
+				console.log(emptySlots);
+
 				const availableToReplaceSlots = bot.inventory.slots
-					.filter(x => x !== null && x.slot >= 36 && x.slot <= 44 && !this.checkSellItem(profile, item, index))
+					.filter(x => x !== null && x.slot >= 36 && x.slot <= 44 && !this.checkSellItem(profile, ToGeneralizedItem(x), index) && x.name !== sItem.name)
 					.map((x) => x.slot);
 
 				if (emptySlots.length === 0 && availableToReplaceSlots.length === 0) continue;
 
 				if (emptySlots.length !== 0) {
 					const targetPlace = emptySlots.pop();
+					console.log(item.slot, targetPlace);
 					bot.clickWindow(item.slot, 0, 0);
 					await syncTimeout(500);
 					bot.clickWindow(targetPlace, 0, 0);
@@ -445,6 +463,35 @@ export class AutoBuyService implements IAutoBuyService {
 			await this.sellItem(bot, item, profile, price, sellIndex);
 			await syncTimeout(2000);
 			salled++;
+		}
+	}
+
+
+	private async restackItems(bot: Bot, profile: abProfile) {
+		const slots = bot.inventory.slots;
+		const itemSlots = slots.filter(x => x !== null && profile.info[this.getItemName(ToGeneralizedItem(x), profile)]);
+		const emptySlots = slots.map((x, i) => !x ? i : null).filter(x => x !== null && x >= 9 && x <= 44);
+
+		for (const item of itemSlots) {
+			const stack: Item[] = [item];
+
+			while (stack.length > 0) {
+				const item = stack.pop();
+				const itemName = this.getItemName(ToGeneralizedItem(item), profile);
+				while (
+					item.count >= 3 &&
+					profile.info[itemName].sellPrice * item.count > profile.defaultMaxSellPrice
+					&& emptySlots.length > 0
+					) {
+					const targetPlace = emptySlots.pop();
+					await bot.clickWindow(item.slot, 1, 0);
+					await syncTimeout(500);
+					await bot.clickWindow(targetPlace, 0, 0);
+					await syncTimeout(500);
+					if (bot.inventory.slots[targetPlace]) stack.push(bot.inventory.slots[targetPlace]);
+					await syncTimeout(300);
+				}
+			}
 		}
 	}
 
@@ -634,8 +681,8 @@ export class AutoBuyService implements IAutoBuyService {
 		const targetName = targetItem?.customName || targetItem?.displayName;
 		const targetPrice = this.extractPrice(targetItem?.customLoreHTML, profile.priceRegex);
 
-		console.log(this.extractNickname(selectItem?.customLoreHTML, profile.nicknameRegex), selectItem.name);
-		console.log(this.extractNickname(targetItem?.customLoreHTML, profile.nicknameRegex), targetItem.name);
+		logger.info(this.extractNickname(selectItem?.customLoreHTML, profile.nicknameRegex) + selectItem.name);
+		logger.info(this.extractNickname(targetItem?.customLoreHTML, profile.nicknameRegex) + targetItem.name);
 
 		return selectitemName === targetName && selectitemPrice === targetPrice;
 	}
