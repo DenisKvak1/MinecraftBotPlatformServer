@@ -137,7 +137,7 @@ export class AutoBuyService implements IAutoBuyService {
 			await this.proccesBuyCycle(bot, profile, profileAccount);
 
 			const countItemToSell = await this.isNeedInventorySell(bot, profile);
-			if ((countItemToSell > 3 || (countItemToSell > 0 && deltaForSale < 3)) && !isSellUnderLimit) {
+			if ((countItemToSell >= 3 || (countItemToSell > 0 && deltaForSale < 3)) && !isSellUnderLimit) {
 				await this.sellInventory(bot, profile, profile.itemForSaleLimit - itemForSale);
 				await this.openAuction(bot);
 				this.massAbIds[massId].botFlags[botId].isNeedInventorySell = false;
