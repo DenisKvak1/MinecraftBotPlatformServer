@@ -15,6 +15,10 @@ export class WebSocketClientsController {
 	broadcast<T>(message: T) {
 		this.webSocketClients.forEach((ws) => ws.send(JSON.stringify(message)));
 	}
+
+	send<T>(ws: WebSocket, message: T) {
+		ws.send(JSON.stringify(message));
+	}
 }
 
 export const webSocketClients = new WebSocketClientsController();

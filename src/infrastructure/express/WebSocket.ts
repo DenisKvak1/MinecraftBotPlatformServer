@@ -2,7 +2,6 @@ import express from 'express';
 import http from 'http';
 import WebSocket from 'ws';
 import { WebSocketClientsController } from './module/WebSocketClientsController';
-import { ApplyWSBotEvents } from './module/ApplyWSBotEvents';
 import { IClientManagerService } from '../../core/service/ClientManagerService';
 import { IInventoryService } from '../../core/service/InventoryService';
 import { IWindowService } from '../../core/service/WindowService';
@@ -26,37 +25,21 @@ import { IAutoBuyService } from '../../core/service/AutoBuy';
 import { websocketAutoBuyController } from '../controller/ws/WebSocketAutoBuyController';
 import { webSocketFunctionsBotController } from '../controller/ws/webSocketFunctionsBotController';
 import { websocketBotScripts } from '../controller/ws/WebSocketBotScriptsController';
+import { wsBotEventsController } from '../controller/WsBotEventsController';
 
 export class App {
 	private express = express()
 	private server = http.createServer(this.express);
 	private wss = new WebSocket.Server({ server: this.server });
-	private routes: Record<UNIVERSAL_COMMAND_LIST, (message: IncomingMessage)=> void>;
+	private routes: Record<UNIVERSAL_COMMAND_LIST, (message: IncomingMessage, ws?: WebSocket)=> void>;
 
 	constructor(
-		private webSocketController: WebSocketClientsController,
-		private clientManagerService: IClientManagerService,
-		private inventoryService: IInventoryService,
-		private windowService: IWindowService,
-		private chatService: IChatService,
-		private captchaService: ICaptchaService,
-		private farmService: IFarmService,
-		private ABService: IAutoBuyService
+		private webSocketController: WebSocketClientsController
 	) {
 		this.init();
 	}
 
 	private async init() {
-		const eventSubscribe = await ApplyWSBotEvents(
-			this.webSocketController,
-			this.clientManagerService,
-			this.inventoryService,
-			this.windowService,
-			this.chatService,
-			this.captchaService,
-			this.farmService,
-			this.ABService
-		)
 		this.initRoutes()
 		this.initStatic()
 
@@ -71,6 +54,8 @@ export class App {
 
 	private initRoutes(){
 		this.routes = {
+			[UNIVERSAL_COMMAND_LIST.SUBSCRIBE_EVENTS]: (message: IncomingMessage, ws: WebSocket)=> wsBotEventsController.subscribe(message as any, ws),
+			[UNIVERSAL_COMMAND_LIST.UNSUBSCRIBE_EVENTS]: (message: IncomingMessage, ws: WebSocket)=> wsBotEventsController.unSubscribe(message as any, ws),
 			[UNIVERSAL_COMMAND_LIST.GET_EXP]: (message: IncomingMessage)=> websocketInventoryBotController.getExp(message as any),
 			[UNIVERSAL_COMMAND_LIST.GET_SCRIPTS]: (message: IncomingMessage)=> websocketBotScripts.getAllScripts(message as any),
 			[UNIVERSAL_COMMAND_LIST.SAVE_SCRIPT]: (message: IncomingMessage)=> websocketBotScripts.saveScript(message as any),
@@ -110,7 +95,7 @@ export class App {
 	private setupRoutes(ws: WebSocket) {
 		ws.on('message', (data)=>{
 			const jsonData = JSON.parse(data.toString())
-			if(this.routes[jsonData.command]) this.routes[jsonData.command](jsonData)
+			if(this.routes[jsonData.command]) this.routes[jsonData.command](jsonData, ws)
 		})
 	}
 

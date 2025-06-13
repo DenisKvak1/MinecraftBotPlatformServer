@@ -115,6 +115,12 @@ export type IncomingGetBotInfoIDMessage = IncomingMessage<{
 export type IncomingGetBotInfoNameMessage = IncomingMessage<{
 	name: string
 }>
+export type IncomingGetBotFunctionsStateMessage = IncomingMessage
+
+export type IncomingSubscribeOnBotEventsMessage = IncomingMessage
+
+export type IncomingUnSubscribeOnBotEventsMessage = IncomingMessage
+
 export type OutgoingGetBotInfoMessage = OutgoingReplayMessage<{
 	account: ClientAccountModel
 }>
@@ -128,7 +134,6 @@ export type OutgoingDeleteScript = OutgoingReplayMessage
 export type OutgoingSaveScript = OutgoingReplayMessage<{
 	script: BotScript
 }>
-export type IncomingGetBotFunctionsStateMessage = IncomingMessage
 
 export type OutgoingGetBotsInfoMessage = OutgoingReplayMessage<{
 	accounts: ClientAccountModel[]
@@ -205,6 +210,8 @@ export enum UNIVERSAL_COMMAND_LIST {
 	GET_BOT_ID = 'GET_BOT_ID',
 	GET_BOT_NAME = 'GET_BOT_NAME',
 	GET_BOTS = 'GET_BOTS',
+	SUBSCRIBE_EVENTS = 'SUBSCRIBE_EVENTS',
+	UNSUBSCRIBE_EVENTS = 'UNSUBSCRIBE_EVENTS',
 	UPDATE_BOT_OPTIONS = 'UPDATE_UPDATE_BOT_OPTIONS',
 	CONNECT_DISCONNECT_BOT = 'CONNECT_DISCONNECT__BOT',
 	SEND_CHAT_MESSAGE = 'SEND_CHAT_MESSAGE',

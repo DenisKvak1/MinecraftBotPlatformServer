@@ -21,13 +21,6 @@ import { error } from 'winston';
 try {
 	const app = new App(
 		webSocketClients,
-		clientManagerService,
-		inventoryService,
-		windowsService,
-		chatService,
-		captchaService,
-		farmService,
-		autoBuyService,
 	);
 	app.start(3000);
 
@@ -60,7 +53,11 @@ setTimeout(() => {
 		for (let i = 0; i < bots.length; i++) {
 			const id = bots[i];
 			botScriptsService.runByName(`spookey ${i + 1}`, id);
+<<<<<<< Updated upstream
 			await syncTimeout(5000);
+=======
+			await syncTimeout(800 / 5);
+>>>>>>> Stashed changes
 		}
 	})();
 }, 0);
