@@ -935,5 +935,230 @@
         }
       }
     ]
+  },
+  {
+    "id": "4d49ed51-aa01-45d0-f7b0-f010afbb630a",
+    "name": "spookey 6",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "13000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/l Popka228"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/an203"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
+  },
+  {
+    "id": "4d49ed52-bd31-45d0-f7b1-f010afbb630a",
+    "name": "spookey 7",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "13000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/l Popka228"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/an502"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
+  },
+  {
+    "id": "3d49ed53-bd01-45d0-f7b0-f010afbb630a",
+    "name": "spookey 8",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "13000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/l Popka228"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/an602"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
+  },
+  {
+    "id": "4d49ed52-bd01-45d0-b7b1-f012afbb630a",
+    "name": "spookey 9",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "13000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/l Popka228"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/an204"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
+  },
+  {
+    "id": "5d39eb52-bd01-45d0-f7b0-f010afbb630a",
+    "name": "spookey 10",
+    "botActions": [
+      {
+        "command": "CONNECT"
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "13000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/l Popka228"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "SEND_CHAT_MESSAGE",
+        "value": {
+          "message": "/an207"
+        }
+      },
+      {
+        "command": "SLEEP",
+        "value": {
+          "sleepTimeout": "2000"
+        }
+      },
+      {
+        "command": "ADD_MASS_AUTOBUY_PLAYER",
+        "value": {
+          "massId": "1"
+        }
+      }
+    ]
   }
 ]

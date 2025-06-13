@@ -410,10 +410,10 @@
     "defaultMaxSellPrice": 10000000,
     "name": "spookytime",
     "priceRegex": "Цена:\\s*<\\/span><span[^>]*>\\$([\\d,]+)",
-    "savingBalanceAccount": "geraklik112",
-    "targetBalance": 150000000,
+    "savingBalanceAccount": "PushStone",
+    "targetBalance": 30000000,
     "updateIndex": 49,
-    "interval": 150,
+    "interval": 100,
     "resell": {
       "hasResellButton": true,
       "resellButtonIndex": 52,
@@ -908,6 +908,76 @@
         "price": 2500000,
         "sellPrice": 3499999,
         "searchName": "Отмычка к сферам",
+        "percentDown": 50,
+        "sellCount": 1
+      },
+      "[★] Зелье Киллера": {
+        "price": 3000000,
+        "sellPrice": 5999999,
+        "searchName": "Зелье Киллера",
+        "percentDown": 55,
+        "sellCount": 1
+      },
+      "[★] Зелье Медика": {
+        "price": 1000000,
+        "sellPrice": 1999999,
+        "searchName": "Зелье Медика",
+        "percentDown": 55,
+        "sellCount": 1
+      },
+      "[★] Зелье Победителя": {
+        "price": 2000000,
+        "sellPrice": 3999999,
+        "searchName": "Зелье Победителя",
+        "percentDown": 50,
+        "sellCount": 1
+      },
+      "[★] Серная кислота": {
+        "price": 1700000,
+        "sellPrice": 3500000,
+        "searchName": "Серная кислота",
+        "percentDown": 50,
+        "sellCount": 1
+      },
+      "[★] Зелье отрыжки": {
+        "price": 400000,
+        "sellPrice": 800000,
+        "searchName": "Зелье отрыжки",
+        "percentDown": 50,
+        "sellCount": 1
+      },
+      "[★] Зелье Агента": {
+        "price": 1000000,
+        "sellPrice": 2000000,
+        "searchName": "Зелье Агента",
+        "percentDown": 50,
+        "sellCount": 1
+      },
+      "[★] Божья аура": {
+        "price": 200000,
+        "sellPrice": 400000,
+        "searchName": "Божья аура",
+        "percentDown": 50,
+        "sellCount": 1
+      },
+      "[★] Проклятая душа": {
+        "price": 125000,
+        "sellPrice": 250000,
+        "searchName": "Проклятая душа",
+        "percentDown": 50,
+        "sellCount": 1
+      },
+      "[★] Драконий скин": {
+        "price": 400000,
+        "sellPrice": 800000,
+        "searchName": "Драконий скин",
+        "percentDown": 50,
+        "sellCount": 1
+      },
+      "[★] Неизбежный скин": {
+        "price": 450000,
+        "sellPrice": 900000,
+        "searchName": "Неизбежный скин",
         "percentDown": 50,
         "sellCount": 1
       }

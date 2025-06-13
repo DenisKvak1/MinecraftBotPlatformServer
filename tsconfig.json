@@ -5,5 +5,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "target": "ESNext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false
   }
 }

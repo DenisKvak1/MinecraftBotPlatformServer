@@ -22,12 +22,12 @@
     "version": "1.18.2",
     "autoReconnect": {
       "script": "4d49ed52-bd01-45d0-a7b0-f010afbb631a",
-      "timeout": 120000,
+      "timeout": 160000,
       "enable": true
     },
     "whiteList": [],
     "autoReconnectScript": "4d49ed52-bd01-45d0-a7b0-f010afbb631a",
-    "autoReconnectTimeout": 120000
+    "autoReconnectTimeout": 160000
   },
   {
     "id": "5a50a87e-6422-482f-880f-d68d5c2b93af",
@@ -36,9 +36,9 @@
     "port": 25565,
     "version": "1.18.2",
     "autoReconnect": {
-      "enable": true,
       "script": "4d49ed52-bd01-45d0-a7b0-f010afbb633a",
-      "timeout": 120776
+      "timeout": 200000,
+      "enable": true
     },
     "whiteList": []
   },
@@ -50,7 +50,7 @@
     "version": "1.18.2",
     "autoReconnect": {
       "script": "4d49ed52-bd01-45d0-a7b0-f010afdb630a",
-      "timeout": 120000,
+      "timeout": 240000,
       "enable": true
     },
     "whiteList": []
@@ -63,8 +63,95 @@
     "version": "1.18.2",
     "autoReconnect": {
       "script": "4d49ed52-bd01-45d0-f7b0-f010afbb630a",
-      "timeout": 120000,
+      "timeout": 280000,
       "enable": true
+    },
+    "whiteList": []
+  },
+  {
+    "id": "eff2ab9a-3701-4310-a0fe-ecd6a73a82c2",
+    "nickname": "MysticRiver_77",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "script": "4d49ed51-aa01-45d0-f7b0-f010afbb630a",
+      "timeout": 320000,
+      "enable": true
+    },
+    "whiteList": [],
+    "autoReconnectScript": "4d49ed51-aa01-45d0-f7b0-f010afbb630a",
+    "autoReconnectTimeout": 320000
+  },
+  {
+    "id": "485ce6cf-5875-4629-a71f-97cf9264f237",
+    "nickname": "OceanBreeze_7",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "script": "4d49ed52-bd31-45d0-f7b1-f010afbb630a",
+      "timeout": 360000,
+      "enable": true
+    },
+    "whiteList": [],
+    "autoReconnectScript": "4d49ed52-bd31-45d0-f7b1-f010afbb630a",
+    "autoReconnectTimeout": 120000
+  },
+  {
+    "id": "41265256-24b3-4233-8a0e-0376b05f2b87",
+    "nickname": "SkyDrifter_13",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "script": "3d49ed53-bd01-45d0-f7b0-f010afbb630a",
+      "timeout": 400000,
+      "enable": true
+    },
+    "whiteList": [],
+    "autoReconnectScript": "3d49ed53-bd01-45d0-f7b0-f010afbb630a",
+    "autoReconnectTimeout": 120000
+  },
+  {
+    "id": "8836008a-683f-4c79-bde3-a3584a9e1f87",
+    "nickname": "Earthbound_Warri",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "script": "4d49ed52-bd01-45d0-b7b1-f012afbb630a",
+      "timeout": 440000,
+      "enable": true
+    },
+    "whiteList": [],
+    "autoReconnectScript": "4d49ed52-bd01-45d0-b7b1-f012afbb630a",
+    "autoReconnectTimeout": 120000
+  },
+  {
+    "id": "da483929-c682-4783-87ce-a059b327d3f3",
+    "nickname": "ShadowFrost_666",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "script": "5d39eb52-bd01-45d0-f7b0-f010afbb630a",
+      "timeout": 480000,
+      "enable": true
+    },
+    "whiteList": [],
+    "autoReconnectScript": "5d39eb52-bd01-45d0-f7b0-f010afbb630a",
+    "autoReconnectTimeout": 120000
+  },
+  {
+    "id": "85ff8151-5c84-4b2b-947d-f39364fb0556",
+    "nickname": "PushStone",
+    "server": "mc.spookytime.net",
+    "port": 25565,
+    "version": "1.18.2",
+    "autoReconnect": {
+      "script": "",
+      "timeout": 5000
     },
     "whiteList": []
   }
