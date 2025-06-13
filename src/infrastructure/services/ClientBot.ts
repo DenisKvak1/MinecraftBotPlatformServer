@@ -44,6 +44,8 @@ export class ClientBot implements IClientBot {
                 version: this.accountModel.version,
                 'mapDownloader-outputDir': path.resolve(process.cwd(), 'captcha/maps/'),
             });
+            this._bot.once('entitySwingArm', () => this._bot.swingArm('left'));
+            this._bot.once('entityEat', ()=> this._bot.swingArm('right'))
         } catch (e) {
         }
 
@@ -82,8 +84,6 @@ export class ClientBot implements IClientBot {
     }
 
     private setupInventoryUpdateEvent() {
-
-        // @ts-ignore // Incorrect real argument and library types
         this._bot.inventory.on('updateSlot', (slot: number, oldItem: Item | null, newItem: Item | null) => {
             if (this.itemsAreEqual(oldItem, newItem)) return;
             this.$inventoryUpdate.next({

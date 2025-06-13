@@ -1,7 +1,10 @@
+
+// ORIGINAL
 export function isRenamed(string: string){
 	try {
 		const json = JSON.parse(string)
 
+		if(!Array.isArray(json?.extra) && json?.text) return true
 		if (!Array.isArray(json?.extra)) return false
 
 		let isReturn:boolean = false
