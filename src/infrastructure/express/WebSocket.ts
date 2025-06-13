@@ -34,14 +34,7 @@ export class App {
 	private routes: Record<UNIVERSAL_COMMAND_LIST, (message: IncomingMessage, ws?: WebSocket)=> void>;
 
 	constructor(
-		private webSocketController: WebSocketClientsController,
-		private clientManagerService: IClientManagerService,
-		private inventoryService: IInventoryService,
-		private windowService: IWindowService,
-		private chatService: IChatService,
-		private captchaService: ICaptchaService,
-		private farmService: IFarmService,
-		private ABService: IAutoBuyService
+		private webSocketController: WebSocketClientsController
 	) {
 		this.init();
 	}
