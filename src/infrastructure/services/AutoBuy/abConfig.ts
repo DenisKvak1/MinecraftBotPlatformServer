@@ -28,33 +28,22 @@ export type abProfile = {
 	priceRegex: string,
 	nicknameRegex: string
 	updateIndex: number,
-	defaultMaxSellPrice: number
 	shift: boolean
 	interval: number,
-	autosellPrice?: number,
-	defaultpercentDown?: number
-	callibrationPriceInterval: number
+	autoSellPrice?: number,
+	defaultProcentDown?: number
+	reloadPriceInterval: number
 	restartActionInterval?: number
-	serverKeyValueName?: string
 	blackList: string[]
 	exception: string[]
-	buyDelay?: number
-	itemForSaleLimit?: number
-	resell: {
-		"hasResellButton": boolean,
-		"resellButtonIndex": number,
-		"interval": number
-	},
-
-	info: abItemCfg
-}
-export type abItemCfg = {
-	[key: string]: {
-		price: number
-		sellPrice?: number | any,
+	
+	info: {
+		[key: string]: {
+			price: number
+			sellprice?: number | any,
 			searchName?: string
-		sellCount?: number,
-			percentDown?: number,
-			minCountToCalibrate?: number,
+			seellcount?: number,
+			procentDown?: number
+		}
 	}
 }

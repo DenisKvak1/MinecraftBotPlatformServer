@@ -1,13 +1,13 @@
-import { IChatService } from '../../core/service/ChatService';
-import { IClickerService } from '../../core/service/ClickerService';
-import { IClientManagerService } from '../../core/service/ClientManagerService';
-import { IFarmService } from '../../core/service/FarmService';
-import { IFoodService } from '../../core/service/FoodService';
-import { IInventoryService } from '../../core/service/InventoryService';
-import { IWalkService } from '../../core/service/WalkService';
-import { IWindowService } from '../../core/service/WindowService';
-import { BotScriptRepository } from '../../core/repository/BotScriptsRepository/BotScriptsRepository';
-import { IBotScriptService } from '../../core/service/BotScriptService/BotScriptService';
+import {IChatService} from '../../core/service/ChatService';
+import {IClickerService} from '../../core/service/ClickerService';
+import {IClientManagerService} from '../../core/service/ClientManagerService';
+import {IFarmService} from '../../core/service/FarmService';
+import {IFoodService} from '../../core/service/FoodService';
+import {IInventoryService} from '../../core/service/InventoryService';
+import {IWalkService} from '../../core/service/WalkService';
+import {IWindowService} from '../../core/service/WindowService';
+import {BotScriptRepository} from '../../core/repository/BotScriptsRepository/BotScriptsRepository';
+import {IBotScriptService} from '../../core/service/BotScriptService/BotScriptService';
 import {
 	AddToMassAutobuyBotAction,
 	BOT_SCRIPT_ACTIONS,
@@ -27,22 +27,22 @@ import {
 	ToggleFoodBotAction,
 	ToggleUseClickerBotAction,
 } from '../../core/service/BotScriptService/types';
-import { syncTimeout } from '../../../env/helpers/syncTimeout';
-import { IAutoBuyService } from '../../core/service/AutoBuy';
-import { inMemoryBotScriptsRepository } from '../database/repository/inMemoryBotScriptsRepository';
-import { clientManagerService } from './ClientManagerService';
-import { chatService } from './ChatService';
-import { clickerService } from './FarmService/ClickerService';
-import { farmService } from './FarmService/FarmService';
-import { foodService } from './FarmService/FoodService';
-import { inventoryService } from './InventoryService';
-import { walkService } from './WalkService';
-import { windowsService } from './WindowService';
-import { autoBuyService } from './AutoBuy/AutoBuyService';
-import { accountService, AccountService } from '../../core/service/AccountService';
+import {syncTimeout} from '../../../env/helpers/syncTimeout';
+import {IAutoBuyService} from '../../core/service/AutoBuy';
+import {inMemoryBotScriptsRepository} from '../database/repository/inMemoryBotScriptsRepository';
+import {clientManagerService} from './ClientManagerService';
+import {chatService} from './ChatService';
+import {clickerService} from './FarmService/ClickerService';
+import {farmService} from './FarmService/FarmService';
+import {foodService} from './FarmService/FoodService';
+import {inventoryService} from './InventoryService';
+import {walkService} from './WalkService';
+import {windowsService} from './WindowService';
+import {autoBuyService} from './AutoBuy/AutoBuyService';
+import {accountService, AccountService} from '../../core/service/AccountService';
 
 class BotScriptService implements IBotScriptService {
-	private commandFunctions: Record<BOT_SCRIPT_ACTIONS, (botId: string, command: BotAction) => Promise<void>>;
+	private commandFunctions: Record<BOT_SCRIPT_ACTIONS, (botId: string, command: BotAction) => Promise<void>>
 
 	constructor(
 		private botScriptsRepository: BotScriptRepository,
@@ -62,23 +62,19 @@ class BotScriptService implements IBotScriptService {
 
 	private init() {
 		this.commandFunctions = {
-			START_MASS_AUTOBUY: async (botId, command: StartMassAutobuyBotAction) => {
-				const ids = [];
-				await Promise.all(command.value.botsNicknames.map(async (name) => {
-					const id = (await this.accountService.getByID(name)).id;
-					ids.push(id);
-				}));
-				await this.autoBuyService.startAutoBuySystem(ids);
+			START_MASS_AUTOBUY: async (botId, command: StartMassAutobuyBotAction)=>{
+				const ids = []
+				await Promise.all(command.value.botsNicknames.map(async (name)=>{
+					const id = (await this.accountService.getByID(name)).id
+					ids.push(id)
+				}))
+				await this.autoBuyService.startAutoBuySystem(ids)
 			},
-			ADD_MASS_AUTOBUY_PLAYER: async (botId, command: AddToMassAutobuyBotAction) => {
-				if (this.autoBuyService.getAutoBuySystemState(+command.value.massId) == 'OFF') {
-					await this.autoBuyService.startAutoBuySystem([botId]);
-				} else {
-					await this.autoBuyService.addToAutoBuySystem(+command.value.massId, botId);
-				}
+			ADD_MASS_AUTOBUY_PLAYER: async (botId, command: AddToMassAutobuyBotAction)=>{
+				await this.autoBuyService.addToAutoBuySystem(+command.value.massId, botId)
 			},
-			DELETE_MASS_AUTOBUY_PLAYER: async (botId, command: DeleteToMassAutobuyBotAction) => {
-				await this.autoBuyService.deleteMassAutoBuyBot(+command.value.massId, botId);
+			DELETE_MASS_AUTOBUY_PLAYER: async (botId, command: DeleteToMassAutobuyBotAction)=>{
+				await this.autoBuyService.deleteMassAutoBuyBot(+command.value.massId, botId)
 			},
 			ACTIVATE_ITEM: async (botId) => {
 				await this.inventoryService.activate(botId);
@@ -90,7 +86,7 @@ class BotScriptService implements IBotScriptService {
 				await this.windowService.click(botId, command.value.slotIndex);
 			},
 			CONNECT: async (botId) => {
-				console.log(botId);
+				console.log(botId)
 				this.clientManagerService.connect(botId);
 			},
 			DISCONNECT: async (botId) => {
@@ -166,7 +162,7 @@ class BotScriptService implements IBotScriptService {
 	}
 
 	async runByName(scriptName: string, botId: string): Promise<void> {
-		const script = await this.botScriptsRepository.getByName(scriptName);
+		const script = await this.botScriptsRepository.getByName(scriptName)
 		await this.execute(script, botId);
 	}
 
@@ -177,7 +173,7 @@ class BotScriptService implements IBotScriptService {
 		} else {
 			existScript.botActions = botActions;
 			this.botScriptsRepository.save(existScript);
-			return existScript;
+			return existScript
 		}
 	}
 
@@ -189,7 +185,7 @@ class BotScriptService implements IBotScriptService {
 	}
 
 	async delete(id: string): Promise<void> {
-		this.botScriptsRepository.delete(id);
+		this.botScriptsRepository.delete(id)
 	}
 }
 
@@ -205,5 +201,5 @@ export const botScriptsService = new BotScriptService(
 	walkService,
 	windowsService,
 	autoBuyService,
-);
-clientManagerService.loadBotScript(botScriptsService);
+)
+clientManagerService.loadBotScript(botScriptsService)

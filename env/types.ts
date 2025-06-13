@@ -12,5 +12,4 @@ export type GeneralizedItem = {
 	customName?: string
 	customNameHTML?: string,
 	customLoreHTML?: string,
-	nbt: any | null
 }

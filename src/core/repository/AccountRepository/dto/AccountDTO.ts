@@ -16,9 +16,6 @@ export type AccountUpdateDTO = {
     server?: string
     version?: string,
     whiteList?: string[],
-    autoReconnect?: {
-        "script": string,
-        "timeout": number,
-        "enable": boolean
-    },
+    autoReconnectScript: string
+    autoReconnectTimeout: number
 }
